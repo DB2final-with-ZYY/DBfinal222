@@ -2,6 +2,7 @@ package com.shu.pojo;
 
 public class Teacher {
     private Integer teacherId; // 教师ID
+    private String password; // 登录密码
     private String name; // 教师姓名
     private String email;
     private String position; // 职位 (正教授,副教授,高级工程师,讲师)
@@ -17,6 +18,14 @@ public class Teacher {
 
     public void setTeacherId(Integer teacherId) {
         this.teacherId = teacherId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
@@ -71,6 +80,7 @@ public class Teacher {
     public String toString() {
         return "Teacher{" +
                 "teacherId=" + teacherId +
+                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", position='" + position + '\'' +
