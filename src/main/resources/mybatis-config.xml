@@ -32,9 +32,6 @@
         </environment>
     </environments>
     <mappers>
-        <!--加载sql映射文件-->
-        <!--<mapper resource="com/lvshu/mapper/UserMapper.xml"/>-->
-
         <!--Mapper代理方式 包扫描 全部mapper文件都ok-->
         <package name="com.shu.mapper"/>
     </mappers>
