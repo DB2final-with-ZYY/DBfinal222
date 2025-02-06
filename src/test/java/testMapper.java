@@ -52,4 +52,25 @@ public class testMapper {
         System.out.println(teacher);
     }
 
+
+    @Test
+    public void testSearchMapper() {
+        String id = "1";
+        String password = "123";
+
+        // 2.调用MyBatis完成查询
+        // 这里直接去官网复制粘贴过来
+        // 2.1 获取SqlSessionFactory对象 优化以后用了工具类 这样只创建一个工厂
+        SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtils.getSqlSessionFactory();
+        // 2.2 获取SqlSession对象
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        // 2.3 获取Mapper
+        TeacherMapper teacherMapper = sqlSession.getMapper(TeacherMapper.class);
+        // 2.4 调用方法
+        Teacher teacher = teacherMapper.selectById(Integer.parseInt(id));
+
+        System.out.println(teacher);
+    }
+
 }
