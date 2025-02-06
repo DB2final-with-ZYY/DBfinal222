@@ -9,4 +9,9 @@
     <result column="address" property="address"/>
     <result column="phone_code" property="phoneCode"/>
 </resultMap>
+
+<select id="selectAll" resultMap="departmentMap">
+    SELECT * FROM department ORDER BY department_id
+</select>
+
 </mapper> 
