@@ -20,7 +20,7 @@
     </resultMap>
 
     <select id="selectById" resultType="com.shu.pojo.Student" resultMap="studentMap">
-        select * form student where student_id = #{studentId};
+        select * from student where student_id = #{studentId};
     </select>
 
 </mapper>
