@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shu.mapper.ClassScheduleMapper">
+<resultMap id="classScheduleMap" type="com.shu.pojo.ClassSchedule">
+    <id column="schedule_id" property="scheduleId"/>
+    <result column="semester" property="semester"/>
+    <result column="course_id" property="courseId"/>
+    <result column="teacher_id" property="teacherId"/>
+    <result column="classroom" property="classroom"/>
+    <result column="capacity" property="capacity"/>
+    <result column="class_time" property="classTime"/>
+    <association property="course" resultMap="com.shu.mapper.CourseMapper.courseMap"/>
+    <association property="teacher" resultMap="com.shu.mapper.TeacherMapper.teacherMap"/>
+</resultMap>
+</mapper> 

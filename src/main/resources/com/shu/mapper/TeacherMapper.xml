@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shu.mapper.TeacherMapper">
+<resultMap id="teacherMap" type="com.shu.pojo.Teacher">
+    <id column="teacher_id" property="teacherId"/>
+    <result column="password" property="password"/>
+    <result column="name" property="name"/>
+    <result column="email" property="email"/>
+    <result column="position" property="position"/>
+    <result column="gender" property="gender"/>
+    <result column="department_id" property="departmentId"/>
+    <association property="department" resultMap="com.shu.mapper.DepartmentMapper.departmentMap"/>
+</resultMap>
+</mapper> 

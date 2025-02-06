@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shu.mapper.GradeMapper">
+    <resultMap id="gradeMap" type="com.shu.pojo.Grade">
+        <id column="grade_id" property="gradeId"/>
+        <result column="enrollment_id" property="enrollmentId"/>
+        <result column="grade" property="grade"/>
+        <result column="exam_date" property="examDate"/>
+        <association property="enrollment" resultMap="com.shu.mapper.EnrollmentMapper.enrollmentMap"/>
+    </resultMap>
+</mapper> 
