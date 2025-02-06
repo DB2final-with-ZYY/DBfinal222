@@ -13,4 +13,9 @@
     <result column="department_id" property="departmentId"/>
     <association property="department" resultMap="com.shu.mapper.DepartmentMapper.departmentMap"/>
 </resultMap>
+
+    <select id="selectById" resultType="com.shu.pojo.Teacher" resultMap="teacherMap">
+        select * from teacher where teacher_id= #{teacherId};
+    </select>
+
 </mapper> 
