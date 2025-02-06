@@ -54,7 +54,7 @@ public class LoginServlet extends HttpServlet {
                 writer.write("<html><body>");
                 writer.write("<h1>登录成功！</h1>");
                 writer.write("<script>window.alert(\"登陆成功\");</script>");
-                writer.write("<script>window.location.href='home.html';</script>"); // 登录成功后跳转
+                writer.write("<script>window.location.href='courseSearch.html';</script>"); // 登录成功后跳转
                 writer.write("</body></html>");
 
                 // 存入session
@@ -80,7 +80,7 @@ public class LoginServlet extends HttpServlet {
                 writer.write("<html><body>");
                 writer.write("<h1>登录成功！</h1>");
                 writer.write("<script>window.alert(\"登陆成功\");</script>");
-                writer.write("<script>window.location.href='home.html';</script>"); // 登录成功后跳转
+                writer.write("<script>window.location.href='courseSearch.html';</script>"); // 登录成功后跳转
                 writer.write("</body></html>");
 
                 // 存入session
