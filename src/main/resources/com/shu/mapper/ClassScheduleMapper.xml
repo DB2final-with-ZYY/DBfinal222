@@ -28,7 +28,12 @@
     <result column="enrolledCount" property="enrolledCount"/>
 </resultMap>
 
-<select id="searchCourses" resultMap="courseSearchResultMap">
+    <insert id="insertClassSchedule">
+        INSERT INTO class_schedule(semester, course_id, teacher_id, classroom, capacity, class_time)
+        VALUES (#{semester}, #{courseId}, #{teacherId}, #{classroom}, #{capacity}, #{classTime});
+    </insert>
+
+    <select id="searchCourses" resultMap="courseSearchResultMap">
     SELECT 
         cs.course_id as courseId,
         c.course_name as courseName,

@@ -53,4 +53,12 @@ public interface ClassScheduleMapper {
      * @return
      */
     List<ClassSchedule> selectClassScheduleByTeacherId(@Param("teacherId") Integer teacherId);
+
+    /**
+     * 插入课程安排
+     * @param classSchedule
+     * @return
+     */
+    int insertClassSchedule(ClassSchedule classSchedule);
+
 } 
