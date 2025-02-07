@@ -105,15 +105,15 @@ document.addEventListener('DOMContentLoaded', function () {
             if (course.isSelected) {
                 actionBtn.className = 'cancel-btn';
                 actionBtn.textContent = '退选';
-                actionBtn.onclick = () => cancelCourse(course.scheduleId);
+                actionBtn.onclick = (event) => cancelCourse(course.scheduleId);
             } else {
                 actionBtn.className = 'select-btn';
                 actionBtn.textContent = '选择';
-                actionBtn.onclick = () => selectCourse(course.scheduleId);
+                actionBtn.onclick = (event) => selectCourse(course.scheduleId);
             }
             actionCell.appendChild(actionBtn);
 
-            // 清除之前的innerHTML并使用insertCell添加其他单元格
+            // 添加其他单元格
             const cells = [
                 course.courseId,
                 course.courseName,
@@ -135,22 +135,34 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // 选课函数
-    function selectCourse(courseId) {
+    function selectCourse(scheduleId) {
+        // 从表格行中获取课程信息
+        const row = event.target.closest('tr');
+        const cells = row.cells;
+
+        // cells[0]是操作按钮列，所以实际数据从cells[1]开始
+        const courseData = {
+            courseId: parseInt(cells[1].textContent),    // 课程号
+            teacherId: parseInt(cells[4].textContent),   // 教师号
+            classTime: cells[7].textContent,             // 上课时间
+        };
+
+        console.log('选课数据：', courseData); // 添加日志便于调试
+
         fetch('/selectCourse', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ courseId: courseId })
+            body: JSON.stringify(courseData)
         })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('选课成功！');
-                    loadStudentInfo(); // 刷新学生信息（包括已选学分）
-                    searchCourses(); // 刷新课程列表
+                    alert(data.message);
+                    searchCourses();
                 } else {
-                    alert(data.message || '选课失败，请稍后重试');
+                    alert(data.message);
                 }
             })
             .catch(error => {
