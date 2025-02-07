@@ -18,6 +18,14 @@ public interface EnrollmentMapper {
     int insert(Enrollment enrollment);
 
     /**
+     * 删除选课情况 要填充student_id 和schedule_id
+     *
+     * @param enrollment
+     * @return
+     */
+    int delete(Enrollment enrollment);
+
+    /**
      * 获取某个课程的已选人数
      * 
      * @param scheduleId 课程安排ID

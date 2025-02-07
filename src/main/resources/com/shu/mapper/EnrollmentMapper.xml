@@ -28,6 +28,13 @@
         INSERT INTO enrollment (student_id, schedule_id) VALUES (#{studentId}, #{scheduleId});
     </insert>
 
+    <delete id="delete">
+        DELETE FROM enrollment
+        WHERE student_id = #{studentId}
+          AND   schedule_id = #{scheduleId};
+    </delete>
+
+
     <select id="getEnrolledCount" resultType="java.lang.Integer">
         SELECT COUNT(*) 
         FROM enrollment 
