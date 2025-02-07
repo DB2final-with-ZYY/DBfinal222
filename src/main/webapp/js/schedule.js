@@ -33,9 +33,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 加载课程信息和课表
     function loadCourseSchedule() {
-        fetch('/studentSchedule')
+        fetch('/enrolled')
             .then(response => response.json())
             .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                // 直接使用返回的数据，因为已经确定是CourseSearchDTO列表
                 displayCourseList(data);
                 displaySchedule(data);
                 updateTotalCredits(data);
@@ -50,6 +55,15 @@ document.addEventListener('DOMContentLoaded', function () {
     function displayCourseList(courses) {
         const tbody = document.querySelector('#courseTable tbody');
         tbody.innerHTML = '';
+
+        if (!courses || courses.length === 0) {
+            const row = tbody.insertRow();
+            const cell = row.insertCell();
+            cell.colSpan = 8;
+            cell.textContent = '暂无已选课程';
+            cell.style.textAlign = 'center';
+            return;
+        }
 
         courses.forEach(course => {
             const row = tbody.insertRow();
@@ -75,11 +89,15 @@ document.addEventListener('DOMContentLoaded', function () {
     function displaySchedule(courses) {
         const scheduleTable = document.getElementById('scheduleTable');
         // 清空现有课程单元格
-        for (let i = 0; i < 4; i++) { // 4个时间段
-            for (let j = 2; j <= 6; j++) { // 从第3列开始（前两列是节次和时间）
+        for (let i = 0; i < 4; i++) {
+            for (let j = 2; j <= 6; j++) {
                 const cell = scheduleTable.rows[i + 1].cells[j];
                 cell.innerHTML = '';
             }
+        }
+
+        if (!courses || courses.length === 0) {
+            return;
         }
 
         // 填充课程信息
@@ -88,11 +106,13 @@ document.addEventListener('DOMContentLoaded', function () {
             if (timeMatch) {
                 const weekday = '一二三四五'.indexOf(timeMatch[1]);
                 const timeSlot = (parseInt(timeMatch[2].split('-')[0]) - 1) / 2;
-                
+
                 if (weekday !== -1 && timeSlot >= 0 && timeSlot < 4) {
-                    const cell = scheduleTable.rows[timeSlot + 1].cells[weekday + 2]; // +2因为前面多了时间列
+                    const cell = scheduleTable.rows[timeSlot + 1].cells[weekday + 2];
+                    // 添加不同颜色的背景
+                    const randomColor = `hsl(${Math.random() * 360}, 70%, 90%)`;
                     cell.innerHTML = `
-                        <div class="course-cell">
+                        <div class="course-cell" style="background-color: ${randomColor}">
                             <div class="course-name">${course.courseName}</div>
                             <div class="course-info">${course.teacherName}</div>
                             <div class="course-info">${course.classroom}</div>
@@ -105,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 更新总学分
     function updateTotalCredits(courses) {
-        const totalCredits = courses.reduce((sum, course) => sum + course.credit, 0);
+        const totalCredits = courses ? courses.reduce((sum, course) => sum + (course.credit || 0), 0) : 0;
         document.getElementById('totalCredits').textContent = totalCredits;
     }
 }); 
