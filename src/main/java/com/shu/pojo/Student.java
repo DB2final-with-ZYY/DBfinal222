@@ -6,6 +6,7 @@ public class Student {
     private String email; // 电子邮箱
     private String name; // 学生姓名
     private String gender; // 性别 (M-男,F-女,O-其他)
+    private String gradeNumber;   // 年级数
     private String nativePlace; // 生源地
     private Integer departmentId; // 所属院系ID
     private Integer majorId; // 所属专业ID
@@ -53,6 +54,14 @@ public class Student {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getGradeNumber() {
+        return gradeNumber;
+    }
+
+    public void setGradeNumber(String gradeNumber) {
+        this.gradeNumber = gradeNumber;
     }
 
     public String getNativePlace() {
@@ -111,6 +120,7 @@ public class Student {
                 ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 ", gender='" + gender + '\'' +
+                ", gradeNumber='" + gradeNumber + '\'' +
                 ", nativePlace='" + nativePlace + '\'' +
                 ", departmentId=" + departmentId +
                 ", majorId=" + majorId +

@@ -11,6 +11,7 @@
         <result column="email" property="email"/>
         <result column="name" property="name"/>
         <result column="gender" property="gender"/>
+        <result column="grade_number" property="gradeNumber"/>
         <result column="native_place" property="nativePlace"/>
         <result column="department_id" property="departmentId"/>
         <result column="major_id" property="majorId"/>
