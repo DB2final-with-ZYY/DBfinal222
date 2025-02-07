@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // 加载已选课程
     loadEnrolledCourses();
 
+    // 检查URL参数并自动搜索
+    checkUrlParamsAndSearch();
+
     // 监听表单提交
     searchForm.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -78,6 +81,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error loading enrolled courses:', error);
                 alert('加载已选课程失败，请稍后重试');
             });
+    }
+
+    // 检查URL参数并自动搜索
+    function checkUrlParamsAndSearch() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get('courseId');
+
+        if (courseId) {
+            // 设置课程ID输入框的值
+            document.getElementById('courseId').value = courseId;
+            // 触发搜索
+            searchCourses();
+        }
     }
 
     // 搜索课程函数
