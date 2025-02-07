@@ -3,11 +3,30 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shu.mapper.CoursePlanMapper">
-<resultMap id="coursePlanMap" type="com.shu.pojo.CoursePlan">
-    <id column="plan_id" property="planId"/>
-    <result column="major_id" property="majorId"/>
-    <result column="course_id" property="courseId"/>
-    <association property="major" resultMap="com.shu.mapper.MajorMapper.majorMap"/>
-    <association property="course" resultMap="com.shu.mapper.CourseMapper.courseMap"/>
-</resultMap>
+    <resultMap id="coursePlanMap" type="com.shu.pojo.CoursePlan">
+        <id column="plan_id" property="planId"/>
+        <result column="major_id" property="majorId"/>
+        <result column="course_id" property="courseId"/>
+        <association property="major" resultMap="com.shu.mapper.MajorMapper.majorMap"/>
+        <association property="course" resultMap="com.shu.mapper.CourseMapper.courseMap"/>
+    </resultMap>
+
+    <resultMap id="courseMap" type="com.shu.pojo.Course">
+        <id column="course_id" property="courseId"/>
+        <result column="course_name" property="courseName"/>
+<!--        <result column="department_id" property="departmentId"/>-->
+        <result column="credit" property="credit"/>
+<!--        <association property="department" resultMap="com.shu.mapper.DepartmentMapper.departmentMap"/>-->
+    </resultMap>
+
+    <select id="searchCoursePlanByMajor" resultType="com.shu.pojo.Course"  resultMap="courseMap">
+        SELECT
+            c.course_id,
+            c.course_name,
+            c.credit
+        FROM course_plan cp
+        JOIN course c ON cp.course_id = c.course_id
+        WHERE cp.major_id = #{majorId};
+    </select>
+
 </mapper> 
