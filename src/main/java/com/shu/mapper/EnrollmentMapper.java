@@ -1,5 +1,6 @@
 package com.shu.mapper;
 
+import com.shu.dto.CourseSearchDTO;
 import com.shu.pojo.Enrollment;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -31,4 +32,12 @@ public interface EnrollmentMapper {
      * @return 已选课程的上课时间列表
      */
     List<String> getStudentClassTimes(Integer studentId);
+
+    /**
+     * 根据学生id查询已选课程的信息
+     * @param studentId
+     * @return
+     */
+    List<CourseSearchDTO> selectEnrolledCourses(Integer studentId);
+
 }

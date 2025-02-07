@@ -11,6 +11,19 @@
         <association property="classSchedule" resultMap="com.shu.mapper.ClassScheduleMapper.classScheduleMap"/>
     </resultMap>
 
+    <resultMap id="courseSearchResultMap" type="com.shu.dto.CourseSearchDTO">
+        <result column="courseId" property="courseId"/>
+        <result column="courseName" property="courseName"/>
+        <result column="credit" property="credit"/>
+        <result column="teacherId" property="teacherId"/>
+        <result column="teacherName" property="teacherName"/>
+        <result column="position" property="position"/>
+        <result column="classTime" property="classTime"/>
+        <result column="classroom" property="classroom"/>
+        <result column="capacity" property="capacity"/>
+        <result column="enrolledCount" property="enrolledCount"/>
+    </resultMap>
+
     <insert id="insert">
         INSERT INTO enrollment (student_id, schedule_id) VALUES (#{studentId}, #{scheduleId});
     </insert>
@@ -26,5 +39,23 @@
         FROM enrollment e
         JOIN class_schedule cs ON e.schedule_id = cs.schedule_id
         WHERE e.student_id = #{studentId}
+    </select>
+
+    <select id="selectEnrolledCourses" resultType="com.shu.dto.CourseSearchDTO"
+            resultMap="courseSearchResultMap">
+        SELECT
+            cs.course_id as courseId,
+            c.course_name as courseName,
+            c.credit,
+            cs.teacher_id as teacherId,
+            t.name as teacherName,
+            t.position,
+            cs.class_time as classTime,
+            cs.classroom
+        FROM enrollment e
+        JOIN class_schedule cs ON e.schedule_id = cs.schedule_id
+        JOIN teacher t ON cs.teacher_id = t.teacher_id
+        JOIN course c ON cs.course_id = c.course_id
+        WHERE e.student_id = #{studentId};
     </select>
 </mapper> 
