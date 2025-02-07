@@ -1,7 +1,9 @@
 import com.shu.dto.CourseSearchDTO;
+import com.shu.mapper.CoursePlanMapper;
 import com.shu.mapper.EnrollmentMapper;
 import com.shu.mapper.StudentMapper;
 import com.shu.mapper.TeacherMapper;
+import com.shu.pojo.Course;
 import com.shu.pojo.Student;
 import com.shu.pojo.Teacher;
 import com.shu.util.SqlSessionFactoryUtils;
@@ -75,6 +77,27 @@ public class testMapper {
 
         for (CourseSearchDTO courseSearchDTO : courseSearchDTOS) {
             System.out.println(courseSearchDTO);
+        }
+    }
+
+    @Test
+    public void testCoursePlanMapper() {
+        String id = "1";
+
+        // 2.调用MyBatis完成查询
+        // 这里直接去官网复制粘贴过来
+        // 2.1 获取SqlSessionFactory对象 优化以后用了工具类 这样只创建一个工厂
+        SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtils.getSqlSessionFactory();
+        // 2.2 获取SqlSession对象
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        // 2.3 获取Mapper
+        CoursePlanMapper coursePlanMapper = sqlSession.getMapper(CoursePlanMapper.class);
+        // 2.4 调用方法
+        List<Course> courses = coursePlanMapper.searchCoursePlanByMajor(Integer.parseInt(id));
+
+        for (Course course : courses) {
+            System.out.println(course);
         }
 
     }
