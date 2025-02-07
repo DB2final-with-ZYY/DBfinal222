@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // 加载学院列表
     loadDepartments();
 
+    // 加载已选课程
+    loadEnrolledCourses();
+
     // 监听表单提交
     searchForm.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -58,6 +61,25 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error('Error loading departments:', error));
     }
 
+    // 加载已选课程
+    function loadEnrolledCourses() {
+        fetch('/enrolled')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                displayEnrolledCourses(data);
+                displaySchedule(data);
+                updateTotalCredits(data);
+            })
+            .catch(error => {
+                console.error('Error loading enrolled courses:', error);
+                alert('加载已选课程失败，请稍后重试');
+            });
+    }
+
     // 搜索课程函数
     function searchCourses() {
         // 获取表单数据
@@ -85,35 +107,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 显示搜索结果函数
     function displayResults(courses) {
+        // 清空现有结果
         resultTable.innerHTML = '';
 
-        if (!Array.isArray(courses) || courses.length === 0) {
+        if (courses.length === 0) {
             const row = resultTable.insertRow();
             const cell = row.insertCell();
-            cell.colSpan = 11;
+            cell.colSpan = 11;  // 因为有11列（包括操作列）
             cell.textContent = '没有找到匹配的课程';
             cell.style.textAlign = 'center';
             return;
         }
 
+        // 添加新结果
         courses.forEach(course => {
             const row = resultTable.insertRow();
 
-            // 添加选课/退选按钮
+            // 添加选课按钮
             const actionCell = row.insertCell();
-            const actionBtn = document.createElement('button');
-            if (course.isSelected) {
-                actionBtn.className = 'cancel-btn';
-                actionBtn.textContent = '退选';
-                actionBtn.onclick = (event) => cancelCourse(course.scheduleId);
-            } else {
-                actionBtn.className = 'select-btn';
-                actionBtn.textContent = '选择';
-                actionBtn.onclick = (event) => selectCourse(course.scheduleId);
-            }
-            actionCell.appendChild(actionBtn);
+            const selectButton = document.createElement('button');
+            selectButton.className = 'select-btn';
+            selectButton.textContent = '选课';
+            selectButton.onclick = () => selectCourse(course.scheduleId);
+            actionCell.appendChild(selectButton);
 
-            // 添加其他单元格
+            // 添加其他课程信息
             const cells = [
                 course.courseId,
                 course.courseName,
@@ -159,10 +177,11 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(data.message);
-                    searchCourses();
+                    alert('选课成功！');
+                    searchCourses();     // 刷新搜索结果
+                    loadEnrolledCourses(); // 刷新已选课程和课表
                 } else {
-                    alert(data.message);
+                    alert(data.message || '选课失败，请稍后重试');
                 }
             })
             .catch(error => {
@@ -194,5 +213,82 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error:', error);
                 alert('退选失败，请稍后重试');
             });
+    }
+
+    // 显示已选课程列表
+    function displayEnrolledCourses(courses) {
+        const tbody = document.querySelector('#enrolledTable tbody');
+        tbody.innerHTML = '';
+
+        if (!courses || courses.length === 0) {
+            const row = tbody.insertRow();
+            const cell = row.insertCell();
+            cell.colSpan = 8;
+            cell.textContent = '暂无已选课程';
+            cell.style.textAlign = 'center';
+            return;
+        }
+
+        courses.forEach(course => {
+            const row = tbody.insertRow();
+            const cells = [
+                course.courseId,
+                course.courseName,
+                course.credit,
+                course.teacherId,
+                course.teacherName,
+                course.position,
+                course.classTime,
+                course.classroom
+            ];
+
+            cells.forEach(cellData => {
+                const cell = row.insertCell();
+                cell.textContent = cellData || '';
+            });
+        });
+    }
+
+    // 显示课表
+    function displaySchedule(courses) {
+        const scheduleTable = document.getElementById('scheduleTable');
+        // 清空现有课程单元格
+        for (let i = 0; i < 4; i++) {
+            for (let j = 2; j <= 6; j++) {
+                const cell = scheduleTable.rows[i + 1].cells[j];
+                cell.innerHTML = '';
+            }
+        }
+
+        if (!courses || courses.length === 0) {
+            return;
+        }
+
+        // 填充课程信息
+        courses.forEach(course => {
+            const timeMatch = course.classTime.match(/星期(.)(\d-\d)/);
+            if (timeMatch) {
+                const weekday = '一二三四五'.indexOf(timeMatch[1]);
+                const timeSlot = (parseInt(timeMatch[2].split('-')[0]) - 1) / 2;
+
+                if (weekday !== -1 && timeSlot >= 0 && timeSlot < 4) {
+                    const cell = scheduleTable.rows[timeSlot + 1].cells[weekday + 2];
+                    const randomColor = `hsl(${Math.random() * 360}, 70%, 90%)`;
+                    cell.innerHTML = `
+                        <div class="course-cell" style="background-color: ${randomColor}">
+                            <div class="course-name">${course.courseName}</div>
+                            <div class="course-info">${course.teacherName}</div>
+                            <div class="course-info">${course.classroom}</div>
+                        </div>
+                    `;
+                }
+            }
+        });
+    }
+
+    // 更新总学分
+    function updateTotalCredits(courses) {
+        const totalCredits = courses ? courses.reduce((sum, course) => sum + (course.credit || 0), 0) : 0;
+        document.getElementById('totalCredits').textContent = totalCredits;
     }
 }); 
