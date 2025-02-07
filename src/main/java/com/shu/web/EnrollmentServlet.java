@@ -1,6 +1,7 @@
 package com.shu.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shu.dto.CourseSearchDTO;
 import com.shu.mapper.ClassScheduleMapper;
 import com.shu.mapper.EnrollmentMapper;
 import com.shu.pojo.ClassSchedule;
@@ -95,7 +96,16 @@ public class EnrollmentServlet extends HttpServlet {
                 }
             }
 
-            // 4. 插入选课记录
+            // 4. 检查是不是选过的课程号
+            List<CourseSearchDTO> courseSearchDTOS = enrollmentMapper.selectEnrolledCourses(student.getStudentId());
+            for (CourseSearchDTO courseSearchDTO : courseSearchDTOS) {
+                if(courseSearchDTO.getCourseId().equals(courseId)){
+                    resp.getWriter().write("{\"success\": false, \"message\": \"已选过该课程号课程\"}");
+                    return;
+                }
+            }
+
+            // 5. 插入选课记录
             Enrollment enrollment = new Enrollment();
             enrollment.setStudentId(student.getStudentId());
             enrollment.setScheduleId(classSchedule.getScheduleId());
