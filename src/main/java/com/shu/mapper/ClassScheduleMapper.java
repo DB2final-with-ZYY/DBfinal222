@@ -61,4 +61,12 @@ public interface ClassScheduleMapper {
      */
     int insertClassSchedule(ClassSchedule classSchedule);
 
+    /**
+     * 删除课程安排的方法
+     * 只用传courseId，teacherId，classTime
+     * @param classSchedule
+     * @return
+     */
+    int deleteClassSchedule(ClassSchedule classSchedule);
+
 } 

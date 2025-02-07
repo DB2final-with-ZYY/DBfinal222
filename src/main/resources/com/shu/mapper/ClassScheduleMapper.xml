@@ -33,6 +33,13 @@
         VALUES (#{semester}, #{courseId}, #{teacherId}, #{classroom}, #{capacity}, #{classTime});
     </insert>
 
+    <delete id="deleteClassSchedule">
+        DELETE FROM class_schedule
+        WHERE course_id = #{courseId}
+          AND teacher_id = #{teacherId}
+          AND class_time = #{classTime};
+    </delete>
+
     <select id="searchCourses" resultMap="courseSearchResultMap">
     SELECT 
         cs.course_id as courseId,
