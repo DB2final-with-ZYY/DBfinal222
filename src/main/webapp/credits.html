@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>学分完成情况</title>
+    <link rel="stylesheet" href="css/courseSelect.css">
+    <link rel="stylesheet" href="css/credits.css">
+    <script src="js/credits.js"></script>
+</head>
+
+<body>
+    <nav class="nav-menu">
+        <div class="nav-left">
+            <img src="images/signature.png" alt="SHU" class="nav-logo">
+            <a href="courseSelect.html" class="nav-item">选课</a>
+            <a href="courseCancel.html" class="nav-item">退课</a>
+            <a href="courseSearch.html" class="nav-item">课程查询</a>
+            <a href="schedule.html" class="nav-item">课表查看</a>
+            <a href="credits.html" class="nav-item active">学分完成情况</a>
+        </div>
+        <div class="nav-right">
+            <a href="logout" class="nav-item nav-logout">退出登录</a>
+        </div>
+    </nav>
+
+    <!-- 学生信息区域 -->
+    <div class="student-info">
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">学号：</span>
+                <span class="info-value" id="studentId"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">姓名：</span>
+                <span class="info-value" id="studentName"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">性别：</span>
+                <span class="info-value" id="studentGender"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">年级：</span>
+                <span class="info-value" id="studentGrade"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">邮箱：</span>
+                <span class="info-value" id="studentEmail"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">生源地：</span>
+                <span class="info-value" id="studentNativePlace"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">学院：</span>
+                <span class="info-value" id="studentDepartment"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">专业：</span>
+                <span class="info-value" id="studentMajor"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">状态：</span>
+                <span class="info-value" id="studentStatus"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 专业课程计划和完成情况 -->
+    <div class="credits-container">
+        <h2>专业课程计划完成情况</h2>
+        <table id="creditsTable">
+            <thead>
+                <tr>
+                    <th>课程号</th>
+                    <th>课程名称</th>
+                    <th>学分</th>
+                    <th>完成情况</th>
+                    <th>成绩</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 这里将通过JavaScript动态填充课程信息 -->
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html> 

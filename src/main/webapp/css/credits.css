@@ -1,0 +1,63 @@
+.credits-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#creditsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#creditsTable th,
+#creditsTable td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+#creditsTable th {
+    background-color: #004d99;
+    color: white;
+}
+
+#creditsTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#creditsTable tr:hover {
+    background-color: #f5f5f5;
+}
+
+.status-completed {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.status-incomplete {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.select-course-btn {
+    padding: 6px 12px;
+    background-color: #004d99;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.select-course-btn:hover {
+    background-color: #003366;
+}
+
+/* 添加进行中状态的样式 */
+.status-in-progress {
+    color: #ffc107;  /* 黄色 */
+    font-weight: bold;
+} 
