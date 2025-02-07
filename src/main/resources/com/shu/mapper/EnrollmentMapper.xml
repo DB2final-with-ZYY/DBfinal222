@@ -20,4 +20,11 @@
         FROM enrollment 
         WHERE schedule_id = #{scheduleId}
     </select>
+
+    <select id="getStudentClassTimes" resultType="java.lang.String">
+        SELECT cs.class_time
+        FROM enrollment e
+        JOIN class_schedule cs ON e.schedule_id = cs.schedule_id
+        WHERE e.student_id = #{studentId}
+    </select>
 </mapper> 

@@ -3,6 +3,8 @@ package com.shu.mapper;
 import com.shu.pojo.Enrollment;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface EnrollmentMapper {
 
@@ -21,4 +23,12 @@ public interface EnrollmentMapper {
      * @return 已选人数
      */
     int getEnrolledCount(Integer scheduleId);
+
+    /**
+     * 获取学生已选课程的上课时间
+     * 
+     * @param studentId 学生ID
+     * @return 已选课程的上课时间列表
+     */
+    List<String> getStudentClassTimes(Integer studentId);
 }
