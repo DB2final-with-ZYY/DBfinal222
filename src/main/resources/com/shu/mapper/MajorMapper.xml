@@ -9,4 +9,8 @@
         <result column="department_id" property="departmentId"/>
         <association property="department" resultMap="com.shu.mapper.DepartmentMapper.departmentMap"/>
     </resultMap>
+
+    <select id="selectMajorById" resultType="com.shu.pojo.Major" resultMap="majorMap">
+        SELECT * FROM major where major_id = #{majorId};
+    </select>
 </mapper> 
