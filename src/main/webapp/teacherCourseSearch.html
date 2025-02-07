@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>课程查询 - 教师端</title>
+    <link rel="stylesheet" href="css/courseSelect.css">
+    <script src="js/teacherCourseSearch.js"></script>
+</head>
+
+<body>
+    <nav class="nav-menu">
+        <div class="nav-left">
+            <img src="images/signature.png" alt="SHU" class="nav-logo">
+            <a href="teacherCourseSearch.html" class="nav-item active">课程查询</a>
+            <a href="departmentCourses.html" class="nav-item">学院课程</a>
+            <a href="createCourse.html" class="nav-item">创建课程</a>
+            <a href="createSchedule.html" class="nav-item">创建课程安排</a>
+            <a href="deleteSchedule.html" class="nav-item">删除课程安排</a>
+            <a href="teacherSchedule.html" class="nav-item">课表查看</a>
+            <a href="classManagement.html" class="nav-item">班级管理</a>
+        </div>
+        <div class="nav-right">
+            <a href="logout" class="nav-item nav-logout">退出登录</a>
+        </div>
+    </nav>
+
+    <!-- 教师信息区域 -->
+    <div class="student-info">
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">教师号：</span>
+                <span class="info-value" id="teacherId"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">姓名：</span>
+                <span class="info-value" id="teacherName"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">性别：</span>
+                <span class="info-value" id="teacherGender"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">职称：</span>
+                <span class="info-value" id="teacherPosition"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">邮箱：</span>
+                <span class="info-value" id="teacherEmail"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">学院：</span>
+                <span class="info-value" id="teacherDepartment"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-container">
+        <h2>课程查询</h2>
+        <form id="searchForm" action="/courseSearch" method="post">
+            <div class="search-grid">
+                <div class="form-group">
+                    <label for="courseId">课程ID</label>
+                    <input type="text" id="courseId" name="courseId">
+                </div>
+                <div class="form-group">
+                    <label for="courseName">课程名称</label>
+                    <input type="text" id="courseName" name="courseName">
+                </div>
+                <div class="form-group">
+                    <label for="teacherId">教师ID</label>
+                    <input type="text" id="teacherId" name="teacherId">
+                </div>
+                <div class="form-group">
+                    <label for="teacherName">教师姓名</label>
+                    <input type="text" id="teacherName" name="teacherName">
+                </div>
+                <div class="form-group">
+                    <label for="department">开课学院</label>
+                    <select id="department" name="department">
+                        <option value="">全部</option>
+                        <!-- 这里需要动态加载学院列表 -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="credit">学分</label>
+                    <input type="number" id="credit" name="credit" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="weekday">上课时间</label>
+                    <div class="time-select">
+                        <select id="weekday" name="weekday">
+                            <option value="">选择星期</option>
+                            <option value="一">星期一</option>
+                            <option value="二">星期二</option>
+                            <option value="三">星期三</option>
+                            <option value="四">星期四</option>
+                            <option value="五">星期五</option>
+                        </select>
+                        <select id="timeSlot" name="timeSlot">
+                            <option value="">选择节次</option>
+                            <option value="1-2">1-2</option>
+                            <option value="3-4">3-4</option>
+                            <option value="5-6">5-6</option>
+                            <option value="7-8">7-8</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>容量空余</label>
+                    <div class="capacity-range">
+                        <input type="number" id="capacityMin" name="capacityMin" placeholder="最小值" min="0">
+                        <span>至</span>
+                        <input type="number" id="capacityMax" name="capacityMax" placeholder="最大值" min="0">
+                    </div>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="hasSpace" name="hasSpace">
+                    <label for="hasSpace">仅显示未满课程</label>
+                </div>
+            </div>
+
+            <div class="search-buttons">
+                <button type="submit" class="search-btn">搜索</button>
+                <button type="reset" class="reset-btn">重置</button>
+            </div>
+        </form>
+
+        <div class="result-container">
+            <table id="resultTable">
+                <thead>
+                    <tr>
+                        <th>课程号</th>
+                        <th>课程名</th>
+                        <th>学分</th>
+                        <th>教师号</th>
+                        <th>上课教师</th>
+                        <th>职称</th>
+                        <th>上课时间</th>
+                        <th>上课教室</th>
+                        <th>课容量</th>
+                        <th>已选人数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 这里将通过JavaScript动态填充搜索结果 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
