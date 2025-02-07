@@ -96,4 +96,10 @@
         AND class_time = #{classTime};
     </select>
 
+    <select id="selectClassScheduleByTeacherId" resultType="com.shu.pojo.ClassSchedule"
+            resultMap="classScheduleMap">
+        SELECT * FROM class_schedule
+        WHERE teacher_id = #{teacherId}
+    </select>
+
 </mapper> 

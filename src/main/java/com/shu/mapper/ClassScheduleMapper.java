@@ -46,4 +46,11 @@ public interface ClassScheduleMapper {
     ClassSchedule getClassScheduleByInfo(@Param("courseId") Integer courseId,
                                          @Param("teacherId") Integer teacherId,
                                          @Param("classTime") String classTime);
+
+    /**
+     * 查询教师的开课安排
+     * @param teacherId
+     * @return
+     */
+    List<ClassSchedule> selectClassScheduleByTeacherId(@Param("teacherId") Integer teacherId);
 } 
