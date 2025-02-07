@@ -24,6 +24,14 @@
         <result column="enrolledCount" property="enrolledCount"/>
     </resultMap>
 
+    <resultMap id="studentSearchDTO" type="com.shu.dto.StudentSearchDTO">
+        <result column="student_id" property="studentId"/>
+        <result column="name" property="studentName"/>
+        <result column="grade_number" property="gradeNumber"/>
+        <result column="department_name" property="departmentName"/>
+        <result column="major_name" property="majorName"/>
+    </resultMap>
+
     <insert id="insert">
         INSERT INTO enrollment (student_id, schedule_id) VALUES (#{studentId}, #{scheduleId});
     </insert>
@@ -65,4 +73,23 @@
         JOIN course c ON cs.course_id = c.course_id
         WHERE e.student_id = #{studentId};
     </select>
+
+    <select id="selectStudentsByScheduleId" resultType="com.shu.dto.StudentSearchDTO" resultMap="studentSearchDTO">
+        SELECT
+            s.student_id,
+            s.name,
+            s.gender,
+            s.grade_number,
+            d.department_name,
+            m.major_name,
+            s.email,
+            g.grade
+        FROM enrollment e
+        JOIN student s ON e.student_id = s.student_id
+        JOIN major m ON s.major_id = m.major_id
+        JOIN department d ON d.department_id = s.department_id
+        JOIN grade g ON e.enrollment_id = g.enrollment_id
+        WHERE e.schedule_id = #{scheduleId};
+    </select>
+
 </mapper> 

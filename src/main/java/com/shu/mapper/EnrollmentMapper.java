@@ -1,7 +1,9 @@
 package com.shu.mapper;
 
 import com.shu.dto.CourseSearchDTO;
+import com.shu.dto.StudentSearchDTO;
 import com.shu.pojo.Enrollment;
+import com.shu.pojo.Student;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -47,5 +49,12 @@ public interface EnrollmentMapper {
      * @return
      */
     List<CourseSearchDTO> selectEnrolledCourses(Integer studentId);
+
+    /**
+     * 方便老师查询自己班级里的娃娃的信息
+     * @param ScheduleId
+     * @return
+     */
+    List<StudentSearchDTO> selectStudentsByScheduleId(Integer ScheduleId);
 
 }
