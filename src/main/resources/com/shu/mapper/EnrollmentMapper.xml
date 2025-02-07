@@ -14,4 +14,10 @@
     <insert id="insert">
         INSERT INTO enrollment (student_id, schedule_id) VALUES (#{studentId}, #{scheduleId});
     </insert>
+
+    <select id="getEnrolledCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) 
+        FROM enrollment 
+        WHERE schedule_id = #{scheduleId}
+    </select>
 </mapper> 
