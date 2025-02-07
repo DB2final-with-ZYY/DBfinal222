@@ -10,4 +10,8 @@
         <association property="student" resultMap="com.shu.mapper.StudentMapper.studentMap"/>
         <association property="classSchedule" resultMap="com.shu.mapper.ClassScheduleMapper.classScheduleMap"/>
     </resultMap>
+
+    <insert id="insert">
+        INSERT INTO enrollment (student_id, schedule_id) VALUES (#{studentId}, #{scheduleId});
+    </insert>
 </mapper> 
