@@ -35,4 +35,15 @@ public interface ClassScheduleMapper {
                                       @Param("capacityMin") Integer capacityMin,
                                       @Param("capacityMax") Integer capacityMax,
                                       @Param("hasSpace") Boolean hasSpace);
+
+    /**
+     * 用在选课时 确定课程号教师号和时间就能确定唯一的课
+     * @param courseId
+     * @param teacherId
+     * @param classTime
+     * @return
+     */
+    ClassSchedule getClassScheduleByInfo(@Param("courseId") Integer courseId,
+                                         @Param("teacherId") Integer teacherId,
+                                         @Param("classTime") String classTime);
 } 

@@ -89,4 +89,11 @@
     ORDER BY cs.course_id, t.teacher_id
 </select>
 
+    <select id="getClassScheduleByInfo" resultType="com.shu.pojo.ClassSchedule" resultMap="classScheduleMap">
+        SELECT * FROM class_schedule
+        WHERE course_id = #{courseId}
+        AND teacher_id = #{teacherId}
+        AND class_time = #{classTime};
+    </select>
+
 </mapper> 
