@@ -1,0 +1,83 @@
+/* 继承courseSelect.css的基础样式 */
+
+/* 课程列表样式 */
+.course-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.total-credits {
+    text-align: right;
+    margin: 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #004d99;
+}
+
+/* 课表样式 */
+.schedule-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#scheduleTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#scheduleTable th,
+#scheduleTable td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#scheduleTable th {
+    background-color: #004d99;
+    color: white;
+}
+
+#scheduleTable td {
+    height: 80px;
+}
+
+#scheduleTable td:first-child {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    width: 60px;
+}
+
+#scheduleTable td:nth-child(2) {
+    background-color: #f5f5f5;
+    font-size: 12px;
+    white-space: pre-line;
+    line-height: 1.4;
+    width: 120px;
+}
+
+.course-cell {
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #e6f3ff;
+    margin-bottom: 5px;
+}
+
+.course-name {
+    font-weight: bold;
+    color: #004d99;
+}
+
+.course-info {
+    font-size: 12px;
+    color: #666;
+} 
