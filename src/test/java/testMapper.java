@@ -1,3 +1,5 @@
+import com.shu.dto.CourseSearchDTO;
+import com.shu.mapper.EnrollmentMapper;
 import com.shu.mapper.StudentMapper;
 import com.shu.mapper.TeacherMapper;
 import com.shu.pojo.Student;
@@ -8,6 +10,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
 
 import java.io.PrintWriter;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -66,11 +69,14 @@ public class testMapper {
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
         // 2.3 获取Mapper
-        TeacherMapper teacherMapper = sqlSession.getMapper(TeacherMapper.class);
+        EnrollmentMapper enrollmentMapper = sqlSession.getMapper(EnrollmentMapper.class);
         // 2.4 调用方法
-        Teacher teacher = teacherMapper.selectById(Integer.parseInt(id));
+        List<CourseSearchDTO> courseSearchDTOS = enrollmentMapper.selectEnrolledCourses(Integer.parseInt(id));
 
-        System.out.println(teacher);
+        for (CourseSearchDTO courseSearchDTO : courseSearchDTOS) {
+            System.out.println(courseSearchDTO);
+        }
+
     }
 
 }
