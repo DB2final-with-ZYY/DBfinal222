@@ -13,5 +13,12 @@ public interface CourseMapper {
      * @return
      */
     List<Course> selectByDepartment(Integer departmentId);
+
+    /**
+     * 插入课程
+     * @param course
+     * @return
+     */
+    int insert(Course course);
     
 } 
