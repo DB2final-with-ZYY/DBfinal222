@@ -10,4 +10,10 @@
         <result column="credit" property="credit"/>
         <association property="department" resultMap="com.shu.mapper.DepartmentMapper.departmentMap"/>
     </resultMap>
+
+    <select id="selectByDepartment" resultType="com.shu.pojo.Course" resultMap="courseMap">
+        SELECT * FROM course
+        WHERE department_id = #{departmentId};
+    </select>
+
 </mapper> 
