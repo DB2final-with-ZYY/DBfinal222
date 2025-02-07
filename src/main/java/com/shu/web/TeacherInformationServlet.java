@@ -69,6 +69,7 @@ public class TeacherInformationServlet extends HttpServlet {
             data.put("gender", teacher.getGender().equals("M") ? "男" : teacher.getGender().equals("F") ? "女" : "其他");
             data.put("email", teacher.getEmail());
             data.put("departmentName", department.getDepartmentName());
+            data.put("position", teacher.getPosition());
 
             // 转换为JSON并响应
             ObjectMapper mapper = new ObjectMapper();
