@@ -14,4 +14,11 @@ public interface DepartmentMapper {
      * @return 院系列表
      */
     List<Department> selectAll();
+
+    /**
+     * 根据id查院系
+     * @param departmentId
+     * @return
+     */
+    Department selectById(Integer departmentId);
 }

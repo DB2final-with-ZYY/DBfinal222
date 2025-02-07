@@ -10,8 +10,12 @@
     <result column="phone_code" property="phoneCode"/>
 </resultMap>
 
-<select id="selectAll" resultMap="departmentMap">
-    SELECT * FROM department ORDER BY department_id
-</select>
+    <select id="selectAll" resultMap="departmentMap">
+        SELECT * FROM department ORDER BY department_id
+    </select>
+
+    <select id="selectById" resultType="com.shu.pojo.Department" resultMap="departmentMap">
+        SELECT * FROM department WHERE department_id = #{departmentId};
+    </select>
 
 </mapper> 
