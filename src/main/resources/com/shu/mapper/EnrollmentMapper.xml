@@ -74,7 +74,8 @@
         WHERE e.student_id = #{studentId};
     </select>
 
-    <select id="selectStudentsByScheduleId" resultType="com.shu.dto.StudentSearchDTO" resultMap="studentSearchDTO">
+    <select id="selectStudentsByScheduleId" resultType="com.shu.dto.StudentSearchDTO"
+            resultMap="studentSearchDTO">
         SELECT
             s.student_id,
             s.name,
