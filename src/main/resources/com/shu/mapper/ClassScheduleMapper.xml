@@ -113,12 +113,12 @@
         AND class_time = #{classTime};
     </select>
 
-    <select id="selectClassScheduleByTeacherId" resultType="com.shu.dto.CourseSearchDTO"
-            resultMap="courseSearchResultMap">
+    <select id="selectClassScheduleByTeacherId" resultType="com.shu.dto.CourseSearchDTO" resultMap="courseSearchResultMap">
         SELECT
             cs.course_id as courseId,
             c.course_name as courseName,
             c.credit,
+            cs.teacher_id as teacherId,
             cs.class_time as classTime,
             cs.classroom,
             cs.capacity

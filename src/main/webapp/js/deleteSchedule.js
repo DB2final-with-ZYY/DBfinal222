@@ -82,7 +82,13 @@ function displayCourseList(courses) {
         const deleteButton = document.createElement('button');
         deleteButton.textContent = '删除';
         deleteButton.classList.add('delete-btn');
-        deleteButton.onclick = () => deleteSchedule(course.courseId, course.teacherId, course.classTime);
+        // 使用当前登录教师的ID
+        const teacherId = document.getElementById('teacherId').textContent;
+        deleteButton.onclick = () => deleteSchedule({
+            courseId: course.courseId,
+            teacherId: parseInt(teacherId), // 转换为数字
+            classTime: course.classTime
+        });
         actionCell.appendChild(deleteButton);
     });
 }
@@ -124,18 +130,13 @@ function displaySchedule(courses) {
     });
 }
 
-// 修改删除函数，接收必要的参数
-function deleteSchedule(courseId, teacherId, classTime) {
+// 修改删除函数，接收一个对象参数
+function deleteSchedule(scheduleData) {
+    console.log('Deleting schedule:', scheduleData); // 添加调试日志
+
     if (!confirm('确定要删除该课程安排吗？')) {
         return;
     }
-
-    // 构造请求体，包含所有必要的信息
-    const scheduleData = {
-        courseId: courseId,
-        teacherId: teacherId,
-        classTime: classTime
-    };
 
     fetch('/deleteSchedule', {
         method: 'POST',

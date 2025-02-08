@@ -24,7 +24,9 @@ public class DeleteScheduleServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // 设置响应类型
+        // 设置请求和响应的字符编码
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=utf-8");
 
         // 获取当前登录的教师
@@ -48,6 +50,17 @@ public class DeleteScheduleServlet extends HttpServlet {
         // 解析JSON数据
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> scheduleData = mapper.readValue(sb.toString(), Map.class);
+
+        // 打印接收到的数据
+        System.out.println("Received data: " + sb.toString());
+        System.out.println("Parsed data: " + scheduleData);
+
+        // 添加空值检查
+        if (!scheduleData.containsKey("courseId") || !scheduleData.containsKey("teacherId") || !scheduleData.containsKey("classTime")) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\": \"缺少必要参数\"}");
+            return;
+        }
 
         // 获取并转换数据
         Integer courseId = Integer.valueOf(scheduleData.get("courseId").toString());
