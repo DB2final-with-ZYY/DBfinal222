@@ -40,6 +40,11 @@
           AND class_time = #{classTime};
     </delete>
 
+    <delete id="deleteClassScheduleById">
+        DELETE FROM class_schedule
+        WHERE schedule_id = #{scheduleId};
+    </delete>
+
     <select id="searchCourses" resultMap="courseSearchResultMap">
     SELECT 
         cs.course_id as courseId,

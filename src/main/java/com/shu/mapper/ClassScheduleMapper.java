@@ -69,4 +69,10 @@ public interface ClassScheduleMapper {
      */
     int deleteClassSchedule(ClassSchedule classSchedule);
 
+    /**
+     * 用课程安排id来删课程安排
+     * @param ScheduleId
+     * @return
+     */
+    int deleteClassScheduleById(Integer ScheduleId);
 } 
