@@ -53,7 +53,7 @@ function displayCourseList(courses) {
     if (!courses || courses.length === 0) {
         const row = tbody.insertRow();
         const cell = row.insertCell();
-        cell.colSpan = 6;
+        cell.colSpan = 7;
         cell.textContent = '暂无课程安排';
         cell.style.textAlign = 'center';
         return;
@@ -61,6 +61,8 @@ function displayCourseList(courses) {
 
     courses.forEach(course => {
         const row = tbody.insertRow();
+
+        // 先添加课程信息
         const cells = [
             course.courseId,
             course.courseName,
@@ -74,6 +76,14 @@ function displayCourseList(courses) {
             const cell = row.insertCell();
             cell.textContent = cellData || '';
         });
+
+        // 最后添加操作列 - 删除按钮
+        const actionCell = row.insertCell();
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = '删除';
+        deleteButton.classList.add('delete-btn');
+        deleteButton.onclick = () => deleteSchedule(course.courseId, course.teacherId, course.classTime);
+        actionCell.appendChild(deleteButton);
     });
 }
 
@@ -112,6 +122,41 @@ function displaySchedule(courses) {
             }
         }
     });
+}
+
+// 修改删除函数，接收必要的参数
+function deleteSchedule(courseId, teacherId, classTime) {
+    if (!confirm('确定要删除该课程安排吗？')) {
+        return;
+    }
+
+    // 构造请求体，包含所有必要的信息
+    const scheduleData = {
+        courseId: courseId,
+        teacherId: teacherId,
+        classTime: classTime
+    };
+
+    fetch('/deleteSchedule', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(scheduleData)
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('课程安排删除成功！');
+                loadCourseSchedule(); // 重新加载课程列表和课表
+            } else {
+                alert(data.error || '删除失败，请重试');
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting schedule:', error);
+            alert('删除失败，请稍后重试');
+        });
 }
 
 // // 格式化课程时间
