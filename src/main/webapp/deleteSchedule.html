@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>删除课程安排 - 教师端</title>
+    <link rel="stylesheet" href="css/courseSelect.css">
+    <link rel="stylesheet" href="css/schedule.css">
+    <script src="js/teacherSchedule.js"></script>
+</head>
+
+<body>
+    <nav class="nav-menu">
+        <div class="nav-left">
+            <img src="images/signature.png" alt="SHU" class="nav-logo">
+            <a href="teacherCourseSearch.html" class="nav-item">课程查询</a>
+            <a href="createCourse.html" class="nav-item">创建课程</a>
+            <a href="createSchedule.html" class="nav-item">创建课程安排</a>
+            <a href="deleteSchedule.html" class="nav-item active">删除课程安排</a>
+            <a href="teacherSchedule.html" class="nav-item">课表查看</a>
+            <a href="classManagement.html" class="nav-item">班级管理</a>
+            <a href="examManagement.html" class="nav-item">考试管理</a>
+        </div>
+        <div class="nav-right">
+            <a href="logout" class="nav-item nav-logout">退出登录</a>
+        </div>
+    </nav>
+
+    <!-- 教师信息区域 -->
+    <div class="student-info">
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">教师号：</span>
+                <span class="info-value" id="teacherId"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">姓名：</span>
+                <span class="info-value" id="teacherName"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">性别：</span>
+                <span class="info-value" id="teacherGender"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">职称：</span>
+                <span class="info-value" id="teacherPosition"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">邮箱：</span>
+                <span class="info-value" id="teacherEmail"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">学院：</span>
+                <span class="info-value" id="teacherDepartment"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 本学期课程列表 -->
+    <div class="course-container">
+        <h2>本学期课程列表</h2>
+        <table id="courseTable">
+            <thead>
+                <tr>
+                    <th>操作</th>
+                    <th>课程号</th>
+                    <th>课程名</th>
+                    <th>学分</th>
+                    <th>上课时间</th>
+                    <th>上课教室</th>
+                    <th>课容量</th>
+                </tr>
+            </thead>
+            <tbody id="courseListBody">
+                <!-- 这里将通过JavaScript动态填充课程信息 -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 课表展示 -->
+    <div class="schedule-container">
+        <h2>课程表</h2>
+        <table id="scheduleTable">
+            <thead>
+                <tr>
+                    <th>节次</th>
+                    <th>上课时间</th>
+                    <th>星期一</th>
+                    <th>星期二</th>
+                    <th>星期三</th>
+                    <th>星期四</th>
+                    <th>星期五</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1-2</td>
+                    <td>
+                        08:00-08:45<br>
+                        08:55-09:40
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>3-4</td>
+                    <td>
+                        10:00-10:45<br>
+                        10:55-11:40
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>5-6</td>
+                    <td>
+                        13:00-13:45<br>
+                        13:55-14:40
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>7-8</td>
+                    <td>
+                        15:00-15:45<br>
+                        15:55-16:40
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
