@@ -108,9 +108,17 @@
         AND class_time = #{classTime};
     </select>
 
-    <select id="selectClassScheduleByTeacherId" resultType="com.shu.pojo.ClassSchedule"
-            resultMap="classScheduleMap">
-        SELECT * FROM class_schedule
+    <select id="selectClassScheduleByTeacherId" resultType="com.shu.dto.CourseSearchDTO"
+            resultMap="courseSearchResultMap">
+        SELECT
+            cs.course_id as courseId,
+            c.course_name as courseName,
+            c.credit,
+            cs.class_time as classTime,
+            cs.classroom,
+            cs.capacity
+        FROM class_schedule cs
+        JOIN course c ON c.course_id = cs.course_id
         WHERE teacher_id = #{teacherId}
     </select>
 

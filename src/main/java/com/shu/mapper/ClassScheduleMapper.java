@@ -48,11 +48,11 @@ public interface ClassScheduleMapper {
                                          @Param("classTime") String classTime);
 
     /**
-     * 查询教师的开课安排
+     * 查询教师的开课安排 这边返回的是详细信息
      * @param teacherId
      * @return
      */
-    List<ClassSchedule> selectClassScheduleByTeacherId(@Param("teacherId") Integer teacherId);
+    List<CourseSearchDTO> selectClassScheduleByTeacherId(@Param("teacherId") Integer teacherId);
 
     /**
      * 插入课程安排
