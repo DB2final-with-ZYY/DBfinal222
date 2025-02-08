@@ -17,9 +17,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/createSchedule")
 public class CreateScheduleServlet extends HttpServlet {
@@ -27,7 +29,6 @@ public class CreateScheduleServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 设置响应的字符编码和内容类型
         req.setCharacterEncoding("utf-8");
-        resp.setContentType("application/json;charset=utf-8");
 
         // 获取当前登录的教师ID
         HttpSession session = req.getSession();
@@ -39,22 +40,56 @@ public class CreateScheduleServlet extends HttpServlet {
             return;
         }
 
-        // 获取信息
-        String courseId = req.getParameter("courseId");
-        String courseName = req.getParameter("courseName");
-        String credit = req.getParameter("credit");
-        String classroom = req.getParameter("classroom");
-        String capacity = req.getParameter("capacity");
-        String semester = req.getParameter("semester");
-        String classTime = req.getParameter("classTime");
 
-        // 封装信息
+        // 读取 JSON 数据
+        BufferedReader reader = req.getReader();
+        StringBuilder jsonBuilder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            jsonBuilder.append(line);
+        }
+
+        String jsonData = jsonBuilder.toString();
+        if (jsonData.isEmpty()) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\": \"请求体为空\"}");
+            return;
+        }
+
+        // 解析 JSON 数据
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, String> data = objectMapper.readValue(jsonData, Map.class);
+
+        String courseIdStr = data.get("courseId");
+        String classroom = data.get("classroom");
+        String capacityStr = data.get("capacity");
+        String semesterStr = data.get("semester");
+        String classTime = data.get("classTime");
+
+        if (courseIdStr == null || classroom == null || capacityStr == null || semesterStr == null || classTime == null) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\": \"参数不能为空\"}");
+            return;
+        }
+
+        int courseId, capacity, semester;
+        try {
+            courseId = Integer.parseInt(courseIdStr);
+            capacity = Integer.parseInt(capacityStr);
+            semester = Integer.parseInt(semesterStr);
+        } catch (NumberFormatException e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\": \"数值字段格式错误\"}");
+            return;
+        }
+
+        // 封装课程信息
         ClassSchedule classSchedule = new ClassSchedule();
-        classSchedule.setSemester(Integer.parseInt(semester));
-        classSchedule.setCourseId(Integer.parseInt(courseId));
+        classSchedule.setSemester(semester);
+        classSchedule.setCourseId(courseId);
         classSchedule.setTeacherId(teacher.getTeacherId());
         classSchedule.setClassroom(classroom);
-        classSchedule.setCapacity(Integer.parseInt(capacity));
+        classSchedule.setCapacity(capacity);
         classSchedule.setClassTime(classTime);
 
         System.out.println(classSchedule);
@@ -78,22 +113,16 @@ public class CreateScheduleServlet extends HttpServlet {
             if (count > 0) {
                 // 提交
                 sqlSession.commit();
-                writer.write("<html><body>");
-                writer.write("<h1>创建成功！</h1>");
-                writer.write("<script>window.alert(\"创建成功\");</script>");
-                writer.write("<script>window.location.href='teacherSchedule.html';</script>");
-                writer.write("</body></html>");
+                // 给前端响应
+                resp.getWriter().write("{\"success\": true}");
             } else {
                 // 失败，弹出提示框
                 sqlSession.rollback();
-                writer.write("<html><body>");
-                writer.write("<h1>创建失败！</h1>");
-                writer.write("<script>alert('创建失败！'); window.history.back();</script>"); // 弹窗并返回上一步
-                writer.write("</body></html>");
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                resp.getWriter().write("{\"error\": \"课程创建失败，请稍后重试\"}");
             }
-
-
         } catch (Exception e) {
+            sqlSession.rollback();
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write("{\"error\": \"服务器内部错误\"}");

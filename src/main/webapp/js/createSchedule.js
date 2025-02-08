@@ -118,6 +118,7 @@ function setupFormSubmission() {
             if (data.success) {
                 alert('课程安排创建成功！');
                 form.reset();
+                window.location.href = 'teacherSchedule.html'; // 跳转到课程安排界面
             } else {
                 alert(data.error || '创建失败，请重试');
             }
