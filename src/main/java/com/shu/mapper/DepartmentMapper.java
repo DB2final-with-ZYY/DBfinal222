@@ -21,4 +21,11 @@ public interface DepartmentMapper {
      * @return
      */
     Department selectById(Integer departmentId);
+
+    /**
+     *  根据名字查学院
+     * @param departmentName
+     * @return
+     */
+    Department selectByName(String departmentName);
 }

@@ -18,4 +18,8 @@
         SELECT * FROM department WHERE department_id = #{departmentId};
     </select>
 
+    <select id="selectByName" resultType="com.shu.pojo.Department" resultMap="departmentMap">
+        SELECT * FROM department WHERE department_name = #{departmentName};
+    </select>
+
 </mapper> 
