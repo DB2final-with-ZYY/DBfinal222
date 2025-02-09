@@ -16,16 +16,18 @@
 </resultMap>
 
 <resultMap id="courseSearchResultMap" type="com.shu.dto.CourseSearchDTO">
-    <result column="courseId" property="courseId"/>
-    <result column="courseName" property="courseName"/>
+    <result column="course_id" property="courseId"/>
+    <result column="course_name" property="courseName"/>
     <result column="credit" property="credit"/>
-    <result column="teacherId" property="teacherId"/>
-    <result column="teacherName" property="teacherName"/>
+    <result column="teacher_id" property="teacherId"/>
+    <result column="teacher_name" property="teacherName"/>
     <result column="position" property="position"/>
-    <result column="classTime" property="classTime"/>
+    <result column="class_time" property="classTime"/>
     <result column="classroom" property="classroom"/>
     <result column="capacity" property="capacity"/>
-    <result column="enrolledCount" property="enrolledCount"/>
+    <result column="enrolled_count" property="enrolledCount"/>
+    <result column="exam_time" property="examTime"/>
+    <result column="exam_place" property="examPlace"/>
 </resultMap>
 
     <insert id="insertClassSchedule">
@@ -47,16 +49,16 @@
 
     <select id="searchCourses" resultMap="courseSearchResultMap">
     SELECT 
-        cs.course_id as courseId,
-        c.course_name as courseName,
+        cs.course_id,
+        c.course_name,
         c.credit,
-        cs.teacher_id as teacherId,
-        t.name as teacherName,
+        cs.teacher_id,
+        t.name,
         t.position,
-        cs.class_time as classTime,
+        cs.class_time,
         cs.classroom,
         cs.capacity,
-        (SELECT COUNT(*) FROM enrollment e WHERE e.schedule_id = cs.schedule_id) as enrolledCount
+        (SELECT COUNT(*) FROM enrollment e WHERE e.schedule_id = cs.schedule_id)
     FROM 
         class_schedule cs
         JOIN course c ON cs.course_id = c.course_id
@@ -115,15 +117,18 @@
 
     <select id="selectClassScheduleByTeacherId" resultType="com.shu.dto.CourseSearchDTO" resultMap="courseSearchResultMap">
         SELECT
-            cs.course_id as courseId,
-            c.course_name as courseName,
+            cs.course_id,
+            c.course_name,
             c.credit,
-            cs.teacher_id as teacherId,
-            cs.class_time as classTime,
+            cs.teacher_id,
+            cs.class_time,
             cs.classroom,
-            cs.capacity
+            cs.capacity,
+            e.exam_time,
+            e.exam_place
         FROM class_schedule cs
         JOIN course c ON c.course_id = cs.course_id
+        LEFT JOIN exam e ON e.schedule_id = cs.schedule_id
         WHERE teacher_id = #{teacherId}
     </select>
 
