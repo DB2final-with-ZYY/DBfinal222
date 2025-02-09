@@ -72,7 +72,7 @@ function displayCourseList(courses) {
         const actionCell = row.insertCell();
         const createButton = document.createElement('button');
         createButton.textContent = '创建安排';
-        createButton.className = 'btn-action';
+        createButton.className = 'button-create';
         createButton.onclick = () => fillScheduleForm(course);
         actionCell.appendChild(createButton);
     });
