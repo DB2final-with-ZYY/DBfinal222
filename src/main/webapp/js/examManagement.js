@@ -20,12 +20,15 @@ function loadExamSchedules() {
                 row.insertCell().textContent = course.classroom;
                 row.insertCell().textContent = course.capacity;
 
+                let timeInput = null;
+                let locationInput = null;
+
                 // 考试时间单元格
                 const examTimeCell = row.insertCell();
                 if (course.examTime) {
                     examTimeCell.textContent = course.examTime;
                 } else {
-                    const timeInput = document.createElement('input');
+                    timeInput = document.createElement('input');
                     timeInput.type = 'text';
                     timeInput.className = 'exam-input';
                     timeInput.placeholder = '选择考试时间';
@@ -52,7 +55,7 @@ function loadExamSchedules() {
                 if (course.examPlace) {
                     examPlaceCell.textContent = course.examPlace;
                 } else {
-                    const locationInput = document.createElement('input');
+                    locationInput = document.createElement('input');
                     locationInput.type = 'text';
                     locationInput.className = 'exam-input';
                     locationInput.placeholder = '输入考试地点';
@@ -65,7 +68,19 @@ function loadExamSchedules() {
                     const submitBtn = document.createElement('button');
                     submitBtn.textContent = '提交';
                     submitBtn.className = 'submit-btn';
-                    submitBtn.onclick = () => submitExamInfo(course.scheduleId, timeInput, locationInput, submitBtn);
+
+                    // 使用闭包来保持对timeInput和locationInput的引用
+                    const currentTimeInput = timeInput;
+                    const currentLocationInput = locationInput;
+
+                    submitBtn.onclick = () => {
+                        if (currentTimeInput && currentLocationInput) {
+                            submitExamInfo(course.scheduleId, currentTimeInput, currentLocationInput, submitBtn);
+                        } else {
+                            alert('请先填写考试时间和地点');
+                        }
+                    };
+
                     actionCell.appendChild(submitBtn);
                 }
             });
