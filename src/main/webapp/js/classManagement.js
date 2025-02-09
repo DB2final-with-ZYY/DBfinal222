@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadTeacherInfo();
     loadClassList();
     setupClassSelect();
@@ -30,14 +30,19 @@ function loadTeacherInfo() {
 
 // 加载班级列表
 function loadClassList() {
-    const teacherId = document.getElementById('teacherId').textContent;
-    fetch(`/teacherCourses?teacherId=${teacherId}`)
+    fetch('/teacherCourses')
         .then(response => response.json())
         .then(data => {
             const select = document.getElementById('classSelect');
+            select.innerHTML = '<option value="">请选择班级</option>';
+
             data.forEach(classInfo => {
                 const option = document.createElement('option');
-                option.value = classInfo.scheduleId;
+                option.value = JSON.stringify({
+                    courseId: classInfo.courseId,
+                    teacherId: classInfo.teacherId,
+                    classTime: classInfo.classTime
+                });
                 option.textContent = `${classInfo.courseName} (${classInfo.classTime})`;
                 select.appendChild(option);
             });
@@ -47,10 +52,11 @@ function loadClassList() {
 
 // 设置班级选择事件
 function setupClassSelect() {
-    document.getElementById('classSelect').addEventListener('change', function(e) {
-        const scheduleId = e.target.value;
-        if (scheduleId) {
-            loadStudentList(scheduleId);
+    document.getElementById('classSelect').addEventListener('change', function (e) {
+        const selectedValue = e.target.value;
+        if (selectedValue) {
+            const classInfo = JSON.parse(selectedValue);
+            loadStudentList(classInfo);
             document.getElementById('studentListContainer').style.display = 'block';
             document.getElementById('analysisContainer').style.display = 'block';
         } else {
@@ -61,8 +67,14 @@ function setupClassSelect() {
 }
 
 // 加载学生列表
-function loadStudentList(scheduleId) {
-    fetch(`/classStudents?scheduleId=${scheduleId}`)
+function loadStudentList(classInfo) {
+    fetch('/classStudents', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(classInfo)
+    })
         .then(response => response.json())
         .then(data => {
             displayStudentList(data);
@@ -77,20 +89,31 @@ function displayStudentList(students) {
     const tbody = document.getElementById('studentListBody');
     tbody.innerHTML = '';
 
+    // 添加调试日志
+    console.log('Received students data:', students);
+
     students.forEach(student => {
+        // 添加调试日志
+        console.log('Processing student:', student);
+
         const row = tbody.insertRow();
         const cells = [
             student.studentId,
-            student.name,
+            student.studentName,
             student.gender === 'M' ? '男' : '女',
             student.grade,
+            student.departmentName,
             student.majorName,
-            student.score || '未录入'
+            student.email,
+            student.grade || '未录入'  // 使用grade属性作为成绩
         ];
 
-        cells.forEach(text => {
+        // 添加调试日志
+        console.log('Cells to display:', cells);
+
+        cells.forEach((text, index) => {
             const cell = row.insertCell();
-            cell.textContent = text;
+            cell.textContent = text || ''; // 处理undefined或null值
         });
 
         // 添加删除按钮
@@ -106,9 +129,9 @@ function displayStudentList(students) {
 // 更新班级统计信息
 function updateClassStatistics(students) {
     document.getElementById('totalStudents').textContent = students.length;
-    
-    const scores = students.map(s => s.score).filter(s => s != null);
-    const average = scores.length > 0 
+
+    const scores = students.map(s => s.grade).filter(s => s != null);
+    const average = scores.length > 0
         ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2)
         : '暂无';
     document.getElementById('averageScore').textContent = average;
@@ -116,8 +139,8 @@ function updateClassStatistics(students) {
 
 // 显示成绩分析图表
 function displayScoreAnalysis(students) {
-    const scores = students.map(s => s.score).filter(s => s != null);
-    
+    const scores = students.map(s => s.grade).filter(s => s != null);
+
     // 分数分布图
     const distributionChart = echarts.init(document.getElementById('scoreDistribution'));
     const distributionOption = {
@@ -175,12 +198,12 @@ function calculateScoreDistribution(scores) {
 // 计算成绩统计数据
 function calculateScoreStatistics(scores) {
     if (scores.length === 0) return [0, 0, 0, 0];
-    
+
     const average = scores.reduce((a, b) => a + b, 0) / scores.length;
     const max = Math.max(...scores);
     const min = Math.min(...scores);
     const passRate = (scores.filter(s => s >= 60).length / scores.length) * 100;
-    
+
     return [average, max, min, passRate];
 }
 
@@ -190,7 +213,7 @@ function removeStudent(studentId) {
         return;
     }
 
-    const scheduleId = document.getElementById('classSelect').value;
+    const classInfo = JSON.parse(document.getElementById('classSelect').value);
     fetch('/removeStudent', {
         method: 'POST',
         headers: {
@@ -198,20 +221,22 @@ function removeStudent(studentId) {
         },
         body: JSON.stringify({
             studentId: studentId,
-            scheduleId: scheduleId
+            courseId: classInfo.courseId,
+            teacherId: classInfo.teacherId,
+            classTime: classInfo.classTime
         })
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('退课成功');
-            loadStudentList(scheduleId);
-        } else {
-            alert(data.error || '退课失败，请重试');
-        }
-    })
-    .catch(error => {
-        console.error('Error removing student:', error);
-        alert('退课失败，请重试');
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('退课成功');
+                loadStudentList(classInfo);
+            } else {
+                alert(data.error || '退课失败，请重试');
+            }
+        })
+        .catch(error => {
+            console.error('Error removing student:', error);
+            alert('退课失败，请重试');
+        });
 } 

@@ -52,8 +52,8 @@ public class ClassStudentsServlet extends HttpServlet {
         Map<String, Object> scheduleData = mapper.readValue(sb.toString(), Map.class);
 
         // 打印接收到的数据
-        System.out.println("Received data: " + sb.toString());
-        System.out.println("Parsed data: " + scheduleData);
+//        System.out.println("Received data: " + sb.toString());
+//        System.out.println("Parsed data: " + scheduleData);
 
         // 添加空值检查
         if (!scheduleData.containsKey("courseId") || !scheduleData.containsKey("teacherId") || !scheduleData.containsKey("classTime")) {
@@ -74,7 +74,7 @@ public class ClassStudentsServlet extends HttpServlet {
             return;
         }
 
-        System.out.println(courseId + " " + teacherId + " " + classTime);
+//        System.out.println(courseId + " " + teacherId + " " + classTime);
 
         // 获取SqlSession
         SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtils.getSqlSessionFactory();
@@ -83,10 +83,11 @@ public class ClassStudentsServlet extends HttpServlet {
         try {
             ClassScheduleMapper classScheduleMapper = sqlSession.getMapper(ClassScheduleMapper.class);
             ClassSchedule schedule = classScheduleMapper.getClassScheduleByInfo(courseId, teacherId, classTime);
-            System.out.println("(ClassStudentServlet)scheduleId:" + schedule.getScheduleId());
+//            System.out.println("(ClassStudentServlet)scheduleId:" + schedule.getScheduleId());
 
             EnrollmentMapper enrollmentMapper = sqlSession.getMapper(EnrollmentMapper.class);
             List<StudentSearchDTO> studentSearchDTOS = enrollmentMapper.selectStudentsByScheduleId(schedule.getScheduleId());
+//            System.out.println("(ClassStudentsServlet)studentSearchDTOS:" + studentSearchDTOS);
 
             // 传给前端
             // 转换为JSON并响应
