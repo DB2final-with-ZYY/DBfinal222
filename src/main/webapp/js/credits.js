@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         courses.forEach(course => {
             const row = tbody.insertRow();
-            
+
             // 添加课程基本信息
             [course.courseId, course.courseName, course.credit].forEach(text => {
                 const cell = row.insertCell();
@@ -86,23 +86,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 检查课程是否已选
             const enrolledCourse = enrolledCourses.get(course.courseId);
-            
-            // 添加完成情况
+
+            // 添加完成情况和成绩
             const statusCell = row.insertCell();
             const gradeCell = row.insertCell();
-            
+
             if (enrolledCourse) {
                 // 如果已经选了这门课
-                statusCell.textContent = '进行中';
-                statusCell.className = 'status-in-progress';
-                gradeCell.textContent = '-';
-            } else if (course.grade) {
-                // 如果有成绩
-                statusCell.textContent = '已完成';
-                statusCell.className = 'status-completed';
-                gradeCell.textContent = course.grade;
+                if (enrolledCourse.grade) {
+                    // 如果有成绩
+                    statusCell.textContent = '已完成';
+                    statusCell.className = 'status-completed';
+                    gradeCell.textContent = enrolledCourse.grade;
+                } else {
+                    // 如果没有成绩，表示课程仍在进行中
+                    statusCell.textContent = '进行中';
+                    statusCell.className = 'status-in-progress';
+                    gradeCell.textContent = '-';
+                }
             } else {
-                // 如果既没选也没完成
+                // 如果未选这门课
                 statusCell.textContent = '未完成';
                 statusCell.className = 'status-incomplete';
                 gradeCell.textContent = '-';
@@ -120,6 +123,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+
 
     // 跳转到选课页面并填入课程号
     function goToSelectCourse(courseId) {
