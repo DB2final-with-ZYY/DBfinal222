@@ -6,23 +6,37 @@
     <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-    <div class="login-container">
-        <h2 class="login-title">教务管理系统</h2>
-        <form id="loginForm" action="/login" method="post">
-            <select class="role-select" name="role" required>
-                <option value="student">学生</option>
-                <option value="teacher">教师</option>
-            </select>
-            <div class="form-group">
-                <label for="userId">用户ID</label>
-                <input type="text" id="userId" name="id" required>
-            </div>
-            <div class="form-group">
-                <label for="password">密码</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="login-btn">登录</button>
-        </form>
-    </div>
+
+<!-- 头部 -->
+<div class="header">
+    <img src="images/signature.png" alt="SHU" class="nav-logo">
+    <span class="header-title">教务管理系统</span>
+</div>
+
+<!-- 登录表单 -->
+<div class="login-container">
+    <h2 class="login-title">教务管理系统</h2>
+    <form id="loginForm" action="/login" method="post">
+        <select class="role-select" name="role" required>
+            <option value="student">学生</option>
+            <option value="teacher">教师</option>
+        </select>
+        <div class="form-group">
+            <label for="userId">用户ID</label>
+            <input type="text" id="userId" name="id" required>
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="login-btn">登录</button>
+    </form>
+</div>
+
+<!-- 底部 -->
+<div class="footer">
+    <p>© 2025 上海大学 | 教务管理系统, 版权所有:22122128 孔馨怡</p>
+</div>
+
 </body>
-</html> 
+</html>

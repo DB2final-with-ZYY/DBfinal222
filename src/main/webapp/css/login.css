@@ -67,4 +67,35 @@ body {
     border-radius: 5px;
     margin-bottom: 20px;
     background-color: white;
-} 
+}
+
+
+/* 头部样式 */
+.header {
+    background-color: #004d99;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.nav-logo {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.header-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* 底部样式 */
+.footer {
+    background-color: #004d99;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
