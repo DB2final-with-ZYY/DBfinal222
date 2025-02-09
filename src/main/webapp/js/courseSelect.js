@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 course.classTime,
                 course.classroom,
                 course.capacity,
-                course.enrolledCount
+                course.enrolledCount || "0"
             ];
 
             cells.forEach(cellData => {
