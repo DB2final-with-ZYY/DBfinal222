@@ -68,7 +68,7 @@
     <select id="selectStudentsByScheduleId" resultType="com.shu.dto.StudentSearchDTO"
             resultMap="studentSearchDTO">
         SELECT
-            s.student_id,w
+            s.student_id,
             s.name,
             s.gender,
             s.grade_number,

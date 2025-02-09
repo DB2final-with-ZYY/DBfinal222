@@ -48,24 +48,24 @@ function loadExamSchedules() {
                 }
 
                 // 考试地点单元格
-                const examLocationCell = row.insertCell();
-                if (course.examLocation) {
-                    examLocationCell.textContent = course.examLocation;
+                const examPlaceCell = row.insertCell();
+                if (course.examPlace) {
+                    examPlaceCell.textContent = course.examPlace;
                 } else {
                     const locationInput = document.createElement('input');
                     locationInput.type = 'text';
                     locationInput.className = 'exam-input';
                     locationInput.placeholder = '输入考试地点';
-                    examLocationCell.appendChild(locationInput);
+                    examPlaceCell.appendChild(locationInput);
                 }
 
                 // 操作按钮单元格
                 const actionCell = row.insertCell();
-                if (!course.examTime || !course.examLocation) {
+                if (!course.examTime || !course.examPlace) {
                     const submitBtn = document.createElement('button');
                     submitBtn.textContent = '提交';
                     submitBtn.className = 'submit-btn';
-                    submitBtn.onclick = () => submitExamInfo(course.courseId, timeInput, locationInput, submitBtn);
+                    submitBtn.onclick = () => submitExamInfo(course.scheduleId, timeInput, locationInput, submitBtn);
                     actionCell.appendChild(submitBtn);
                 }
             });
@@ -76,11 +76,11 @@ function loadExamSchedules() {
         });
 }
 
-function submitExamInfo(courseId, timeInput, locationInput, submitBtn) {
+function submitExamInfo(scheduleId, timeInput, locationInput, submitBtn) {
     const examTime = timeInput.value;
-    const examLocation = locationInput.value;
+    const examPlace = locationInput.value;
 
-    if (!examTime || !examLocation) {
+    if (!examTime || !examPlace) {
         alert('请填写完整的考试时间和地点');
         return;
     }
@@ -94,15 +94,15 @@ function submitExamInfo(courseId, timeInput, locationInput, submitBtn) {
 
     submitBtn.disabled = true;
 
-    fetch('/api/exam/arrange', {
+    fetch('/examArrange', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            courseId: courseId,
+            scheduleId: scheduleId,
             examTime: examTime,
-            examLocation: examLocation
+            examPlace: examPlace
         })
     })
         .then(response => response.json())
