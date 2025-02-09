@@ -101,7 +101,7 @@ function displayStudentList(students) {
             student.studentId,
             student.studentName,
             student.gender === 'M' ? '男' : '女',
-            student.grade,
+            student.gradeNumber,
             student.departmentName,
             student.majorName,
             student.email,
