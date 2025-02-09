@@ -89,11 +89,9 @@ function displayStudentList(students) {
     const tbody = document.getElementById('studentListBody');
     tbody.innerHTML = '';
 
-    // 添加调试日志
     console.log('Received students data:', students);
 
     students.forEach(student => {
-        // 添加调试日志
         console.log('Processing student:', student);
 
         const row = tbody.insertRow();
@@ -108,13 +106,20 @@ function displayStudentList(students) {
             student.grade || '未录入'  // 使用grade属性作为成绩
         ];
 
-        // 添加调试日志
         console.log('Cells to display:', cells);
 
         cells.forEach((text, index) => {
             const cell = row.insertCell();
-            cell.textContent = text || ''; // 处理undefined或null值
+            cell.textContent = text || ''; // 处理 undefined 或 null 值
         });
+
+        // 添加录入/修改成绩按钮
+        const gradeActionCell = row.insertCell();
+        const gradeButton = document.createElement('button');
+        gradeButton.textContent = student.grade ? '修改成绩' : '录入成绩';
+        gradeButton.className = 'button-create';
+        gradeButton.onclick = () => handleGradeEntry(student);
+        gradeActionCell.appendChild(gradeButton);
 
         // 添加删除按钮
         const actionCell = row.insertCell();
@@ -125,6 +130,44 @@ function displayStudentList(students) {
         actionCell.appendChild(deleteButton);
     });
 }
+
+// 处理成绩录入/修改
+function handleGradeEntry(student) {
+    const newGrade = prompt(`请输入 ${student.studentName} 的成绩:`, student.grade || '');
+    if (newGrade !== null) {
+        const classInfo = JSON.parse(document.getElementById('classSelect').value);
+
+        // 判断是提交成绩还是修改成绩
+        const url = student.grade ? '/updateGrade' : '/submitGrade'; // 判断接口
+
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                studentId: student.studentId,
+                courseId: classInfo.courseId,
+                teacherId: classInfo.teacherId,
+                classTime: classInfo.classTime,
+                grade: newGrade
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(student.grade ? '成绩更新成功' : '成绩录入成功');
+                    loadStudentList(classInfo);
+                } else {
+                    alert(data.error || '操作失败，请重试');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating/submiting grade:', error);
+                alert('操作失败，请重试');
+            });
+    }
+}
+
+
 
 // 更新班级统计信息
 function updateClassStatistics(students) {
@@ -239,4 +282,4 @@ function removeStudent(studentId) {
             console.error('Error removing student:', error);
             alert('退课失败，请重试');
         });
-} 
+}
