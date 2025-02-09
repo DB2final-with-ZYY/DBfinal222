@@ -138,7 +138,7 @@ function handleGradeEntry(student) {
         const classInfo = JSON.parse(document.getElementById('classSelect').value);
 
         // 判断是提交成绩还是修改成绩
-        const url = student.grade ? '/updateGrade' : '/submitGrade'; // 判断接口
+        const url = student.grade ? '/updateGrade' : '/insertGrade'; // 判断接口
 
         fetch(url, {
             method: 'POST',
