@@ -82,6 +82,35 @@ function loadExamSchedules() {
                     };
 
                     actionCell.appendChild(submitBtn);
+                } else {
+                    const modifyBtn = document.createElement('button');
+                    modifyBtn.textContent = '修改';
+                    modifyBtn.className = 'modify-btn';
+
+                    modifyBtn.onclick = () => {
+                        // 允许用户修改时间和地点
+                        const newTimeInput = document.createElement('input');
+                        newTimeInput.type = 'text';
+                        newTimeInput.className = 'exam-input';
+                        newTimeInput.value = course.examTime; // 初始值为已有考试时间
+                        examTimeCell.innerHTML = '';
+                        examTimeCell.appendChild(newTimeInput);
+
+                        const newLocationInput = document.createElement('input');
+                        newLocationInput.type = 'text';
+                        newLocationInput.className = 'exam-input';
+                        newLocationInput.value = course.examPlace; // 初始值为已有考试地点
+                        examPlaceCell.innerHTML = '';
+                        examPlaceCell.appendChild(newLocationInput);
+
+                        // 更新按钮
+                        modifyBtn.textContent = '更新';
+                        modifyBtn.onclick = () => {
+                            submitExamInfo(course.scheduleId, newTimeInput, newLocationInput, modifyBtn);
+                        };
+                    };
+
+                    actionCell.appendChild(modifyBtn);
                 }
             });
         })
@@ -100,7 +129,6 @@ function submitExamInfo(scheduleId, timeInput, locationInput, submitBtn) {
         return;
     }
 
-    // 验证时间格式
     const timePattern = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}-\d{2}:\d{2}$/;
     if (!timePattern.test(examTime)) {
         alert('考试时间格式不正确，请使用系统提供的时间选择器');
@@ -109,7 +137,10 @@ function submitExamInfo(scheduleId, timeInput, locationInput, submitBtn) {
 
     submitBtn.disabled = true;
 
-    fetch('/examArrange', {
+    // 选择创建或修改接口
+    const endpoint = submitBtn.textContent === '提交' ? '/examArrange' : '/updateExam';
+
+    fetch(endpoint, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=UTF-8'
@@ -123,7 +154,7 @@ function submitExamInfo(scheduleId, timeInput, locationInput, submitBtn) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('考试信息提交成功！');
+                alert('考试信息' + (submitBtn.textContent === '提交' ? '提交' : '更新') + '成功！');
                 loadExamSchedules(); // 重新加载列表
             } else {
                 alert(data.message || '提交失败，请重试');
@@ -135,4 +166,4 @@ function submitExamInfo(scheduleId, timeInput, locationInput, submitBtn) {
             alert('提交失败，请重试');
             submitBtn.disabled = false;
         });
-} 
+}
