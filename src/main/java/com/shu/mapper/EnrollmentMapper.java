@@ -45,7 +45,7 @@ public interface EnrollmentMapper {
     List<String> getStudentClassTimes(Integer studentId);
 
     /**
-     * 根据学生id查询已选课程的信息
+     * 根据学生id查询已选课程的信息包括考试和成绩
      * @param studentId
      * @return
      */
