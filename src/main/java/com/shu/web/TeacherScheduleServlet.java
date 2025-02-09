@@ -47,7 +47,7 @@ public class TeacherScheduleServlet extends HttpServlet {
             // 查询该教师的所有课程安排
             List<CourseSearchDTO> teacherCourses = classScheduleMapper
                     .selectClassScheduleByTeacherId(teacher.getTeacherId());
-            System.out.println(teacherCourses);
+            // System.out.println(teacherCourses);
 
             // 转换为JSON并响应
             ObjectMapper mapper = new ObjectMapper();
