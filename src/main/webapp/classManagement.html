@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>班级管理 - 教师端</title>
+    <link rel="stylesheet" href="css/courseSelect.css">
+    <link rel="stylesheet" href="css/schedule.css">
+    <link rel="stylesheet" href="css/createCourse.css">
+    <!-- 引入ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="js/classManagement.js"></script>
+</head>
+
+<body>
+    <nav class="nav-menu">
+        <div class="nav-left">
+            <img src="images/signature.png" alt="SHU" class="nav-logo">
+            <a href="teacherCourseSearch.html" class="nav-item">课程查询</a>
+            <a href="createCourse.html" class="nav-item">创建课程</a>
+            <a href="createSchedule.html" class="nav-item">创建课程安排</a>
+            <a href="deleteSchedule.html" class="nav-item">删除课程安排</a>
+            <a href="teacherSchedule.html" class="nav-item">课表查看</a>
+            <a href="classManagement.html" class="nav-item active">班级管理</a>
+            <a href="examManagement.html" class="nav-item">考试管理</a>
+        </div>
+        <div class="nav-right">
+            <a href="logout" class="nav-item nav-logout">退出登录</a>
+        </div>
+    </nav>
+
+    <!-- 教师信息区域 -->
+    <div class="student-info">
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">教师号：</span>
+                <span class="info-value" id="teacherId"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">姓名：</span>
+                <span class="info-value" id="teacherName"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">性别：</span>
+                <span class="info-value" id="teacherGender"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">职称：</span>
+                <span class="info-value" id="teacherPosition"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">邮箱：</span>
+                <span class="info-value" id="teacherEmail"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">学院：</span>
+                <span class="info-value" id="teacherDepartment"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 班级选择区域 -->
+    <div class="create-course-container">
+        <h2>班级选择</h2>
+        <div class="form-group">
+            <select id="classSelect" class="class-select">
+                <option value="">请选择班级</option>
+                <!-- 这里将通过JavaScript动态填充班级列表 -->
+            </select>
+        </div>
+    </div>
+
+    <!-- 学生列表区域 -->
+    <div class="course-container" id="studentListContainer" style="display: none;">
+        <h2>学生列表</h2>
+        <div class="class-info">
+            <span>总人数：</span><span id="totalStudents">0</span>
+            <span>平均分：</span><span id="averageScore">0</span>
+        </div>
+        <table id="studentTable">
+            <thead>
+                <tr>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>年级</th>
+                    <th>专业</th>
+                    <th>成绩</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="studentListBody">
+                <!-- 这里将通过JavaScript动态填充学生信息 -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 成绩分析区域 -->
+    <div class="course-container" id="analysisContainer" style="display: none;">
+        <h2>成绩分析</h2>
+        <div class="charts-container">
+            <div id="scoreDistribution" style="width: 600px; height: 400px;"></div>
+            <div id="scoreStatistics" style="width: 600px; height: 400px;"></div>
+        </div>
+    </div>
+</body>
+
+</html> 
