@@ -10,8 +10,10 @@
         <id column="exam_place" property="examPlace"/>
         <association property="classSchedule" resultMap="com.shu.mapper.ClassScheduleMapper.classScheduleMap"/>
     </resultMap>
+
     <insert id="insert">
         INSERT INTO exam (schedule_id, exam_time, exam_place)
             VALUES (#{scheduleId}, #{examTime}, #{examPlace});
     </insert>
+    
 </mapper> 
