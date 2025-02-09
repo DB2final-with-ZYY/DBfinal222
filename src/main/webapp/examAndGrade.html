@@ -3,10 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>学分完成情况</title>
+    <title>考试与成绩</title>
     <link rel="stylesheet" href="css/courseSelect.css">
-    <link rel="stylesheet" href="css/credits.css">
-    <script src="js/credits.js"></script>
+    <link rel="stylesheet" href="css/schedule.css">
+    <script src="js/schedule.js"></script>
 </head>
 
 <body>
@@ -17,8 +17,8 @@
             <a href="courseCancel.html" class="nav-item">退课</a>
             <a href="courseSearch.html" class="nav-item">课程查询</a>
             <a href="schedule.html" class="nav-item">课表查看</a>
-            <a href="credits.html" class="nav-item active">学分完成情况</a>
-            <a href="examAndGrade.html" class="nav-item">考试与成绩</a>
+            <a href="credits.html" class="nav-item">学分完成情况</a>
+            <a href="examAndGrade.html" class="nav-item active">考试与成绩</a>
         </div>
         <div class="nav-right">
             <a href="logout" class="nav-item nav-logout">退出登录</a>
@@ -67,18 +67,25 @@
         </div>
     </div>
 
-    <!-- 专业课程计划和完成情况 -->
-    <div class="credits-container">
-        <h2>专业课程计划完成情况</h2>
-        <table id="creditsTable">
+    <!-- 已选课程列表 -->
+    <div class="course-container">
+        <h2>已选课程</h2>
+        <div class="total-credits">
+            <span>合计学分：</span>
+            <span id="totalCredits">0</span>
+        </div>
+        <table id="courseTable">
             <thead>
                 <tr>
                     <th>课程号</th>
-                    <th>课程名称</th>
+                    <th>课程名</th>
                     <th>学分</th>
-                    <th>完成情况</th>
+                    <th>教师号</th>
+                    <th>教师姓名</th>
+                    <th>职称</th>
+                    <th>考试时间</th>
+                    <th>考试地点</th>
                     <th>成绩</th>
-                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -86,6 +93,8 @@
             </tbody>
         </table>
     </div>
+
+
 </body>
 
-</html> 
+</html>
