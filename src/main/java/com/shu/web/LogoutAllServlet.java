@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @WebServlet("/logout")
-public class LogoutServlet extends HttpServlet {
+public class LogoutAllServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 设置请求的字符编码为UTF-8,不然会出乱码
