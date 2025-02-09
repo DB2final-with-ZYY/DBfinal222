@@ -1,6 +1,7 @@
 package com.shu.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shu.dto.CourseSearchDTO;
 import com.shu.mapper.ClassScheduleMapper;
 import com.shu.mapper.CourseMapper;
 import com.shu.mapper.TeacherMapper;
@@ -103,12 +104,28 @@ public class CreateScheduleServlet extends HttpServlet {
 //            TeacherMapper teacherMapper = sqlSession.getMapper(TeacherMapper.class);
 //            teacher = teacherMapper.selectById(teacher.getTeacherId());
 
-            ClassScheduleMapper classScheduleMapper = sqlSession.getMapper(ClassScheduleMapper.class);
-            int count = classScheduleMapper.insertClassSchedule(classSchedule);
-
             // 获取字符输出流,并设置content type
             resp.setContentType("text/html;charset=utf-8");
             PrintWriter writer = resp.getWriter();
+
+            ClassScheduleMapper classScheduleMapper = sqlSession.getMapper(ClassScheduleMapper.class);
+
+            // 查询该教师的所有课程安排
+            List<CourseSearchDTO> teacherCourses = classScheduleMapper
+                    .selectClassScheduleByTeacherId(teacher.getTeacherId());
+
+            // 检查有没有时间冲突
+            for (CourseSearchDTO courseSearchDTO : teacherCourses) {
+                if(courseSearchDTO.getClassTime().equals(classSchedule.getClassTime())){
+                    resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    resp.getWriter().write("{\"error\": \"课程安排创建失败，该时间段已有安排\"}");
+                    sqlSession.close();
+                    return;
+                }
+            }
+
+            // 插入
+            int count = classScheduleMapper.insertClassSchedule(classSchedule);
 
             if (count > 0) {
                 // 提交
