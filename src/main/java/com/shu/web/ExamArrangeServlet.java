@@ -25,7 +25,7 @@ public class ExamArrangeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         // 设置响应类型
-        resp.setContentType("applic1ation/json;charset=utf-8");
+        resp.setContentType("application/json;charset=utf-8");
 
         // 获取当前登录的教师信息
         HttpSession session = req.getSession();
