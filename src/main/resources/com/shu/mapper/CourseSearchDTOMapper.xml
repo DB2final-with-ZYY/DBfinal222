@@ -17,6 +17,7 @@
         <result column="enrolled_count" property="enrolledCount"/>
         <result column="exam_time" property="examTime"/>
         <result column="exam_place" property="examPlace"/>
+        <result column="grade" property="grade"/>
     </resultMap>
 
 </mapper> 

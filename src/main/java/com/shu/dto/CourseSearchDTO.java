@@ -1,5 +1,7 @@
 package com.shu.dto;
 
+import java.math.BigDecimal;
+
 public class CourseSearchDTO {
     private Integer scheduleId;
     private Integer courseId;          // 课程号
@@ -14,6 +16,7 @@ public class CourseSearchDTO {
     private Integer enrolledCount;     // 已选人数
     private String examTime;           // 考试时间
     private String examPlace;          // 考试地点
+    private BigDecimal grade;          // 成绩
 
     public Integer getScheduleId() {
         return scheduleId;
@@ -119,6 +122,14 @@ public class CourseSearchDTO {
         this.examTime = examTime;
     }
 
+    public BigDecimal getGrade() {
+        return grade;
+    }
+
+    public void setGrade(BigDecimal grade) {
+        this.grade = grade;
+    }
+
     @Override
     public String toString() {
         return "CourseSearchDTO{" +
@@ -135,6 +146,7 @@ public class CourseSearchDTO {
                 ", enrolledCount=" + enrolledCount +
                 ", examTime='" + examTime + '\'' +
                 ", examPlace='" + examPlace + '\'' +
+                ", grade=" + grade +
                 '}';
     }
 }
