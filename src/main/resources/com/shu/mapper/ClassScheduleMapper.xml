@@ -15,21 +15,6 @@
     <association property="teacher" resultMap="com.shu.mapper.TeacherMapper.teacherMap"/>
 </resultMap>
 
-<resultMap id="courseSearchResultMap" type="com.shu.dto.CourseSearchDTO">
-    <result column="course_id" property="courseId"/>
-    <result column="course_name" property="courseName"/>
-    <result column="credit" property="credit"/>
-    <result column="teacher_id" property="teacherId"/>
-    <result column="teacher_name" property="teacherName"/>
-    <result column="position" property="position"/>
-    <result column="class_time" property="classTime"/>
-    <result column="classroom" property="classroom"/>
-    <result column="capacity" property="capacity"/>
-    <result column="enrolled_count" property="enrolledCount"/>
-    <result column="exam_time" property="examTime"/>
-    <result column="exam_place" property="examPlace"/>
-</resultMap>
-
     <insert id="insertClassSchedule">
         INSERT INTO class_schedule(semester, course_id, teacher_id, classroom, capacity, class_time)
         VALUES (#{semester}, #{courseId}, #{teacherId}, #{classroom}, #{capacity}, #{classTime});
@@ -47,8 +32,9 @@
         WHERE schedule_id = #{scheduleId};
     </delete>
 
-    <select id="searchCourses" resultMap="courseSearchResultMap">
-    SELECT 
+    <select id="searchCourses" resultMap="com.shu.mapper.CourseSearchDTOMapper.courseSearchResultMap">
+    SELECT
+        cs.schedule_id,
         cs.course_id,
         c.course_name,
         c.credit,
@@ -115,8 +101,10 @@
         AND class_time = #{classTime};
     </select>
 
-    <select id="selectClassScheduleByTeacherId" resultType="com.shu.dto.CourseSearchDTO" resultMap="courseSearchResultMap">
+    <select id="selectClassScheduleByTeacherId" resultType="com.shu.dto.CourseSearchDTO"
+            resultMap="com.shu.mapper.CourseSearchDTOMapper.courseSearchResultMap">
         SELECT
+            cs.schedule_id,
             cs.course_id,
             c.course_name,
             c.credit,

@@ -1,6 +1,7 @@
 package com.shu.dto;
 
 public class CourseSearchDTO {
+    private Integer scheduleId;
     private Integer courseId;          // 课程号
     private String courseName;         // 课程名
     private Integer credit;            // 学分
@@ -13,6 +14,14 @@ public class CourseSearchDTO {
     private Integer enrolledCount;     // 已选人数
     private String examTime;           // 考试时间
     private String examPlace;          // 考试地点
+
+    public Integer getScheduleId() {
+        return scheduleId;
+    }
+
+    public void setScheduleId(Integer scheduleId) {
+        this.scheduleId = scheduleId;
+    }
 
     public Integer getCourseId() {
         return courseId;
@@ -113,7 +122,8 @@ public class CourseSearchDTO {
     @Override
     public String toString() {
         return "CourseSearchDTO{" +
-                "courseId=" + courseId +
+                "scheduleId=" + scheduleId +
+                ", courseId=" + courseId +
                 ", courseName='" + courseName + '\'' +
                 ", credit=" + credit +
                 ", teacherId=" + teacherId +

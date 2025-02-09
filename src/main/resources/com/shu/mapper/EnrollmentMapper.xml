@@ -11,21 +11,6 @@
         <association property="classSchedule" resultMap="com.shu.mapper.ClassScheduleMapper.classScheduleMap"/>
     </resultMap>
 
-    <resultMap id="courseSearchResultMap" type="com.shu.dto.CourseSearchDTO">
-        <result column="course_id" property="courseId"/>
-        <result column="course_name" property="courseName"/>
-        <result column="credit" property="credit"/>
-        <result column="teacher_id" property="teacherId"/>
-        <result column="teacher_name" property="teacherName"/>
-        <result column="position" property="position"/>
-        <result column="class_time" property="classTime"/>
-        <result column="classroom" property="classroom"/>
-        <result column="capacity" property="capacity"/>
-        <result column="enrolled_count" property="enrolledCount"/>
-        <result column="exam_time" property="examTime"/>
-        <result column="exam_place" property="examPlace"/>
-    </resultMap>
-
     <resultMap id="studentSearchDTO" type="com.shu.dto.StudentSearchDTO">
         <result column="student_id" property="studentId"/>
         <result column="name" property="studentName"/>
@@ -59,8 +44,9 @@
     </select>
 
     <select id="selectEnrolledCourses" resultType="com.shu.dto.CourseSearchDTO"
-            resultMap="courseSearchResultMap">
+            resultMap="com.shu.mapper.CourseSearchDTOMapper.courseSearchResultMap">
         SELECT
+            cs.schedule_id,
             cs.course_id,
             c.course_name,
             c.credit,
@@ -82,7 +68,7 @@
     <select id="selectStudentsByScheduleId" resultType="com.shu.dto.StudentSearchDTO"
             resultMap="studentSearchDTO">
         SELECT
-            s.student_id,
+            s.student_id,w
             s.name,
             s.gender,
             s.grade_number,
