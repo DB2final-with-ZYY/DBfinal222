@@ -11,6 +11,8 @@ public class CourseSearchDTO {
     private String classroom;          // 教室
     private Integer capacity;          // 课容量
     private Integer enrolledCount;     // 已选人数
+    private String examTime;           // 考试时间
+    private String examPlace;          // 考试地点
 
     public Integer getCourseId() {
         return courseId;
@@ -92,6 +94,22 @@ public class CourseSearchDTO {
         this.enrolledCount = enrolledCount;
     }
 
+    public String getExamPlace() {
+        return examPlace;
+    }
+
+    public void setExamPlace(String examPlace) {
+        this.examPlace = examPlace;
+    }
+
+    public String getExamTime() {
+        return examTime;
+    }
+
+    public void setExamTime(String examTime) {
+        this.examTime = examTime;
+    }
+
     @Override
     public String toString() {
         return "CourseSearchDTO{" +
@@ -105,6 +123,8 @@ public class CourseSearchDTO {
                 ", classroom='" + classroom + '\'' +
                 ", capacity=" + capacity +
                 ", enrolledCount=" + enrolledCount +
+                ", examTime='" + examTime + '\'' +
+                ", examPlace='" + examPlace + '\'' +
                 '}';
     }
 }
