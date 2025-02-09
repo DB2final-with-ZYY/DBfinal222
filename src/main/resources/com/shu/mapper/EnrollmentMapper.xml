@@ -89,7 +89,7 @@
         JOIN student s ON e.student_id = s.student_id
         JOIN major m ON s.major_id = m.major_id
         JOIN department d ON d.department_id = s.department_id
-        JOIN grade g ON e.enrollment_id = g.enrollment_id
+        LEFT JOIN grade g ON e.enrollment_id = g.enrollment_id
         WHERE e.schedule_id = #{scheduleId};
     </select>
 
