@@ -3,6 +3,8 @@ package com.shu.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shu.dto.CourseSearchDTO;
 import com.shu.mapper.ClassScheduleMapper;
+import com.shu.mapper.ExamMapper;
+import com.shu.pojo.Exam;
 import com.shu.pojo.Teacher;
 import com.shu.util.SqlSessionFactoryUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -75,17 +77,30 @@ public class ExamArrangeServlet extends HttpServlet {
             return;
         }
 
-        System.out.println("scheduleId:" + scheduleId);
-        System.out.println("examTime:" + examTime);
-        System.out.println("examPlace:" + examPlace);
+        // 封装
+        Exam exam = new Exam();
+        exam.setScheduleId(scheduleId);
+        exam.setExamTime(examTime);
+        exam.setExamPlace(examPlace);
+        System.out.println(exam);
 
         // 获取SqlSession
         SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtils.getSqlSessionFactory();
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
         try {
+            ExamMapper examMapper = sqlSession.getMapper(ExamMapper.class);
+            int count = examMapper.insert(exam);
+            if (count > 0) {
+                sqlSession.commit();
+                resp.getWriter().write("{\"success\": true}");
+            } else {
+                sqlSession.rollback();
+                resp.getWriter().write("{\"success\": false, \"message\": \"创建考试安排失败\"}");
+            }
 
         } catch (Exception e) {
+            sqlSession.rollback();
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write("{\"error\": \"服务器内部错误\"}");
