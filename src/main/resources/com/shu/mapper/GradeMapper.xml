@@ -7,7 +7,6 @@
         <id column="grade_id" property="gradeId"/>
         <result column="enrollment_id" property="enrollmentId"/>
         <result column="grade" property="grade"/>
-        <result column="exam_date" property="examDate"/>
         <association property="enrollment" resultMap="com.shu.mapper.EnrollmentMapper.enrollmentMap"/>
     </resultMap>
 </mapper> 

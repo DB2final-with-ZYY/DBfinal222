@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shu.mapper.ExamMapper">
+    <resultMap id="examMap" type="com.shu.pojo.Exam">
+        <id column="exam_id" property="examId"/>
+        <id column="schedule_id" property="scheduleId"/>
+        <id column="exam_time" property="examTime"/>
+        <id column="exam_place" property="examPlace"/>
+        <association property="classSchedule" resultMap="com.shu.mapper.ClassScheduleMapper.classScheduleMap"/>
+    </resultMap>
+</mapper> 
