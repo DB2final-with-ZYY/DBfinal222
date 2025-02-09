@@ -15,5 +15,11 @@
         INSERT INTO exam (schedule_id, exam_time, exam_place)
             VALUES (#{scheduleId}, #{examTime}, #{examPlace});
     </insert>
-    
+
+    <update id="update">
+        UPDATE exam
+        SET exam_time = #{examTime}, exam_place = #{examPlace}
+        WHERE schedule_id = #{scheduleId};
+    </update>
+
 </mapper> 
