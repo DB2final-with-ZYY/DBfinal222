@@ -55,7 +55,7 @@ public class StudentInformationServlet extends HttpServlet {
                 resp.getWriter().write("{\"error\": \"学生信息不存在\"}");
                 return;
             }
-            System.out.println("Studentinformation:" + student);
+//            System.out.println("Studentinformation:" + student);
 
             // 获取学院和专业mapper
             DepartmentMapper departmentMapper = sqlSession.getMapper(DepartmentMapper.class);

@@ -68,18 +68,18 @@ public class CourseSearchServlet extends HttpServlet {
         Boolean hasSpace = Boolean.valueOf(req.getParameter("hasSpace"));
 
         // 打印接收到的参数信息
-        System.out.println("CourseSearchServlet:");
-        System.out.println("Course ID: " + courseId);
-        System.out.println("Course Name: " + courseName);
-        System.out.println("Teacher ID: " + teacherId);
-        System.out.println("Teacher Name: " + teacherName);
-        System.out.println("Department: " + department);
-        System.out.println("Credit: " + credit);
-        System.out.println("Weekday: " + weekday);
-        System.out.println("Time Slot: " + timeSlot);
-        System.out.println("Capacity Min: " + capacityMin);
-        System.out.println("Capacity Max: " + capacityMax);
-        System.out.println("Has Space: " + hasSpace);
+//        System.out.println("CourseSearchServlet:");
+//        System.out.println("Course ID: " + courseId);
+//        System.out.println("Course Name: " + courseName);
+//        System.out.println("Teacher ID: " + teacherId);
+//        System.out.println("Teacher Name: " + teacherName);
+//        System.out.println("Department: " + department);
+//        System.out.println("Credit: " + credit);
+//        System.out.println("Weekday: " + weekday);
+//        System.out.println("Time Slot: " + timeSlot);
+//        System.out.println("Capacity Min: " + capacityMin);
+//        System.out.println("Capacity Max: " + capacityMax);
+//        System.out.println("Has Space: " + hasSpace);
 
         // 2.调用MyBatis完成查询
         // 这里直接去官网复制粘贴过来

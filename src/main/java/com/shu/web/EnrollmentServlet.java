@@ -46,7 +46,7 @@ public class EnrollmentServlet extends HttpServlet {
         Integer courseId = (Integer) requestData.get("courseId");
         Integer teacherId = (Integer) requestData.get("teacherId");
         String classTime = (String) requestData.get("classTime");
-        System.out.println(requestData.toString());
+//        System.out.println(requestData.toString());
 
         // 获取SqlSession
         SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtils.getSqlSessionFactory();
