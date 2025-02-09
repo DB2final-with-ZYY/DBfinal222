@@ -9,4 +9,16 @@
         <result column="grade" property="grade"/>
         <association property="enrollment" resultMap="com.shu.mapper.EnrollmentMapper.enrollmentMap"/>
     </resultMap>
+
+    <insert id="insert">
+        INSERT INTO grade (enrollment_id, grade)
+        VALUES (#{enrollmentId}, #{grade});
+    </insert>
+
+    <update id="update">
+        UPDATE grade
+        SET grade = #{grade}
+        WHERE enrollment_id = #{enrollmentId};
+    </update>
+
 </mapper> 
