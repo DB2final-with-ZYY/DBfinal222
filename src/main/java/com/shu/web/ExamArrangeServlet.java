@@ -27,6 +27,7 @@ public class ExamArrangeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         // 设置响应类型
+        req.setCharacterEncoding("UTF-8");  // 设置请求编码为UTF-8
         resp.setContentType("application/json;charset=utf-8");
 
         // 获取当前登录的教师信息
@@ -56,24 +57,16 @@ public class ExamArrangeServlet extends HttpServlet {
 
         // 解析 JSON 数据
         ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, String> data = objectMapper.readValue(jsonData, Map.class);
+        Map<String, Object> data = objectMapper.readValue(jsonData, Map.class);
 
-        String scheduleIdStr = data.get("scheduleId");
-        String examTime = data.get("examTime");
-        String examPlace = data.get("examPlace");
+        // 获取参数并正确处理类型
+        Integer scheduleId = (Integer) data.get("scheduleId");
+        String examTime = (String) data.get("examTime");
+        String examPlace = (String) data.get("examPlace");
 
-        if (scheduleIdStr == null || examTime == null || examPlace == null) {
+        if (scheduleId == null || examTime == null || examPlace == null) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("{\"error\": \"参数不能为空\"}");
-            return;
-        }
-
-        int scheduleId = Integer.parseInt(scheduleIdStr);
-        try {
-            scheduleId = Integer.parseInt(scheduleIdStr);
-        } catch (NumberFormatException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"error\": \"数值字段格式错误\"}");
             return;
         }
 
@@ -103,7 +96,7 @@ public class ExamArrangeServlet extends HttpServlet {
             sqlSession.rollback();
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("{\"error\": \"服务器内部错误\"}");
+            resp.getWriter().write("{\"error\": \"服务器内部错误: " + e.getMessage() + "\"}");
         } finally {
             // 关闭SqlSession
             sqlSession.close();

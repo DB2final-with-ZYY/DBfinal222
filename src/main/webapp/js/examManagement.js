@@ -112,7 +112,7 @@ function submitExamInfo(scheduleId, timeInput, locationInput, submitBtn) {
     fetch('/examArrange', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json;charset=UTF-8'
         },
         body: JSON.stringify({
             scheduleId: scheduleId,
