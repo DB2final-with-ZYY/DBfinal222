@@ -85,7 +85,7 @@ function loadExamSchedules() {
                 } else {
                     const modifyBtn = document.createElement('button');
                     modifyBtn.textContent = '修改';
-                    modifyBtn.className = 'modify-btn';
+                    modifyBtn.className = 'button-update';
 
                     modifyBtn.onclick = () => {
                         // 允许用户修改时间和地点
@@ -105,6 +105,7 @@ function loadExamSchedules() {
 
                         // 更新按钮
                         modifyBtn.textContent = '更新';
+                        modifyBtn.className = 'button-modify';
                         modifyBtn.onclick = () => {
                             submitExamInfo(course.scheduleId, newTimeInput, newLocationInput, modifyBtn);
                         };
