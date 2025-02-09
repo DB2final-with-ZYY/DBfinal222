@@ -119,7 +119,7 @@ function displayStudentList(students) {
         // 添加删除按钮
         const actionCell = row.insertCell();
         const deleteButton = document.createElement('button');
-        deleteButton.textContent = '退课';
+        deleteButton.textContent = '移除学生';
         deleteButton.className = 'delete-btn';
         deleteButton.onclick = () => removeStudent(student.studentId);
         actionCell.appendChild(deleteButton);
