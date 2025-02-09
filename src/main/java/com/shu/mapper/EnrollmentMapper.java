@@ -5,6 +5,7 @@ import com.shu.dto.StudentSearchDTO;
 import com.shu.pojo.Enrollment;
 import com.shu.pojo.Student;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -56,5 +57,14 @@ public interface EnrollmentMapper {
      * @return
      */
     List<StudentSearchDTO> selectStudentsByScheduleId(Integer ScheduleId);
+
+    /**
+     *  根据信息返回enrollment
+     * @param studentId
+     * @param scheduleId
+     * @return
+     */
+    Enrollment selectEnrollmentById(@Param("studentId") Integer studentId,
+                                    @Param("scheduleId") Integer scheduleId);
 
 }

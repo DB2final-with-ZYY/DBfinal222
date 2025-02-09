@@ -84,4 +84,11 @@
         WHERE e.schedule_id = #{scheduleId};
     </select>
 
+    <select id="selectEnrollmentById" resultType="com.shu.pojo.Enrollment"
+            resultMap="enrollmentMap">
+        SELECT * FROM enrollment
+        WHERE student_id = #{studentId}
+        AND schedule_id = #{scheduleId};
+    </select>
+
 </mapper> 
