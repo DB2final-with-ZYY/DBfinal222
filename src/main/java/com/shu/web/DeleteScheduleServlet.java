@@ -52,8 +52,8 @@ public class DeleteScheduleServlet extends HttpServlet {
         Map<String, Object> scheduleData = mapper.readValue(sb.toString(), Map.class);
 
         // 打印接收到的数据
-        System.out.println("Received data: " + sb.toString());
-        System.out.println("Parsed data: " + scheduleData);
+//        System.out.println("Received data: " + sb.toString());
+//        System.out.println("Parsed data: " + scheduleData);
 
         // 添加空值检查
         if (!scheduleData.containsKey("courseId") || !scheduleData.containsKey("teacherId") || !scheduleData.containsKey("classTime")) {
