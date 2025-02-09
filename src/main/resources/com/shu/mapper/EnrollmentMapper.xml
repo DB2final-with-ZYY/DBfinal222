@@ -51,7 +51,7 @@
             c.course_name,
             c.credit,
             cs.teacher_id,
-            t.name,
+            t.name as teacher_name,
             t.position,
             cs.class_time,
             cs.classroom,
