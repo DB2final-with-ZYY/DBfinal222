@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>考试管理 - 教师端</title>
+    <link rel="stylesheet" href="css/courseSelect.css">
+    <link rel="stylesheet" href="css/schedule.css">
+    <link rel="stylesheet" href="css/createCourse.css">
+    <!-- 引入日期时间选择器的CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .exam-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .exam-table th,
+        .exam-table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .exam-table th {
+            background-color: #f5f5f5;
+        }
+
+        .exam-input {
+            width: 150px;
+            padding: 5px;
+        }
+
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="nav-menu">
+        <div class="nav-left">
+            <img src="images/signature.png" alt="SHU" class="nav-logo">
+            <a href="teacherCourseSearch.html" class="nav-item">课程查询</a>
+            <a href="createCourse.html" class="nav-item">创建课程</a>
+            <a href="createSchedule.html" class="nav-item">创建课程安排</a>
+            <a href="deleteSchedule.html" class="nav-item">删除课程安排</a>
+            <a href="teacherSchedule.html" class="nav-item">课表查看</a>
+            <a href="classManagement.html" class="nav-item">班级管理</a>
+            <a href="examManagement.html" class="nav-item active">考试管理</a>
+        </div>
+        <div class="nav-right">
+            <a href="logout" class="nav-item nav-logout">退出登录</a>
+        </div>
+    </nav>
+
+    <div class="course-container">
+        <h2>考试安排管理</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>课程号</th>
+                    <th>课程名称</th>
+                    <th>学分</th>
+                    <th>课程时间</th>
+                    <th>教室</th>
+                    <th>容量</th>
+                    <th>考试时间</th>
+                    <th>考试地点</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="examTableBody">
+                <!-- 这里将通过JavaScript动态填充数据 -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 引入Flatpickr日期时间选择器 -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
+    <script src="js/examManagement.js"></script>
+</body>
+
+</html>
