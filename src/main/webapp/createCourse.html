@@ -76,7 +76,11 @@
             </div>
             <div class="form-group">
                 <label for="credit">课程学分</label>
-                <input type="number" id="credit" name="credit" min="1" max="10" required>
+                <input type="number" id="credit" name="credit" min="1" max="30" placeholder="1-30分" required>
+            </div>
+            <div class="form-group">
+                <label for="credit">考试占比</label>
+                <input type="number" id="examWeight" name="examWeight" step="0.1" min="0" max="1" placeholder="如：0.6" required>
             </div>
             <div class="form-buttons">
                 <button type="submit" class="submit-btn">创建课程</button>
