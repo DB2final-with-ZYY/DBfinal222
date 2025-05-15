@@ -47,6 +47,7 @@ public class EnrollmentedServlet extends HttpServlet {
             EnrollmentMapper enrollmentMapper = sqlSession.getMapper(EnrollmentMapper.class);
             List<CourseSearchDTO> courseSearchDTOS = enrollmentMapper.selectEnrolledCourses(student.getStudentId());
 
+            // System.out.println(courseSearchDTOS);
             // 创建ObjectMapper对象用于JSON转换
             ObjectMapper objectMapper = new ObjectMapper();
 

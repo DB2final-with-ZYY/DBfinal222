@@ -87,7 +87,7 @@ public class ClassStudentsServlet extends HttpServlet {
 
             EnrollmentMapper enrollmentMapper = sqlSession.getMapper(EnrollmentMapper.class);
             List<StudentSearchDTO> studentSearchDTOS = enrollmentMapper.selectStudentsByScheduleId(schedule.getScheduleId());
-//            System.out.println("(ClassStudentsServlet)studentSearchDTOS:" + studentSearchDTOS);
+            System.out.println("(ClassStudentsServlet)studentSearchDTOS:" + studentSearchDTOS);
 
             // 传给前端
             // 转换为JSON并响应

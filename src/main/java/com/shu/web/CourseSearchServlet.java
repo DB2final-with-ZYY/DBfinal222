@@ -98,6 +98,8 @@ public class CourseSearchServlet extends HttpServlet {
         List<CourseSearchDTO> results = classScheduleMapper.searchCourses(courseId, courseName, teacherId, teacherName,
                 department, credit, weekday, timeSlot, capacityMin, capacityMax, hasSpace);
 
+        // System.out.println(results);
+
         // 设置响应类型和字符编码
         resp.setContentType("application/json");
 
