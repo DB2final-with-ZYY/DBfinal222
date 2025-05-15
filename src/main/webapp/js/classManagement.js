@@ -256,12 +256,16 @@ function handleGradeEntry(student, gradeType) {
 // }
 
 
-
 // 更新班级统计信息
 function updateClassStatistics(students) {
+    const classInfo = JSON.parse(document.getElementById('classSelect').value);
+    const scores = students.map(student => {
+        const finalGrade = calculateFinalGrade(student, classInfo.examWeight || examWeight);
+        return finalGrade !== '未完善' ? parseFloat(finalGrade) : null;
+    }).filter(score => score !== null);
+
     document.getElementById('totalStudents').textContent = students.length;
 
-    const scores = students.map(s => s.grade).filter(s => s != null);
     const average = scores.length > 0
         ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2)
         : '暂无';
@@ -270,7 +274,11 @@ function updateClassStatistics(students) {
 
 // 显示成绩分析图表
 function displayScoreAnalysis(students) {
-    const scores = students.map(s => s.grade).filter(s => s != null);
+    const classInfo = JSON.parse(document.getElementById('classSelect').value);
+    const scores = students.map(student => {
+        const finalGrade = calculateFinalGrade(student, classInfo.examWeight || examWeight);
+        return finalGrade !== '未完善' ? parseFloat(finalGrade) : null;
+    }).filter(score => score !== null);
 
     // 分数分布图
     const distributionChart = echarts.init(document.getElementById('scoreDistribution'));
@@ -335,8 +343,91 @@ function calculateScoreStatistics(scores) {
     const min = Math.min(...scores);
     const passRate = (scores.filter(s => s >= 60).length / scores.length) * 100;
 
-    return [average, max, min, passRate];
+    return [average.toFixed(2), max, min, passRate.toFixed(2)];
 }
+
+
+
+// // 更新班级统计信息
+// function updateClassStatistics(students) {
+//     document.getElementById('totalStudents').textContent = students.length;
+//
+//     const scores = students.map(s => s.grade).filter(s => s != null);
+//     const average = scores.length > 0
+//         ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2)
+//         : '暂无';
+//     document.getElementById('averageScore').textContent = average;
+// }
+//
+// // 显示成绩分析图表
+// function displayScoreAnalysis(students) {
+//     const scores = students.map(s => s.grade).filter(s => s != null);
+//
+//     // 分数分布图
+//     const distributionChart = echarts.init(document.getElementById('scoreDistribution'));
+//     const distributionOption = {
+//         title: { text: '成绩分布' },
+//         tooltip: {},
+//         xAxis: {
+//             type: 'category',
+//             data: ['<60', '60-69', '70-79', '80-89', '90-100']
+//         },
+//         yAxis: { type: 'value' },
+//         series: [{
+//             data: calculateScoreDistribution(scores),
+//             type: 'bar'
+//         }]
+//     };
+//     distributionChart.setOption(distributionOption);
+//
+//     // 成绩统计图
+//     const statisticsChart = echarts.init(document.getElementById('scoreStatistics'));
+//     const statisticsOption = {
+//         title: { text: '成绩统计' },
+//         tooltip: {},
+//         radar: {
+//             indicator: [
+//                 { name: '平均分', max: 100 },
+//                 { name: '最高分', max: 100 },
+//                 { name: '最低分', max: 100 },
+//                 { name: '及格率', max: 100 }
+//             ]
+//         },
+//         series: [{
+//             type: 'radar',
+//             data: [{
+//                 value: calculateScoreStatistics(scores),
+//                 name: '成绩指标'
+//             }]
+//         }]
+//     };
+//     statisticsChart.setOption(statisticsOption);
+// }
+//
+// // 计算分数分布
+// function calculateScoreDistribution(scores) {
+//     const distribution = [0, 0, 0, 0, 0];
+//     scores.forEach(score => {
+//         if (score < 60) distribution[0]++;
+//         else if (score < 70) distribution[1]++;
+//         else if (score < 80) distribution[2]++;
+//         else if (score < 90) distribution[3]++;
+//         else distribution[4]++;
+//     });
+//     return distribution;
+// }
+//
+// // 计算成绩统计数据
+// function calculateScoreStatistics(scores) {
+//     if (scores.length === 0) return [0, 0, 0, 0];
+//
+//     const average = scores.reduce((a, b) => a + b, 0) / scores.length;
+//     const max = Math.max(...scores);
+//     const min = Math.min(...scores);
+//     const passRate = (scores.filter(s => s >= 60).length / scores.length) * 100;
+//
+//     return [average, max, min, passRate];
+// }
 
 // 退课功能
 function removeStudent(studentId) {
