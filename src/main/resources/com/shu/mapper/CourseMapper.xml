@@ -14,8 +14,8 @@
     </resultMap>
 
     <insert id="insert">
-        INSERT INTO course (course_name, department_id, credit)
-        VALUES (#{courseName}, #{departmentId}, #{credit});
+        INSERT INTO course (course_name, department_id, credit, exam_weight)
+        VALUES (#{courseName}, #{departmentId}, #{credit}, #{examWeight});
     </insert>
 
     <select id="selectByDepartment" resultType="com.shu.pojo.Course" resultMap="courseMap">

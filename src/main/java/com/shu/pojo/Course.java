@@ -1,11 +1,13 @@
 package com.shu.pojo;
 
+import java.math.BigDecimal;
+
 public class Course {
     private Integer courseId; // 课程ID
     private String courseName; // 课程名称
     private Integer departmentId; // 所属院系ID
     private Integer credit; // 课程学分
-    private Integer examWeight;  // 考试占比
+    private BigDecimal examWeight;  // 考试占比
     private String status;  // ('待审核', '审核通过', '审核不通过')
 
     // 关联属性
@@ -51,11 +53,11 @@ public class Course {
         this.courseId = courseId;
     }
 
-    public Integer getExamWeight() {
+    public BigDecimal getExamWeight() {
         return examWeight;
     }
 
-    public void setExamWeight(Integer examWeight) {
+    public void setExamWeight(BigDecimal examWeight) {
         this.examWeight = examWeight;
     }
 
