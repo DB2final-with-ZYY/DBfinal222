@@ -8,6 +8,8 @@
         <result column="course_name" property="courseName"/>
         <result column="department_id" property="departmentId"/>
         <result column="credit" property="credit"/>
+        <result column="exam_weight" property="examWeight"/>
+        <result column="status" property="status"/>
         <association property="department" resultMap="com.shu.mapper.DepartmentMapper.departmentMap"/>
     </resultMap>
 
@@ -18,7 +20,8 @@
 
     <select id="selectByDepartment" resultType="com.shu.pojo.Course" resultMap="courseMap">
         SELECT * FROM course
-        WHERE department_id = #{departmentId};
+        WHERE department_id = #{departmentId}
+        AND status = '审核通过';
     </select>
 
 </mapper> 

@@ -11,6 +11,7 @@
     <result column="classroom" property="classroom"/>
     <result column="capacity" property="capacity"/>
     <result column="class_time" property="classTime"/>
+    <result column="status" property="status"/>
     <association property="course" resultMap="com.shu.mapper.CourseMapper.courseMap"/>
     <association property="teacher" resultMap="com.shu.mapper.TeacherMapper.teacherMap"/>
 </resultMap>
@@ -51,6 +52,7 @@
         JOIN teacher t ON cs.teacher_id = t.teacher_id
         JOIN department d ON c.department_id = d.department_id
     <where>
+        cs.status = '审核通过'
         <if test="courseId != null">
             AND cs.course_id = #{courseId}
         </if>
@@ -98,7 +100,8 @@
         SELECT * FROM class_schedule
         WHERE course_id = #{courseId}
         AND teacher_id = #{teacherId}
-        AND class_time = #{classTime};
+        AND class_time = #{classTime}
+        AND status = '审核通过';
     </select>
 
     <select id="selectClassScheduleByTeacherId" resultType="com.shu.dto.CourseSearchDTO"
@@ -118,6 +121,7 @@
         JOIN course c ON c.course_id = cs.course_id
         LEFT JOIN exam e ON e.schedule_id = cs.schedule_id
         WHERE teacher_id = #{teacherId}
+        AND cs.status = '审核通过';
     </select>
 
 </mapper> 
