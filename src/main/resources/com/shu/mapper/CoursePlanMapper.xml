@@ -11,15 +11,7 @@
         <association property="course" resultMap="com.shu.mapper.CourseMapper.courseMap"/>
     </resultMap>
 
-    <resultMap id="courseMap" type="com.shu.pojo.Course">
-        <id column="course_id" property="courseId"/>
-        <result column="course_name" property="courseName"/>
-<!--        <result column="department_id" property="departmentId"/>-->
-        <result column="credit" property="credit"/>
-<!--        <association property="department" resultMap="com.shu.mapper.DepartmentMapper.departmentMap"/>-->
-    </resultMap>
-
-    <select id="searchCoursePlanByMajor" resultType="com.shu.pojo.Course"  resultMap="courseMap">
+    <select id="searchCoursePlanByMajor" resultType="com.shu.pojo.Course"  resultMap="com.shu.mapper.CourseMapper.courseMap">
         SELECT
             c.course_id,
             c.course_name,
