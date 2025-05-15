@@ -61,6 +61,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // 计算总评成绩
+    function calculateFinalGrade(usualScore, examScore, examWeight) {
+        if (usualScore === undefined || examScore === undefined || examWeight === undefined) {
+            return '未完善';
+        }
+        const finalGrade = usualScore * (1 - examWeight) + examScore * examWeight;
+        return finalGrade.toFixed(2); // 保留两位小数
+    }
+
     // 显示课程计划
     function displayCoursePlan(courses, enrolledCourses) {
         const tbody = document.querySelector('#creditsTable tbody');
@@ -92,12 +101,19 @@ document.addEventListener('DOMContentLoaded', function () {
             const gradeCell = row.insertCell();
 
             if (enrolledCourse) {
-                // 如果已经选了这门课
-                if (enrolledCourse.grade) {
+                const usualScore = enrolledCourse.usualScore;
+                const examScore = enrolledCourse.examScore;
+                const examWeight = enrolledCourse.examWeight || 0.6; // 默认考试权重
+
+                // 如果已经选了这门课,这里检查两个成绩都不是空才行
+                if (enrolledCourse.examScore & enrolledCourse.usualScore) {
                     // 如果有成绩
                     statusCell.textContent = '已完成';
                     statusCell.className = 'status-completed';
-                    gradeCell.textContent = enrolledCourse.grade;
+                    // gradeCell.textContent = enrolledCourse.grade;
+                    // 计算总评成绩
+                    const finalGrade = calculateFinalGrade(usualScore, examScore, examWeight);
+                    gradeCell.textContent = finalGrade;
                 } else {
                     // 如果没有成绩，表示课程仍在进行中
                     statusCell.textContent = '进行中';

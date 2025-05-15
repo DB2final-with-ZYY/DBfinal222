@@ -44,6 +44,7 @@
             cs.course_id,
             c.course_name,
             c.credit,
+            c.exam_weight,
             cs.teacher_id,
             t.name as teacher_name,
             t.position,
