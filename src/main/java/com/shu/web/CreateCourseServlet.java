@@ -79,7 +79,7 @@ public class CreateCourseServlet extends HttpServlet {
                 sqlSession.commit();
                 writer.write("<html><body>");
                 writer.write("<h1>创建成功！</h1>");
-                writer.write("<script>window.alert(\"创建成功\");</script>");
+                writer.write("<script>window.alert(\"创建成功,请联系管理审核\");</script>");
                 writer.write("<script>window.location.href='createSchedule.html';</script>");
                 writer.write("</body></html>");
             } else {

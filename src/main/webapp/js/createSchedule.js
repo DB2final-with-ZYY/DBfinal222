@@ -117,7 +117,7 @@ function setupFormSubmission() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('课程安排创建成功！');
+                alert('课程安排创建成功！请等待管理审核');
                 form.reset();
                 window.location.href = 'teacherSchedule.html'; // 跳转到课程安排界面
             } else {
