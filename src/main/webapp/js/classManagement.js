@@ -29,7 +29,10 @@ function loadTeacherInfo() {
         });
 }
 
-// 加载班级列表
+// 默认考试占比
+let examWeight = 0.6; // 默认值
+
+// 加载班级列表(含考试占比)
 function loadClassList() {
     fetch('/teacherCourses')
         .then(response => response.json())
@@ -42,7 +45,8 @@ function loadClassList() {
                 option.value = JSON.stringify({
                     courseId: classInfo.courseId,
                     teacherId: classInfo.teacherId,
-                    classTime: classInfo.classTime
+                    classTime: classInfo.classTime,
+                    examWeight: classInfo.examWeight // 添加考试占比
                 });
                 option.textContent = `${classInfo.courseName} (${classInfo.classTime})`;
                 select.appendChild(option);
@@ -66,6 +70,20 @@ function setupClassSelect() {
         }
     });
 }
+
+// 计算总评
+function calculateFinalGrade(student, examWeight) {
+    const usual = student.usualScore;
+    const exam = student.examScore;
+
+    if (usual === '未录入' || exam === '未录入') {
+        return '未完善';
+    }
+
+    const finalGrade = usual * (1 - examWeight) + exam * examWeight;
+    return finalGrade.toFixed(2); // 保留两位小数
+}
+
 
 // 加载学生列表
 function loadStudentList(classInfo) {
@@ -107,7 +125,7 @@ function displayStudentList(students) {
             // student.grade || '未录入'  // 使用grade属性作为成绩
             student.usualScore || '未录入',
             student.examScore || '未录入',
-            student.grade || '未录入'
+            // student.grade || '未录入'
         ];
 
         console.log('Cells to display:', cells);
@@ -116,6 +134,13 @@ function displayStudentList(students) {
             const cell = row.insertCell();
             cell.textContent = text || ''; // 处理 undefined 或 null 值
         });
+
+
+        // 计算并显示总评
+        const classInfo = JSON.parse(document.getElementById('classSelect').value);
+        const finalGrade = calculateFinalGrade(student, classInfo.examWeight || examWeight);
+        const finalGradeCell = row.insertCell();
+        finalGradeCell.textContent = finalGrade;
 
         // 平时成绩操作
         const usualGradeActionCell = row.insertCell();

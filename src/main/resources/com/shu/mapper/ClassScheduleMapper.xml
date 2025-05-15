@@ -111,6 +111,7 @@
             cs.course_id,
             c.course_name,
             c.credit,
+            c.exam_weight,
             cs.teacher_id,
             cs.class_time,
             cs.classroom,
