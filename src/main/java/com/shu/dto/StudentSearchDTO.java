@@ -11,6 +11,8 @@ public class StudentSearchDTO {
     private String majorName;
     private String email;
     private BigDecimal grade; // 成绩分数
+    private Integer usualScore;  // 平时成绩
+    private Integer examScore;  // 考试成绩
 
     public Integer getStudentId() {
         return studentId;
@@ -76,6 +78,22 @@ public class StudentSearchDTO {
         this.grade = grade;
     }
 
+    public Integer getUsualScore() {
+        return usualScore;
+    }
+
+    public void setUsualScore(Integer usualScore) {
+        this.usualScore = usualScore;
+    }
+
+    public Integer getExamScore() {
+        return examScore;
+    }
+
+    public void setExamScore(Integer examScore) {
+        this.examScore = examScore;
+    }
+
     @Override
     public String toString() {
         return "StudentSearchDTO{" +
@@ -87,6 +105,8 @@ public class StudentSearchDTO {
                 ", majorName='" + majorName + '\'' +
                 ", email='" + email + '\'' +
                 ", grade=" + grade +
+                ", usualScore=" + usualScore +
+                ", examScore=" + examScore +
                 '}';
     }
 }

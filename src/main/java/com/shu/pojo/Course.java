@@ -5,6 +5,8 @@ public class Course {
     private String courseName; // 课程名称
     private Integer departmentId; // 所属院系ID
     private Integer credit; // 课程学分
+    private Integer examWeight;  // 考试占比
+    private String status;  // ('待审核', '审核通过', '审核不通过')
 
     // 关联属性
     private Department department; // 所属院系信息
@@ -49,6 +51,22 @@ public class Course {
         this.courseId = courseId;
     }
 
+    public Integer getExamWeight() {
+        return examWeight;
+    }
+
+    public void setExamWeight(Integer examWeight) {
+        this.examWeight = examWeight;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Course{" +
@@ -56,6 +74,8 @@ public class Course {
                 ", courseName='" + courseName + '\'' +
                 ", departmentId=" + departmentId +
                 ", credit=" + credit +
+                ", examWeight=" + examWeight +
+                ", status='" + status + '\'' +
                 ", department=" + department +
                 '}';
     }

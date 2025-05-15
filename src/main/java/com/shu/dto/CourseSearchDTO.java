@@ -16,6 +16,8 @@ public class CourseSearchDTO {
     private Integer enrolledCount;     // 已选人数
     private String examTime;           // 考试时间
     private String examPlace;          // 考试地点
+    private Integer usualScore;        // 平时成绩
+    private Integer examScore;         // 考试成绩
     private BigDecimal grade;          // 成绩
 
     public Integer getScheduleId() {
@@ -130,6 +132,22 @@ public class CourseSearchDTO {
         this.grade = grade;
     }
 
+    public Integer getUsualScore() {
+        return usualScore;
+    }
+
+    public void setUsualScore(Integer usualScore) {
+        this.usualScore = usualScore;
+    }
+
+    public Integer getExamScore() {
+        return examScore;
+    }
+
+    public void setExamScore(Integer examScore) {
+        this.examScore = examScore;
+    }
+
     @Override
     public String toString() {
         return "CourseSearchDTO{" +
@@ -146,6 +164,8 @@ public class CourseSearchDTO {
                 ", enrolledCount=" + enrolledCount +
                 ", examTime='" + examTime + '\'' +
                 ", examPlace='" + examPlace + '\'' +
+                ", usualScore=" + usualScore +
+                ", examScore=" + examScore +
                 ", grade=" + grade +
                 '}';
     }

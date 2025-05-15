@@ -8,6 +8,7 @@ public class ClassSchedule {
     private String classroom; // 教室
     private Integer capacity; // 课程容量
     private String classTime; // 上课时间 (格式：星期几几到几)
+    private String status;
 
     // 关联属性
     private Course course; // 课程信息
@@ -85,6 +86,14 @@ public class ClassSchedule {
         this.scheduleId = scheduleId;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "ClassSchedule{" +
@@ -95,6 +104,7 @@ public class ClassSchedule {
                 ", classroom='" + classroom + '\'' +
                 ", capacity=" + capacity +
                 ", classTime='" + classTime + '\'' +
+                ", status='" + status + '\'' +
                 ", course=" + course +
                 ", teacher=" + teacher +
                 '}';

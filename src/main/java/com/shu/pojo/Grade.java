@@ -6,6 +6,8 @@ import java.util.Date;
 public class Grade {
     private Integer gradeId; // 成绩ID
     private Integer enrollmentId; // 选课ID
+    private Integer usualScore;  // 平时成绩
+    private Integer examScore;  // 考试成绩
     private BigDecimal grade; // 成绩分数
 
     // 关联属性
@@ -43,11 +45,29 @@ public class Grade {
         this.enrollment = enrollment;
     }
 
+    public Integer getUsualScore() {
+        return usualScore;
+    }
+
+    public void setUsualScore(Integer usualScore) {
+        this.usualScore = usualScore;
+    }
+
+    public Integer getExamScore() {
+        return examScore;
+    }
+
+    public void setExamScore(Integer examScore) {
+        this.examScore = examScore;
+    }
+
     @Override
     public String toString() {
         return "Grade{" +
                 "gradeId=" + gradeId +
                 ", enrollmentId=" + enrollmentId +
+                ", usualScore=" + usualScore +
+                ", examScore=" + examScore +
                 ", grade=" + grade +
                 ", enrollment=" + enrollment +
                 '}';

@@ -8,6 +8,7 @@ public class Teacher {
     private String position; // 职位 (正教授,副教授,高级工程师,讲师)
     private String gender; // 性别 (M-男,F-女,O-其他)
     private Integer departmentId; // 所属院系ID
+    private String status;  // '在职', '离职'
 
     // 关联属性
     private Department department; // 所属院系信息
@@ -76,6 +77,14 @@ public class Teacher {
         this.department = department;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Teacher{" +
@@ -86,6 +95,7 @@ public class Teacher {
                 ", position='" + position + '\'' +
                 ", gender='" + gender + '\'' +
                 ", departmentId=" + departmentId +
+                ", status='" + status + '\'' +
                 ", department=" + department +
                 '}';
     }
