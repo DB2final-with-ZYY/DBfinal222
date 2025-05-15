@@ -25,7 +25,10 @@
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
                 <!--                TODO-->
-                <property name="url" value="jdbc:mysql://localhost:3306/DBfinal?useSSL=false&amp;useServerprepStmts=true"/>
+<!--                <property name="url" value="jdbc:mysql://113.44.251.108:3306/DBfinal?useSSL=false&amp;useServerprepStmts=true"/>-->
+<!--                <property name="username" value="DBfinal"/>-->
+<!--                <property name="password" value="12345678"/>-->
+                <property name="url" value="jdbc:mysql://localhost:3306/newDBfinal?useSSL=false&amp;useServerprepStmts=true"/>
                 <property name="username" value="root"/>
                 <property name="password" value="12345678"/>
             </dataSource>
