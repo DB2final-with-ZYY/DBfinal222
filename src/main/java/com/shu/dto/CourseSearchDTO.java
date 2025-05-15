@@ -16,6 +16,7 @@ public class CourseSearchDTO {
     private Integer enrolledCount;     // 已选人数
     private String examTime;           // 考试时间
     private String examPlace;          // 考试地点
+    private String examWeight;         // 考试占比
     private Integer usualScore;        // 平时成绩
     private Integer examScore;         // 考试成绩
     private BigDecimal grade;          // 成绩
@@ -132,6 +133,14 @@ public class CourseSearchDTO {
         this.grade = grade;
     }
 
+    public String getExamWeight() {
+        return examWeight;
+    }
+
+    public void setExamWeight(String examWeight) {
+        this.examWeight = examWeight;
+    }
+
     public Integer getUsualScore() {
         return usualScore;
     }
@@ -164,6 +173,7 @@ public class CourseSearchDTO {
                 ", enrolledCount=" + enrolledCount +
                 ", examTime='" + examTime + '\'' +
                 ", examPlace='" + examPlace + '\'' +
+                ", examWeight='" + examWeight + '\'' +
                 ", usualScore=" + usualScore +
                 ", examScore=" + examScore +
                 ", grade=" + grade +

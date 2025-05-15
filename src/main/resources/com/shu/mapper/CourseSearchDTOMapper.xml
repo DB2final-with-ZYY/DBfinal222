@@ -18,6 +18,7 @@
         <result column="exam_time" property="examTime"/>
         <result column="exam_place" property="examPlace"/>
         <result column="grade" property="grade"/>
+        <result column="exam_weight" property="examWeight"/>
         <result column="exam_score" property="examScore"/>
         <result column="usual_score" property="usualScore"/>
     </resultMap>
