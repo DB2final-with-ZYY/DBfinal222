@@ -50,6 +50,15 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
+    // 计算总评成绩
+    function calculateFinalGrade(usualScore, examScore, examWeight) {
+        if (usualScore === undefined || examScore === undefined || examWeight === undefined) {
+            return '未完善';
+        }
+        const finalGrade = usualScore * (1 - examWeight) + examScore * examWeight;
+        return finalGrade.toFixed(2); // 保留两位小数
+    }
+
     // 显示课程列表
     function displayCourseList(DTOs) {
         const tbody = document.querySelector('#courseTable tbody');
@@ -72,6 +81,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         DTOs.forEach(DTO => {
             const row = tbody.insertRow();
+            // 提取成绩参数
+            const usualScore = DTO.usualScore ?? null;
+            const examScore = DTO.examScore ?? null;
+            const examWeight = parseFloat(DTO.examWeight) || 0.6;  // 处理成绩权重
+
+            // 计算总评成绩
+            const finalScore = calculateFinalGrade(usualScore, examScore, examWeight);
+
             const cells = [
                 DTO.courseId || '无',         // 课程号
                 DTO.courseName || '无',       // 课程名
@@ -81,7 +98,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 DTO.position || '无',         // 教师职称
                 DTO.examTime || '未安排',     // 考试时间
                 DTO.examPlace || '未安排',    // 考试地点
-                DTO.grade ?? '未录入'         // 成绩（可能为 0，所以用 ?? 处理）
+                finalScore !== '未完善' ? finalScore : '未录入'  // 总评成绩
+                // DTO.grade ?? '未录入'         // 成绩（可能为 0，所以用 ?? 处理）
             ];
 
             cells.forEach(cellData => {
