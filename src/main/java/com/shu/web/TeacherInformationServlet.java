@@ -47,6 +47,9 @@ public class TeacherInformationServlet extends HttpServlet {
             // 获取TeacherMapper
             TeacherMapper teacherMapper = sqlSession.getMapper(TeacherMapper.class);
 
+            // 清理缓存
+            sqlSession.clearCache();
+
             // 查询教师信息
             teacher = teacherMapper.selectById(teacher.getTeacherId());
 
@@ -55,7 +58,7 @@ public class TeacherInformationServlet extends HttpServlet {
                 resp.getWriter().write("{\"error\": \"教师信息不存在\"}");
                 return;
             }
-            // System.out.println("Teacherinformation:" + teacher);
+            System.out.println("Teacherinformation:" + teacher);
 
             // 获取学院mapper
             DepartmentMapper departmentMapper = sqlSession.getMapper(DepartmentMapper.class);
@@ -70,6 +73,7 @@ public class TeacherInformationServlet extends HttpServlet {
             data.put("email", teacher.getEmail());
             data.put("departmentName", department.getDepartmentName());
             data.put("position", teacher.getPosition());
+            data.put("status", teacher.getStatus());
 
             // 转换为JSON并响应
             ObjectMapper mapper = new ObjectMapper();

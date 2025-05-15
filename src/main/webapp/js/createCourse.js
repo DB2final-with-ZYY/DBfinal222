@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('teacherPosition').textContent = data.position;
                 document.getElementById('teacherEmail').textContent = data.email;
                 document.getElementById('teacherDepartment').textContent = data.departmentName;
+                document.getElementById('teacherStatus').textContent = data.status;
             })
             .catch(error => {
                 console.error('Error loading teacher info:', error);

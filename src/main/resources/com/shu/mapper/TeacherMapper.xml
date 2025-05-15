@@ -11,10 +11,11 @@
     <result column="position" property="position"/>
     <result column="gender" property="gender"/>
     <result column="department_id" property="departmentId"/>
+    <result column="status" property="status"/>
     <association property="department" resultMap="com.shu.mapper.DepartmentMapper.departmentMap"/>
 </resultMap>
 
-    <select id="selectById" resultType="com.shu.pojo.Teacher" resultMap="teacherMap">
+    <select id="selectById" resultType="com.shu.pojo.Teacher" resultMap="teacherMap" flushCache="true">
         select * from teacher where teacher_id= #{teacherId};
     </select>
 
