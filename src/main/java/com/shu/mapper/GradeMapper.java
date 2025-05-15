@@ -18,5 +18,32 @@ public interface GradeMapper {
      * @return
      */
     int insert(Grade grade);
-    
+
+    /**
+     *  插入平时成绩 usual_score
+     * @param grade
+     * @return
+     */
+    int insertUsualScore(Grade grade);
+
+    /**
+     *  插入考试成绩 exam_score
+     * @param grade
+     * @return
+     */
+    int insertExamScore(Grade grade);
+
+    /**
+     *  更新平时成绩 usual_score
+     * @param grade
+     * @return
+     */
+    int updateUsualScore(Grade grade);
+
+    /**
+     *  更新考试成绩 exam_score
+     * @param grade
+     * @return
+     */
+    int updateExamScore(Grade grade);
 } 

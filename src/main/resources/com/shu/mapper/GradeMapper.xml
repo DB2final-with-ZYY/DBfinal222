@@ -6,18 +6,41 @@
     <resultMap id="gradeMap" type="com.shu.pojo.Grade">
         <id column="grade_id" property="gradeId"/>
         <result column="enrollment_id" property="enrollmentId"/>
-        <result column="grade" property="grade"/>
+        <result column="usual_score" property="usualScore"/>
+        <result column="exam_score" property="examScore"/>
         <association property="enrollment" resultMap="com.shu.mapper.EnrollmentMapper.enrollmentMap"/>
     </resultMap>
 
     <insert id="insert">
-        INSERT INTO grade (enrollment_id, grade)
-        VALUES (#{enrollmentId}, #{grade});
+        INSERT INTO grade (enrollment_id, usual_score, exam_score)
+        VALUES (#{enrollmentId}, #{usualScore}, #{examScore});
+    </insert>
+
+    <insert id="insertUsualScore">
+        INSERT INTO grade (enrollment_id, usual_score)
+        VALUES (#{enrollmentId}, #{usualScore});
+    </insert>
+
+    <insert id="insertExamScore">
+        INSERT INTO grade (enrollment_id, exam_score)
+        VALUES (#{enrollmentId}, #{examScore});
     </insert>
 
     <update id="update">
         UPDATE grade
-        SET grade = #{grade}
+        SET usual_score = #{usualScore}, exam_score = #{examScore}
+        WHERE enrollment_id = #{enrollmentId};
+    </update>
+
+    <update id="updateUsualScore">
+        UPDATE grade
+        SET usual_score = #{usualScore}
+        WHERE enrollment_id = #{enrollmentId};
+    </update>
+
+    <update id="updateExamScore">
+        UPDATE grade
+        SET exam_score = #{examScore}
         WHERE enrollment_id = #{enrollmentId};
     </update>
 

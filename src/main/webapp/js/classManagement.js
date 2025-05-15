@@ -103,8 +103,11 @@ function displayStudentList(students) {
             student.gradeNumber,
             student.departmentName,
             student.majorName,
-            student.email,
-            student.grade || '未录入'  // 使用grade属性作为成绩
+            // student.email,
+            // student.grade || '未录入'  // 使用grade属性作为成绩
+            student.usualScore || '未录入',
+            student.examScore || '未录入',
+            student.grade || '未录入'
         ];
 
         console.log('Cells to display:', cells);
@@ -114,32 +117,54 @@ function displayStudentList(students) {
             cell.textContent = text || ''; // 处理 undefined 或 null 值
         });
 
-        // 添加录入/修改成绩按钮
-        const gradeActionCell = row.insertCell();
-        const gradeButton = document.createElement('button');
-        gradeButton.textContent = student.grade ? '修改成绩' : '录入成绩';
-        gradeButton.className = 'button-create';
-        gradeButton.onclick = () => handleGradeEntry(student);
-        gradeActionCell.appendChild(gradeButton);
+        // 平时成绩操作
+        const usualGradeActionCell = row.insertCell();
+        const usualGradeButton = document.createElement('button');
+        usualGradeButton.textContent = student.usualScore ? '修改成绩' : '录入成绩';
+        usualGradeButton.className = 'button-create';
+        usualGradeButton.onclick = () => handleGradeEntry(student, 'usual');
+        usualGradeActionCell.appendChild(usualGradeButton);
 
-        // 添加删除按钮
-        const actionCell = row.insertCell();
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = '移除学生';
-        deleteButton.className = 'delete-btn';
-        deleteButton.onclick = () => removeStudent(student.studentId);
-        actionCell.appendChild(deleteButton);
+        // 考试成绩操作
+        const examGradeActionCell = row.insertCell();
+        const examGradeButton = document.createElement('button');
+        examGradeButton.textContent = student.examScore ? '修改成绩' : '录入成绩';
+        examGradeButton.className = 'button-create';
+        examGradeButton.onclick = () => handleGradeEntry(student, 'exam');
+        examGradeActionCell.appendChild(examGradeButton);
+
+        // // 添加录入/修改成绩按钮
+        // const gradeActionCell = row.insertCell();
+        // const gradeButton = document.createElement('button');
+        // gradeButton.textContent = student.grade ? '修改成绩' : '录入成绩';
+        // gradeButton.className = 'button-create';
+        // gradeButton.onclick = () => handleGradeEntry(student);
+        // gradeActionCell.appendChild(gradeButton);
+
+        // // 添加删除按钮
+        // const actionCell = row.insertCell();
+        // const deleteButton = document.createElement('button');
+        // deleteButton.textContent = '移除学生';
+        // deleteButton.className = 'delete-btn';
+        // deleteButton.onclick = () => removeStudent(student.studentId);
+        // actionCell.appendChild(deleteButton);
     });
 }
 
-// 处理成绩录入/修改
-function handleGradeEntry(student) {
-    const newGrade = prompt(`请输入 ${student.studentName} 的成绩:`, student.grade || '');
+// 处理平时/考试成绩录入/修改
+function handleGradeEntry(student, gradeType) {
+    const gradeLabel = gradeType === 'usual' ? '平时成绩' : '考试成绩';
+    const currentGrade = gradeType === 'usual' ? student.usualScore : student.examScore;
+    const newGrade = prompt(`请输入 ${student.studentName} 的${gradeLabel}:`, currentGrade || '');
+
     if (newGrade !== null) {
         const classInfo = JSON.parse(document.getElementById('classSelect').value);
 
-        // 判断是提交成绩还是修改成绩
-        const url = student.grade ? '/updateGrade' : '/insertGrade'; // 判断接口
+        // 确定接口路径和操作类型
+        const isUpdate = currentGrade !== undefined && currentGrade !== '未录入';
+        const url = isUpdate
+            ? (gradeType === 'usual' ? '/updateUsualGrade' : '/updateExamGrade')
+            : (gradeType === 'usual' ? '/insertUsualGrade' : '/insertExamGrade');
 
         fetch(url, {
             method: 'POST',
@@ -155,18 +180,55 @@ function handleGradeEntry(student) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(student.grade ? '成绩更新成功' : '成绩录入成功');
+                    alert(isUpdate ? `${gradeLabel}更新成功` : `${gradeLabel}录入成功`);
                     loadStudentList(classInfo);
                 } else {
                     alert(data.error || '操作失败，请重试');
                 }
             })
             .catch(error => {
-                console.error('Error updating/submiting grade:', error);
+                console.error(`Error updating/submitting ${gradeLabel}:`, error);
                 alert('操作失败，请重试');
             });
     }
 }
+
+
+// // 处理成绩录入/修改
+// function handleGradeEntry(student) {
+//     const newGrade = prompt(`请输入 ${student.studentName} 的成绩:`, student.grade || '');
+//     if (newGrade !== null) {
+//         const classInfo = JSON.parse(document.getElementById('classSelect').value);
+//
+//         // 判断是提交成绩还是修改成绩
+//         const url = student.grade ? '/updateGrade' : '/insertGrade'; // 判断接口
+//
+//         fetch(url, {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({
+//                 studentId: student.studentId,
+//                 courseId: classInfo.courseId,
+//                 teacherId: classInfo.teacherId,
+//                 classTime: classInfo.classTime,
+//                 grade: newGrade
+//             })
+//         })
+//             .then(response => response.json())
+//             .then(data => {
+//                 if (data.success) {
+//                     alert(student.grade ? '成绩更新成功' : '成绩录入成功');
+//                     loadStudentList(classInfo);
+//                 } else {
+//                     alert(data.error || '操作失败，请重试');
+//                 }
+//             })
+//             .catch(error => {
+//                 console.error('Error updating/submiting grade:', error);
+//                 alert('操作失败，请重试');
+//             });
+//     }
+// }
 
 
 
