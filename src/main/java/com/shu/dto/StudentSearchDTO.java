@@ -10,9 +10,11 @@ public class StudentSearchDTO {
     private String departmentName;
     private String majorName;
     private String email;
+    private String nativePlace;  // 生源地
     private BigDecimal grade; // 成绩分数
     private Integer usualScore;  // 平时成绩
     private Integer examScore;  // 考试成绩
+    private String status;  // 状态
 
     public Integer getStudentId() {
         return studentId;
@@ -94,6 +96,22 @@ public class StudentSearchDTO {
         this.examScore = examScore;
     }
 
+    public String getNativePlace() {
+        return nativePlace;
+    }
+
+    public void setNativePlace(String nativePlace) {
+        this.nativePlace = nativePlace;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "StudentSearchDTO{" +
@@ -104,9 +122,11 @@ public class StudentSearchDTO {
                 ", departmentName='" + departmentName + '\'' +
                 ", majorName='" + majorName + '\'' +
                 ", email='" + email + '\'' +
+                ", nativePlace='" + nativePlace + '\'' +
                 ", grade=" + grade +
                 ", usualScore=" + usualScore +
                 ", examScore=" + examScore +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

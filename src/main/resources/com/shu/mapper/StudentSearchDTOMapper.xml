@@ -13,5 +13,7 @@
         <result column="grade" property="grade"/>
         <result column="usual_score" property="usualScore"/>
         <result column="exam_score" property="examScore"/>
+        <result column="native_place" property="nativePlace"/>
+        <result column="status" property="status"/>
     </resultMap>
 </mapper>
