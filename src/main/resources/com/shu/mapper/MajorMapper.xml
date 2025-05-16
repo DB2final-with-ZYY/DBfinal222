@@ -13,4 +13,21 @@
     <select id="selectMajorById" resultType="com.shu.pojo.Major" resultMap="majorMap">
         SELECT * FROM major where major_id = #{majorId};
     </select>
+
+    <select id="selectMajorsByDepartment" resultMap="majorMap">
+        SELECT m.*, d.*
+        FROM major m
+                 LEFT JOIN department d ON m.department_id = d.department_id
+        WHERE d.department_name = #{departmentName}
+        ORDER BY m.major_id
+    </select>
+
+    <select id="selectMajorsByDepartmentId" resultMap="majorMap">
+        SELECT m.*, d.*
+        FROM major m
+                 LEFT JOIN department d ON m.department_id = d.department_id
+        WHERE m.department_id = #{departmentId}
+        ORDER BY m.major_id
+    </select>
+
 </mapper> 
