@@ -1,7 +1,9 @@
 package com.shu.web;
 
+import com.shu.mapper.AdminMapper;
 import com.shu.mapper.StudentMapper;
 import com.shu.mapper.TeacherMapper;
+import com.shu.pojo.Admin;
 import com.shu.pojo.Student;
 import com.shu.pojo.Teacher;
 import com.shu.util.SqlSessionFactoryUtils;
@@ -88,6 +90,31 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("teacher", teahcer);
 
             } else {
+                // 登陆失败，弹出提示框
+                writer.write("<html><body>");
+                writer.write("<h1>登录失败！</h1>");
+                writer.write("<script>alert('Id或密码错误！'); window.history.back();</script>"); // 弹窗并返回上一步
+                writer.write("</body></html>");
+            }
+        }
+        else if (role.equals("admin")) {
+            // 2.3 获取Mapper
+            AdminMapper adminMapper = sqlSession.getMapper(AdminMapper.class);
+            // 2.4 调用方法
+            Admin admin = adminMapper.selectById(Integer.parseInt(id));
+            if (admin.getPassword().equals(password)) {
+                // 登陆成功，跳转到主页或其他页面
+                writer.write("<html><body>");
+                writer.write("<h1>登录成功！</h1>");
+                writer.write("<script>window.alert(\"登陆成功\");</script>");
+                writer.write("<script>window.location.href='studentManagement.html';</script>"); // 登录成功后跳转
+                writer.write("</body></html>");
+
+                // 存入session
+                HttpSession session = req.getSession();
+                session.setAttribute("admin", admin);
+            }
+            else {
                 // 登陆失败，弹出提示框
                 writer.write("<html><body>");
                 writer.write("<h1>登录失败！</h1>");
