@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const majorSelect = document.getElementById('major');
                 // 清空现有选项，保留"全部"选项
                 majorSelect.innerHTML = '<option value="">全部</option>';
-                
+
                 data.forEach(major => {
                     const option = document.createElement('option');
                     option.value = major.majorId;
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 使行可编辑
     function makeRowEditable(row) {
         const cells = row.cells;
-        
+
         // 密码
         const passwordCell = cells[1];
         const passwordInput = document.createElement('input');
@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 // 清空现有选项
                 majorSelect.innerHTML = '';
-                
+
                 data.forEach(major => {
                     const option = document.createElement('option');
                     option.value = major.majorId;
@@ -355,9 +355,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 保存更改
     function saveChanges(row) {
-
         const studentId = row.dataset.studentId;
         const cells = row.cells;
+
         const updatedData = {
             studentId: studentId,
             password: cells[1].querySelector('input').value,
@@ -372,18 +372,18 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         // 验证必填字段
-        if (!updatedData.password || !updatedData.name || !updatedData.email || 
+        if (!updatedData.password || !updatedData.name || !updatedData.email ||
             !updatedData.gradeNumber || !updatedData.departmentId || !updatedData.majorId) {
             alert('请填写所有必填字段（密码、姓名、邮箱、年级、学院、专业）');
             return;
         }
-/* 
-        // 验证密码长度
-        if (updatedData.password.length < 6 || updatedData.password.length > 30) {
-            alert('密码长度必须在6-30个字符之间');
-            return;
-        }
-*/
+        /*
+                // 验证密码长度
+                if (updatedData.password.length < 6 || updatedData.password.length > 30) {
+                    alert('密码长度必须在6-30个字符之间');
+                    return;
+                }
+        */
         // 验证年级格式
         const gradeNumber = parseInt(updatedData.gradeNumber);
         if (isNaN(gradeNumber) || gradeNumber < 2010 || gradeNumber > 2026) {
@@ -399,21 +399,21 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify(updatedData)
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // 更新成功，恢复显示模式
-                searchStudents();
-                const editButton = row.querySelector('.edit-btn');
-                editButton.textContent = '编辑';
-            } else {
-                alert('更新失败：' + (data.message || '未知错误'));
-            }
-        })
-        .catch(error => {
-            console.error('Error updating student:', error);
-            alert('更新失败，请稍后重试');
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 更新成功，恢复显示模式
+                    searchStudents();
+                    const editButton = row.querySelector('.edit-btn');
+                    editButton.textContent = '编辑';
+                } else {
+                    alert('更新失败：' + (data.message || '未知错误'));
+                }
+            })
+            .catch(error => {
+                console.error('Error updating student:', error);
+                alert('更新失败，请稍后重试');
+            });
     }
 
     // 添加新学生行
@@ -421,13 +421,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const row = resultTable.insertRow(0);
         row.dataset.isNew = 'true';
 
-        // 学生号单元格（可输入）
+        // 学生号单元格（自动生成且只读）
         const idCell = row.insertCell();
         const idInput = document.createElement('input');
         idInput.type = 'text';
         idInput.className = 'edit-input';
-        idInput.placeholder = '请输入学号';
-        idInput.required = true;
+        idInput.value = getNextStudentId();
+        idInput.readOnly = true;
         idCell.appendChild(idInput);
 
         // 密码单元格
@@ -549,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // 验证必填字段
         if (!newStudent.studentId || !newStudent.password || !newStudent.name ||
-            !newStudent.email || !newStudent.gradeNumber || !newStudent.departmentId || 
+            !newStudent.email || !newStudent.gradeNumber || !newStudent.departmentId ||
             !newStudent.majorId) {
             alert('请填写所有必填字段（学号、密码、姓名、邮箱、年级、学院、专业）');
             return;
@@ -560,13 +560,13 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('学号必须是数字');
             return;
         }
-/*
-        // 验证密码长度
-        if (newStudent.password.length < 6 || newStudent.password.length > 30) {
-            alert('密码长度必须在6-30个字符之间');
-            return;
-        }
-*/
+        /*
+                // 验证密码长度
+                if (newStudent.password.length < 6 || newStudent.password.length > 30) {
+                    alert('密码长度必须在6-30个字符之间');
+                    return;
+                }
+        */
         // 验证年级格式
         const gradeNumber = parseInt(newStudent.gradeNumber);
         if (isNaN(gradeNumber) || gradeNumber < 2010 || gradeNumber > 2026) {
@@ -582,19 +582,33 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify(newStudent)
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('新增学生成功');
-                // 刷新表格
-                searchStudents();
-            } else {
-                alert('新增失败：' + (data.message || '未知错误'));
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('新增学生成功');
+                    // 刷新表格
+                    searchStudents();
+                } else {
+                    alert('新增失败：' + (data.message || '未知错误'));
+                }
+            })
+            .catch(error => {
+                console.error('Error adding student:', error);
+                alert('新增失败，请稍后重试');
+            });
+    }
+
+    function getNextStudentId() {
+        let maxId = 0;
+        // 遍历表格所有行，找到最大学号
+        const rows = resultTable.rows;
+        for (let i = 0; i < rows.length; i++) {
+            const idCell = rows[i].cells[0];
+            const id = parseInt(idCell.textContent);
+            if (!isNaN(id) && id > maxId) {
+                maxId = id;
             }
-        })
-        .catch(error => {
-            console.error('Error adding student:', error);
-            alert('新增失败，请稍后重试');
-        });
+        }
+        return maxId + 1;
     }
 });
