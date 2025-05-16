@@ -75,10 +75,10 @@
 
     <insert id="insert">
         INSERT INTO student (
-            student_id, password, name, gender, email,
+            password, name, gender, email,
             grade_number, native_place, department_id, major_id, status
         ) VALUES (
-                     #{studentId}, #{password}, #{name}, #{gender}, #{email},
+                    #{password}, #{name}, #{gender}, #{email},
                      #{gradeNumber}, #{nativePlace}, #{departmentId}, #{majorId}, #{status}
                  )
     </insert>
