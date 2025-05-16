@@ -355,7 +355,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 保存更改
     function saveChanges(row) {
-        
+
+        const studentId = row.dataset.studentId;
+        const cells = row.cells;
         const updatedData = {
             studentId: studentId,
             password: cells[1].querySelector('input').value,
@@ -546,7 +548,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         // 验证必填字段
-        if (!newStudent.studentId || !newStudent.password || !newStudent.name || 
+        if (!newStudent.studentId || !newStudent.password || !newStudent.name ||
             !newStudent.email || !newStudent.gradeNumber || !newStudent.departmentId || 
             !newStudent.majorId) {
             alert('请填写所有必填字段（学号、密码、姓名、邮箱、年级、学院、专业）');
