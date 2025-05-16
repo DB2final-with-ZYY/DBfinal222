@@ -20,8 +20,86 @@
         <association property="major" resultMap="com.shu.mapper.MajorMapper.majorMap"/>
     </resultMap>
 
+    <select id="searchStudents" resultMap="com.shu.mapper.StudentSearchDTOMapper.studentSearchDTO">
+        SELECT
+        s.student_id,
+        s.password,
+        s.name,
+        s.gender,
+        s.email,
+        s.grade_number,
+        s.native_place,
+        d.department_name,
+        m.major_name,
+        s.status
+        FROM student s
+        LEFT JOIN department d ON s.department_id = d.department_id
+        LEFT JOIN major m ON s.major_id = m.major_id
+        <where>
+            <if test="studentId != null">
+                AND s.student_id = #{studentId}
+            </if>
+            <if test="studentName != null and studentName != ''">
+                AND s.name LIKE CONCAT('%', #{studentName}, '%')
+            </if>
+            <if test="gender != null and gender != ''">
+                AND s.gender = #{gender}
+            </if>
+            <if test="email != null and email != ''">
+                AND s.email = #{email}
+            </if>
+            <if test="gradeNumber != null">
+                AND s.grade_number = #{gradeNumber}
+            </if>
+            <if test="nativePlace != null and nativePlace != ''">
+                AND s.native_place = #{nativePlace}
+            </if>
+            <if test="departmentId != null">
+                AND s.department_id = #{departmentId}
+            </if>
+            <if test="majorId != null">
+                AND s.major_id = #{majorId}
+            </if>
+            <if test="status != null and status != ''">
+                AND s.status = #{status}
+            </if>
+        </where>
+        ORDER BY s.student_id
+    </select>
+
+
+
     <select id="selectById" resultType="com.shu.pojo.Student" resultMap="studentMap">
         select * from student where student_id = #{studentId};
     </select>
+
+    <insert id="insert">
+        INSERT INTO student (
+            student_id, password, name, gender, email,
+            grade_number, native_place, department_id, major_id, status
+        ) VALUES (
+                     #{studentId}, #{password}, #{name}, #{gender}, #{email},
+                     #{gradeNumber}, #{nativePlace}, #{departmentId}, #{majorId}, #{status}
+                 )
+    </insert>
+
+    <update id="update">
+        UPDATE student
+        SET password = #{password},
+            name = #{name},
+            gender = #{gender},
+            email = #{email},
+            grade_number = #{gradeNumber},
+            native_place = #{nativePlace},
+            department_id = #{departmentId},
+            major_id = #{majorId},
+            status = #{status}
+        WHERE student_id = #{studentId}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM student WHERE student_id = #{studentId}
+    </delete>
+
 
 </mapper>
