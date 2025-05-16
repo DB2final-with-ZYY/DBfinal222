@@ -32,7 +32,7 @@ public class UpdateStudentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
 
-        System.out.println("updateStudentSerlvet");
+        // System.out.println("updateStudentSerlvet");
 
         // 设置请求和响应的字符编码
         request.setCharacterEncoding("UTF-8");
