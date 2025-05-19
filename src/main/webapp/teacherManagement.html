@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>教师管理 - 管理员端</title>
+    <link rel="stylesheet" href="css/courseSelect.css">
+    <script src="js/teacherManagement.js"></script>
+</head>
+
+<body>
+<nav class="nav-menu">
+    <div class="nav-left">
+        <img src="images/signature.png" alt="SHU" class="nav-logo">
+        <a href="studentManagement.html" class="nav-item">学生管理</a>
+        <a href="teacherManagement.html" class="nav-item active">教师管理</a>
+        <a href="courseManagement.html" class="nav-item">课程管理</a>
+        <a href="courseScheduleManagement.html" class="nav-item">课程安排管理</a>
+        <a href="classManagement.html" class="nav-item">班级管理</a>
+        <a href="examManagement.html" class="nav-item">考试管理</a>
+    </div>
+    <div class="nav-right">
+        <a href="logoutAdmin" class="nav-item nav-logout">退出登录</a>
+    </div>
+</nav>
+
+<!-- 管理员信息区域 -->
+<div class="student-info">
+    <div class="info-grid">
+        <div class="info-item">
+            <span class="info-label">管理员号：</span>
+            <span class="info-value" id="adminId"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">姓名：</span>
+            <span class="info-value" id="adminName"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">性别：</span>
+            <span class="info-value" id="adminGender"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">邮箱：</span>
+            <span class="info-value" id="adminEmail"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">学院：</span>
+            <span class="info-value" id="adminDepartment"></span>
+        </div>
+    </div>
+</div>
+
+<div class="search-container">
+    <h2>教师查询</h2>
+    <form id="searchForm" action="/teacherSearch" method="post">
+        <div class="search-grid">
+            <div class="form-group">
+                <label for="teacherId">教师ID</label>
+                <input type="text" id="teacherId" name="teacherId">
+            </div>
+            <div class="form-group">
+                <label for="teacherName">教师姓名</label>
+                <input type="text" id="teacherName" name="teacherName">
+            </div>
+            <div class="form-group">
+                <label for="department">所属学院</label>
+                <select id="department" name="department">
+                    <option value="">全部</option>
+                    <!-- 这里需要动态加载学院列表 -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="position">职称</label>
+                <select id="position" name="position">
+                    <option value="">全部</option>
+                    <option value="正教授">正教授</option>
+                    <option value="副教授">副教授</option>
+                    <option value="高级工程师">高级工程师</option>
+                    <option value="讲师">讲师</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status">状态</label>
+                <select id="status" name="status">
+                    <option value="">全部</option>
+                    <option value="在职">在职</option>
+                    <option value="离职">离职</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="search-buttons">
+            <button type="submit" class="search-btn">搜索</button>
+            <button type="reset" class="reset-btn">重置</button>
+        </div>
+    </form>
+
+    <div class="result-container">
+        <table id="resultTable">
+            <thead>
+            <tr>
+                <th>教师号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>邮箱</th>
+                <th>职称</th>
+                <th>学院</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 这里将通过JavaScript动态填充搜索结果 -->
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+
+</html>
