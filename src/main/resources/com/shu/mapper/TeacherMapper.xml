@@ -19,4 +19,63 @@
         select * from teacher where teacher_id= #{teacherId};
     </select>
 
+    <insert id="insert">
+        INSERT INTO teacher (
+            password, name, email, position, gender, department_id, status
+        ) VALUES (
+            #{password}, #{name}, #{email}, #{position}, #{gender}, #{departmentId}, #{status}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE teacher
+        SET password = #{password},
+            name = #{name},
+            email = #{email},
+            position = #{position},
+            gender = #{gender},
+            department_id = #{departmentId},
+            status = #{status}
+        WHERE teacher_id = #{teacherId}
+    </update>
+
+    <select id="searchTeachers" resultMap="com.shu.mapper.TeacherSearchDTOMapper.teacherSearchDTO">
+        SELECT
+        t.teacher_id,
+        t.password,
+        t.name,
+        t.email,
+        t.position,
+        t.gender,
+        t.department_id,
+        t.status,
+        d.department_name
+        FROM teacher t
+        LEFT JOIN department d ON t.department_id = d.department_id
+        <where>
+            <if test="teacherId != null">
+                AND t.teacher_id = #{teacherId}
+            </if>
+            <if test="teacherName != null and teacherName != ''">
+                AND t.name LIKE CONCAT('%', #{teacherName}, '%')
+            </if>
+            <if test="gender != null and gender != ''">
+                AND t.gender = #{gender}
+            </if>
+            <if test="email != null and email != ''">
+                AND t.email = #{email}
+            </if>
+            <if test="position != null and position != ''">
+                AND t.position = #{position}
+            </if>
+            <if test="departmentId != null">
+                AND t.department_id = #{departmentId}
+            </if>
+            <if test="status != null and status != ''">
+                AND t.status = #{status}
+            </if>
+        </where>
+        ORDER BY t.teacher_id
+    </select>
+
 </mapper> 

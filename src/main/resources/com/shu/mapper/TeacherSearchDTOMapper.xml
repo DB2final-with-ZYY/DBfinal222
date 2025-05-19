@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shu.mapper.TeacherSearchDTOMapper">
+    <resultMap id="teacherSearchDTO" type="com.shu.dto.TeacherSearchDTO">
+        <result column="teacher_id" property="teacherId"/>
+        <result column="password" property="password"/>
+        <result column="name" property="teacherName"/>
+        <result column="email" property="email"/>
+        <result column="position" property="position"/>
+        <result column="gender" property="gender"/>
+        <result column="department_name" property="departmentName"/>
+        <result column="status" property="status"/>
+        <result column="course_name" property="courseName"/>
+        <result column="schedule_id" property="scheduleId"/>
+    </resultMap>
+</mapper> 
