@@ -15,5 +15,7 @@
         <result column="exam_score" property="examScore"/>
         <result column="native_place" property="nativePlace"/>
         <result column="status" property="status"/>
+        <result column="password" property="password"/>
+        
     </resultMap>
 </mapper>

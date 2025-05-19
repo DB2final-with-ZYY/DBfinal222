@@ -15,6 +15,7 @@ public class StudentSearchDTO {
     private Integer usualScore;  // 平时成绩
     private Integer examScore;  // 考试成绩
     private String status;  // 状态
+    private String password;
 
     public Integer getStudentId() {
         return studentId;
@@ -112,6 +113,14 @@ public class StudentSearchDTO {
         this.status = status;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "StudentSearchDTO{" +
@@ -127,6 +136,7 @@ public class StudentSearchDTO {
                 ", usualScore=" + usualScore +
                 ", examScore=" + examScore +
                 ", status='" + status + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }
