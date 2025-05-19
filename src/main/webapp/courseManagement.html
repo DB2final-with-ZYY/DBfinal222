@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>课程管理 - 管理员端</title>
+    <link rel="stylesheet" href="css/courseSelect.css">
+    <script src="js/courseManagement.js"></script>
+</head>
+
+<body>
+<nav class="nav-menu">
+    <div class="nav-left">
+        <img src="images/signature.png" alt="SHU" class="nav-logo">
+        <a href="studentManagement.html" class="nav-item">学生管理</a>
+        <a href="teacherManagement.html" class="nav-item">教师管理</a>
+        <a href="courseManagement.html" class="nav-item active">课程管理</a>
+        <a href="courseScheduleManagement.html" class="nav-item">课程安排管理</a>
+        <a href="classManagement.html" class="nav-item">班级管理</a>
+        <a href="examManagement.html" class="nav-item">考试管理</a>
+    </div>
+    <div class="nav-right">
+        <a href="logoutAdmin" class="nav-item nav-logout">退出登录</a>
+    </div>
+</nav>
+
+<!-- 管理员信息区域 -->
+<div class="student-info">
+    <div class="info-grid">
+        <div class="info-item">
+            <span class="info-label">管理员号：</span>
+            <span class="info-value" id="adminId"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">姓名：</span>
+            <span class="info-value" id="adminName"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">性别：</span>
+            <span class="info-value" id="adminGender"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">邮箱：</span>
+            <span class="info-value" id="adminEmail"></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">学院：</span>
+            <span class="info-value" id="adminDepartment"></span>
+        </div>
+    </div>
+</div>
+
+<div class="search-container">
+    <h2>课程查询</h2>
+    <form id="searchForm" action="/courseSearch" method="post">
+        <div class="search-grid">
+            <div class="form-group">
+                <label for="courseId">课程ID</label>
+                <input type="text" id="courseId" name="courseId">
+            </div>
+            <div class="form-group">
+                <label for="courseName">课程名称</label>
+                <input type="text" id="courseName" name="courseName">
+            </div>
+            <div class="form-group">
+                <label for="department">开课学院</label>
+                <select id="department" name="department">
+                    <option value="">全部</option>
+                    <!-- 这里需要动态加载学院列表 -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="credit">学分</label>
+                <input type="number" id="credit" name="credit" min="0">
+            </div>
+            <div class="form-group">
+                <label for="status">状态</label>
+                <select id="status" name="status">
+                    <option value="">全部</option>
+                    <option value="待审核">待审核</option>
+                    <option value="审核通过">审核通过</option>
+                    <option value="审核不通过">审核不通过</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="search-buttons">
+            <button type="submit" class="search-btn">搜索</button>
+            <button type="reset" class="reset-btn">重置</button>
+        </div>
+    </form>
+
+    <div class="result-container">
+        <table id="resultTable">
+            <thead>
+            <tr>
+                <th>课程号</th>
+                <th>课程名</th>
+                <th>学分</th>
+                <th>考试权重</th>
+                <th>开课学院</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 这里将通过JavaScript动态填充搜索结果 -->
+            </tbody>
+        </table>
+        <div class="search-buttons">
+            <button type="button" class="search-btn" id="addCourseBtn">新增</button>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
