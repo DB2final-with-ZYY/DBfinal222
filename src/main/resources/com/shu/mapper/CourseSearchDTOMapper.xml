@@ -21,6 +21,8 @@
         <result column="exam_weight" property="examWeight"/>
         <result column="exam_score" property="examScore"/>
         <result column="usual_score" property="usualScore"/>
+        <result column="department_id" property="departmentId"/>
+        <result column="department_name" property="departmentName"/>
+        <result column="status" property="status"/>
     </resultMap>
-
 </mapper> 

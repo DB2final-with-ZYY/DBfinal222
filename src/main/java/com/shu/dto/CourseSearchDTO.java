@@ -20,6 +20,9 @@ public class CourseSearchDTO {
     private Integer usualScore;        // 平时成绩
     private Integer examScore;         // 考试成绩
     private BigDecimal grade;          // 成绩
+    private Integer departmentId;
+    private String departmentName;
+    private String status;
 
     public Integer getScheduleId() {
         return scheduleId;
@@ -157,6 +160,30 @@ public class CourseSearchDTO {
         this.examScore = examScore;
     }
 
+    public Integer getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "CourseSearchDTO{" +
@@ -177,6 +204,9 @@ public class CourseSearchDTO {
                 ", usualScore=" + usualScore +
                 ", examScore=" + examScore +
                 ", grade=" + grade +
+                ", departmentId=" + departmentId +
+                ", departmentName='" + departmentName + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }
