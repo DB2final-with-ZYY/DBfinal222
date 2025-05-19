@@ -13,6 +13,36 @@
         <association property="department" resultMap="com.shu.mapper.DepartmentMapper.departmentMap"/>
     </resultMap>
 
+    <select id="searchCourses" resultMap="com.shu.mapper.CourseSearchDTOMapper.courseSearchResultMap">
+        SELECT
+            c.course_id,
+            c.course_name,
+            c.credit,
+            c.exam_weight,
+            d.department_name,
+            c.status
+        FROM course c
+        LEFT JOIN department d ON c.department_id = d.department_id
+        <where>
+            <if test="courseId != null">
+                AND c.course_id = #{courseId}
+            </if>
+            <if test="courseName != null and courseName != ''">
+                AND c.course_name LIKE CONCAT('%', #{courseName}, '%')
+            </if>
+            <if test="credit != null">
+                AND c.credit = #{credit}
+            </if>
+            <if test="departmentId != null">
+                AND c.department_id = #{departmentId}
+            </if>
+            <if test="status != null and status != ''">
+                AND c.status = #{status}
+            </if>
+        </where>
+        ORDER BY c.course_id
+    </select>
+
     <insert id="insert">
         INSERT INTO course (course_name, department_id, credit, exam_weight)
         VALUES (#{courseName}, #{departmentId}, #{credit}, #{examWeight});
