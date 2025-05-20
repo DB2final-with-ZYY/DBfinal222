@@ -101,4 +101,12 @@ public interface ClassScheduleMapper {
             @Param("teacherId") Integer teacherId,
             @Param("teacherName") String teacherName,
             @Param("status") String status);
+
+    /**
+     * 更新课程安排信息
+     * 
+     * @param classSchedule 课程安排信息
+     * @return 更新的行数
+     */
+    int updateClassSchedule(ClassSchedule classSchedule);
 }

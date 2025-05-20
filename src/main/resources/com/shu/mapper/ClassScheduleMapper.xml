@@ -167,4 +167,16 @@
         ORDER BY cs.schedule_id ASC
     </select>
 
+    <update id="updateClassSchedule">
+        UPDATE class_schedule
+        SET semester = #{semester},
+            course_id = #{courseId},
+            teacher_id = #{teacherId},
+            classroom = #{classroom},
+            capacity = #{capacity},
+            class_time = #{classTime},
+            status = #{status}
+        WHERE schedule_id = #{scheduleId}
+    </update>
+
 </mapper> 
