@@ -3,19 +3,19 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>学生管理 - 管理员端</title>
+    <title>课程安排管理 - 管理员端</title>
     <link rel="stylesheet" href="css/courseSelect.css">
-    <script src="js/studentManagement.js"></script>
+    <script src="js/classScheduleManagement.js"></script>
 </head>
 
 <body>
     <nav class="nav-menu">
         <div class="nav-left">
             <img src="images/signature.png" alt="SHU" class="nav-logo">
-            <a href="studentManagement.html" class="nav-item active">学生管理</a>
+            <a href="studentManagement.html" class="nav-item">学生管理</a>
             <a href="teacherManagement.html" class="nav-item">教师管理</a>
             <a href="courseManagement.html" class="nav-item">课程管理</a>
-            <a href="classScheduleManagement.html" class="nav-item">课程安排管理</a>
+            <a href="classScheduleManagement.html" class="nav-item active">课程安排管理</a>
             <a href="classManagement.html" class="nav-item">班级管理</a>
             <a href="examManagement.html" class="nav-item">考试管理</a>
         </div>
@@ -51,39 +51,36 @@
     </div>
 
     <div class="search-container">
-        <h2>学生查询</h2>
-        <form id="searchForm" action="/studentSearch" method="post">
+        <h2>课程安排查询</h2>
+        <form id="searchForm" action="/scheduleSearch" method="post">
             <div class="search-grid">
                 <div class="form-group">
-                    <label for="studentId">学生ID</label>
-                    <input type="text" id="studentId" name="studentId">
+                    <label for="scheduleId">安排ID</label>
+                    <input type="text" id="scheduleId" name="scheduleId">
                 </div>
                 <div class="form-group">
-                    <label for="studentName">学生姓名</label>
-                    <input type="text" id="studentName" name="studentName">
+                    <label for="courseId">课程ID</label>
+                    <input type="text" id="courseId" name="courseId">
                 </div>
                 <div class="form-group">
-                    <label for="department">所属学院</label>
-                    <select id="department" name="department">
-                        <option value="">全部</option>
-                        <!-- 这里需要动态加载学院列表 -->
-                    </select>
+                    <label for="courseName">课程名称</label>
+                    <input type="text" id="courseName" name="courseName">
                 </div>
                 <div class="form-group">
-                    <label for="major">所属专业</label>
-                    <select id="major" name="major">
-                        <option value="">全部</option>
-                        <!-- 这里需要动态加载专业列表 -->
-                    </select>
+                    <label for="teacherId">教师ID</label>
+                    <input type="text" id="teacherId" name="teacherId">
                 </div>
                 <div class="form-group">
-                    <label for="status">学生状态</label>
+                    <label for="semester">学期</label>
+                    <input type="number" id="semester" name="semester" min="201501" max="203504" placeholder="如：202501">
+                </div>
+                <div class="form-group">
+                    <label for="status">状态</label>
                     <select id="status" name="status">
                         <option value="">全部</option>
-                        <option value="正常">正常</option>
-                        <option value="试读">试读</option>
-                        <option value="休学">休学</option>
-                        <option value="毕业">毕业</option>
+                        <option value="待审核">待审核</option>
+                        <option value="审核通过">审核通过</option>
+                        <option value="审核不通过">审核不通过</option>
                     </select>
                 </div>
             </div>
@@ -98,15 +95,15 @@
             <table id="resultTable">
                 <thead>
                     <tr>
-                        <th>学生号</th>
-                        <th>密码</th>
-                        <th>姓名</th>
-                        <th>性别</th>
-                        <th>邮箱</th>
-                        <th>年级</th>
-                        <th>生源地</th>
-                        <th>学院</th>
-                        <th>专业</th>
+                        <th>安排ID</th>
+                        <th>学期</th>
+                        <th>课程号</th>
+                        <th>课程名</th>
+                        <th>教师号</th>
+                        <th>教师姓名</th>
+                        <th>教室</th>
+                        <th>容量</th>
+                        <th>上课时间</th>
                         <th>状态</th>
                         <th>操作</th>
                     </tr>
@@ -116,10 +113,10 @@
                 </tbody>
             </table>
             <div class="search-buttons">
-                <button type="button" class="search-btn" id="addStudentBtn">新增</button>
+                <button type="button" class="search-btn" id="addTeacherBtn">新增</button>
             </div>
         </div>
     </div>
 </body>
 
-</html>
+</html> 
