@@ -81,4 +81,24 @@ public interface ClassScheduleMapper {
      * @return
      */
     int deleteClassScheduleById(Integer ScheduleId);
+
+    /**
+     * 根据条件搜索课程安排信息
+     * 
+     * @param scheduleId     课程安排ID
+     * @param semester       学期
+     * @param courseId       课程ID
+     * @param courseName     课程名称
+     * @param teacherId      教师ID
+     * @param teacherName    教师姓名
+     * @param status         课程状态
+     * @return 课程安排信息列表
+     */
+    List<CourseSearchDTO> searchClassSchedules(@Param("scheduleId") Integer scheduleId,
+            @Param("semester") Integer semester,
+            @Param("courseId") Integer courseId,
+            @Param("courseName") String courseName,
+            @Param("teacherId") Integer teacherId,
+            @Param("teacherName") String teacherName,
+            @Param("status") String status);
 }

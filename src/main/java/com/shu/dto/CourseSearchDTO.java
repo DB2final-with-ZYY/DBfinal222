@@ -22,6 +22,7 @@ public class CourseSearchDTO {
     private BigDecimal grade;          // 成绩
     private Integer departmentId;
     private String departmentName;
+    private Integer semester;
     private String status;
 
     public Integer getScheduleId() {
@@ -176,6 +177,14 @@ public class CourseSearchDTO {
         this.departmentName = departmentName;
     }
 
+    public Integer getSemester() {
+        return semester;
+    }
+
+    public void setSemester(Integer semester) {
+        this.semester = semester;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -206,6 +215,7 @@ public class CourseSearchDTO {
                 ", grade=" + grade +
                 ", departmentId=" + departmentId +
                 ", departmentName='" + departmentName + '\'' +
+                ", semester=" + semester +
                 ", status='" + status + '\'' +
                 '}';
     }

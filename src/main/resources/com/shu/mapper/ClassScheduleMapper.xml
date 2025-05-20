@@ -125,4 +125,46 @@
         AND cs.status = '审核通过';
     </select>
 
+    <select id="searchClassSchedules" resultMap="com.shu.mapper.CourseSearchDTOMapper.courseSearchResultMap">
+        SELECT 
+            cs.schedule_id,
+            cs.semester,
+            cs.course_id,
+            c.course_name,
+            c.credit,
+            cs.teacher_id,
+            t.name as teacher_name,
+            cs.class_time,
+            cs.classroom,
+            cs.capacity,
+            cs.status
+        FROM class_schedule cs
+        LEFT JOIN course c ON cs.course_id = c.course_id
+        LEFT JOIN teacher t ON cs.teacher_id = t.teacher_id
+        <where>
+            <if test="scheduleId != null">
+                AND cs.schedule_id = #{scheduleId}
+            </if>
+            <if test="semester != null">
+                AND cs.semester = #{semester}
+            </if>
+            <if test="courseId != null">
+                AND cs.course_id = #{courseId}
+            </if>
+            <if test="courseName != null and courseName != ''">
+                AND c.course_name LIKE CONCAT('%', #{courseName}, '%')
+            </if>
+            <if test="teacherId != null">
+                AND cs.teacher_id = #{teacherId}
+            </if>
+            <if test="teacherName != null and teacherName != ''">
+                AND t.name LIKE CONCAT('%', #{teacherName}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND cs.status = #{status}
+            </if>
+        </where>
+        ORDER BY cs.schedule_id ASC
+    </select>
+
 </mapper> 

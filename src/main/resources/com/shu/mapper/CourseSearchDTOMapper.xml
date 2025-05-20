@@ -23,6 +23,7 @@
         <result column="usual_score" property="usualScore"/>
         <result column="department_id" property="departmentId"/>
         <result column="department_name" property="departmentName"/>
+        <result column="semester" property="semester"/>
         <result column="status" property="status"/>
     </resultMap>
 </mapper> 
