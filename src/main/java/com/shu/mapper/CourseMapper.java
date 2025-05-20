@@ -40,5 +40,11 @@ public interface CourseMapper {
      * @return
      */
     int insert(Course course);
-    
+
+    /**
+     * 更新课程信息
+     * @param course 课程信息
+     * @return 更新的行数
+     */
+    int update(Course course);
 } 
