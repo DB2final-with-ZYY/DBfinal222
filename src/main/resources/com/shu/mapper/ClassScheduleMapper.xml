@@ -17,8 +17,8 @@
 </resultMap>
 
     <insert id="insertClassSchedule">
-        INSERT INTO class_schedule(semester, course_id, teacher_id, classroom, capacity, class_time)
-        VALUES (#{semester}, #{courseId}, #{teacherId}, #{classroom}, #{capacity}, #{classTime});
+        INSERT INTO class_schedule(schedule_id, semester, course_id, teacher_id, classroom, capacity, class_time)
+        VALUES (#{scheduleId}, #{semester}, #{courseId}, #{teacherId}, #{classroom}, #{capacity}, #{classTime});
     </insert>
 
     <delete id="deleteClassSchedule">
