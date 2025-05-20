@@ -21,9 +21,9 @@
 
     <insert id="insert">
         INSERT INTO teacher (
-            password, name, email, position, gender, department_id, status
+            teacher_id, password, name, email, position, gender, department_id, status
         ) VALUES (
-            #{password}, #{name}, #{email}, #{position}, #{gender}, #{departmentId}, #{status}
+            #{teacherId}, #{password}, #{name}, #{email}, #{position}, #{gender}, #{departmentId}, #{status}
         )
     </insert>
 
