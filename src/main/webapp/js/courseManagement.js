@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // 发送搜索请求
-        fetch('/courseSearch?' + searchParams.toString())
+        fetch('/coursesSearch?' + searchParams.toString())
             .then(response => response.json())
             .then(data => {
                 displayResults(data);
@@ -375,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function () {
             courseId: cells[0].querySelector('input').value,
             courseName: cells[1].querySelector('input').value,
             credit: cells[2].querySelector('input').value,
-            examWeight: cells[3].querySelector('input').value,
+            examWeight: parseFloat(cells[3].querySelector('input').value).toFixed(2),
             departmentId: cells[4].querySelector('select').value,
             status: cells[5].querySelector('select').value
         };

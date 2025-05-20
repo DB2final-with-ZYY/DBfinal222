@@ -2,11 +2,7 @@ package com.shu.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shu.dto.CourseSearchDTO;
-import com.shu.mapper.ClassScheduleMapper;
-import com.shu.mapper.StudentMapper;
-import com.shu.mapper.TeacherMapper;
-import com.shu.pojo.Student;
-import com.shu.pojo.Teacher;
+import com.shu.mapper.CourseMapper;
 import com.shu.util.SqlSessionFactoryUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -16,16 +12,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
-@WebServlet("/courseSearch")
+@WebServlet("/coursesSearch")
 public class CourseSearchServlet extends HttpServlet {
 
-    // 添加编码转换方法
     private String encodeString(String str) {
         if (str == null || str.isEmpty()) {
             return str;
@@ -35,93 +28,53 @@ public class CourseSearchServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 设置请求的字符编码为UTF-8,不然会出乱码
         req.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json;charset=UTF-8");
 
-        // 1.接收检索条件
+        // 获取搜索参数
         String courseIdStr = req.getParameter("courseId");
         Integer courseId = (courseIdStr != null && !courseIdStr.isEmpty()) ? Integer.parseInt(courseIdStr) : null;
 
         String courseName = encodeString(req.getParameter("courseName"));
-
-        String teacherIdStr = req.getParameter("teacherId");
-        Integer teacherId = (teacherIdStr != null && !teacherIdStr.isEmpty()) ? Integer.parseInt(teacherIdStr) : null;
-
-        String teacherName = encodeString(req.getParameter("teacherName"));
-        String department = encodeString(req.getParameter("department"));
-
         String creditStr = req.getParameter("credit");
         Integer credit = (creditStr != null && !creditStr.isEmpty()) ? Integer.parseInt(creditStr) : null;
+        String departmentIdStr = req.getParameter("department");
+        Integer departmentId = (departmentIdStr != null && !departmentIdStr.isEmpty()) ? Integer.parseInt(departmentIdStr) : null;
+        String status = encodeString(req.getParameter("status"));
 
-        String weekday = encodeString(req.getParameter("weekday"));
+        // 打印调试信息
+        System.out.println("Search parameters:");
+        System.out.println("courseId: " + courseId);
+        System.out.println("courseName: " + courseName);
+        System.out.println("credit: " + credit);
+        System.out.println("departmentId: " + departmentId);
+        System.out.println("status: " + status);
 
-        String timeSlot = req.getParameter("timeSlot");
-
-        String capacityMinStr = req.getParameter("capacityMin");
-        Integer capacityMin = (capacityMinStr != null && !capacityMinStr.isEmpty()) ? Integer.parseInt(capacityMinStr)
-                : null;
-
-        String capacityMaxStr = req.getParameter("capacityMax");
-        Integer capacityMax = (capacityMaxStr != null && !capacityMaxStr.isEmpty()) ? Integer.parseInt(capacityMaxStr)
-                : null;
-
-        Boolean hasSpace = Boolean.valueOf(req.getParameter("hasSpace"));
-
-        // 打印接收到的参数信息
-//        System.out.println("CourseSearchServlet:");
-//        System.out.println("Course ID: " + courseId);
-//        System.out.println("Course Name: " + courseName);
-//        System.out.println("Teacher ID: " + teacherId);
-//        System.out.println("Teacher Name: " + teacherName);
-//        System.out.println("Department: " + department);
-//        System.out.println("Credit: " + credit);
-//        System.out.println("Weekday: " + weekday);
-//        System.out.println("Time Slot: " + timeSlot);
-//        System.out.println("Capacity Min: " + capacityMin);
-//        System.out.println("Capacity Max: " + capacityMax);
-//        System.out.println("Has Space: " + hasSpace);
-
-        // 2.调用MyBatis完成查询
-        // 这里直接去官网复制粘贴过来
-        // 2.1 获取SqlSessionFactory对象 优化以后用了工具类 这样只创建一个工厂
         SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtils.getSqlSessionFactory();
-        // 2.2 获取SqlSession对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
-        // 获取字符输出流,并设置content type
-        resp.setContentType("text/html;charset=utf-8");
-        PrintWriter writer = resp.getWriter();
-
-        // 2.3 获取Mapper
-        ClassScheduleMapper classScheduleMapper = sqlSession.getMapper(ClassScheduleMapper.class);
-        // 2.4 调用方法
-        List<CourseSearchDTO> results = classScheduleMapper.searchCourses(courseId, courseName, teacherId, teacherName,
-                department, credit, weekday, timeSlot, capacityMin, capacityMax, hasSpace);
-
-        // System.out.println(results);
-
-        // 设置响应类型和字符编码
         resp.setContentType("application/json");
 
         try {
-            // 创建ObjectMapper对象用于JSON转换
-            ObjectMapper objectMapper = new ObjectMapper();
+            CourseMapper courseMapper = sqlSession.getMapper(CourseMapper.class);
+            List<CourseSearchDTO> results = courseMapper.searchCourses(
+                courseId, courseName, credit, departmentId, status
+            );
 
-            // 将查询结果转换为JSON并写入响应
+            // 打印查询结果
+            System.out.println("Query results size: " + (results != null ? results.size() : 0));
+
+            ObjectMapper objectMapper = new ObjectMapper();
             String jsonResponse = objectMapper.writeValueAsString(results);
             resp.getWriter().write(jsonResponse);
 
         } catch (Exception e) {
-            // 记录错误日志
             e.printStackTrace();
-            // 返回错误信息
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write("{\"error\": \"查询失败，请稍后重试\"}");
+        } finally {
+            sqlSession.close();
         }
-
-        // 2.5 释放资源
-        sqlSession.close();
-
     }
 
     @Override
