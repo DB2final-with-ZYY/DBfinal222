@@ -1,6 +1,6 @@
 package com.shu.mapper;
 
-import com.shu.dto.ExamSearchDTO;
+import com.shu.dto.CourseSearchDTO;
 import com.shu.pojo.Exam;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -34,7 +34,7 @@ public interface ExamMapper {
      * @param examPlace     考试地点
      * @return 考试安排信息列表
      */
-    List<ExamSearchDTO> searchExams(
+    List<CourseSearchDTO> searchSchedules(
             @Param("examId") Integer examId,
             @Param("scheduleId") Integer scheduleId,
             @Param("courseId") Integer courseId,

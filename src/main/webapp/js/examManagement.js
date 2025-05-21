@@ -20,10 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // 初始加载
     searchExams();
 
-    // 绑定新增按钮点击事件
-    document.getElementById('addExamBtn').addEventListener('click', function() {
-        addNewExam();
-    });
 
     // 加载管理员信息
     function loadAdminInfo() {
@@ -93,7 +89,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         exams.forEach(exam => {
             const row = resultTable.insertRow();
-            row.dataset.examId = exam.examId;
+            // 确保scheduleId被正确设置
+            if (!exam.scheduleId) {
+                console.error('Missing scheduleId for exam:', exam);
+                return;
+            }
+            row.dataset.scheduleId = exam.scheduleId;
+            row.dataset.examId = exam.examId; // 设置examId
+            console.log('Setting row data:', { scheduleId: exam.scheduleId, examId: exam.examId }); // 调试信息
 
             // 课程号
             const courseIdCell = row.insertCell();
@@ -117,30 +120,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 考试时间
             const examTimeCell = row.insertCell();
-            if (exam.examTime) {
-                examTimeCell.textContent = exam.examTime || '';
+            examTimeCell.textContent = exam.examTime || '';
             examTimeCell.dataset.originalValue = exam.examTime;
-            } else {
-                const timeInput = document.createElement('input');
-                timeInput.type = 'text';
-                timeInput.className = 'edit-input';
-                timeInput.placeholder = '选择考试时间';
-                examTimeCell.appendChild(timeInput);
-
-                // 初始化日期时间选择器
-                flatpickr(timeInput, {
-                    enableTime: true,
-                    dateFormat: "Y-m-d H:i",
-                    locale: "zh",
-                    minDate: "today",
-                    defaultHour: 9,
-                    onChange: function (selectedDates, dateStr) {
-                        const startTime = selectedDates[0];
-                        const endTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000);
-                        timeInput.value = `${dateStr}-${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`;
-                    }
-                });
-            }
 
             // 考试地点
             const examPlaceCell = row.insertCell();
@@ -149,11 +130,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 操作按钮
             const actionCell = row.insertCell();
-            const editButton = document.createElement('button');
-            editButton.textContent = '编辑';
-            editButton.className = 'edit-btn';
-            editButton.onclick = () => toggleEditMode(row);
-            actionCell.appendChild(editButton);
+            const actionButton = document.createElement('button');
+
+            // 判断是否有考试信息
+            if (!exam.examTime || !exam.examPlace) {
+                actionButton.textContent = '创建考试';
+                actionButton.className = 'create-btn';
+                actionButton.onclick = () => createExam(row);
+            } else {
+                actionButton.textContent = '编辑';
+                actionButton.className = 'edit-btn';
+                actionButton.onclick = () => toggleEditMode(row);
+            }
+            actionCell.appendChild(actionButton);
         });
     }
 
@@ -163,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const isEditing = editButton.textContent === '完成';
 
         if (isEditing) {
-            saveChanges(row);
+            updateExamInfo(row);
         } else {
             makeRowEditable(row);
             editButton.textContent = '完成';
@@ -201,6 +190,15 @@ document.addEventListener('DOMContentLoaded', function () {
         examTimeCell.textContent = '';
         examTimeCell.appendChild(examTimeInput);
 
+        // 初始化flatpickr
+        flatpickr(examTimeInput, {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            locale: "zh",
+            minDate: "today",
+            defaultHour: 9
+        });
+
         // 考试地点（可编辑）
         const examPlaceCell = cells[5];
         const examPlaceInput = document.createElement('input');
@@ -208,21 +206,30 @@ document.addEventListener('DOMContentLoaded', function () {
         examPlaceInput.value = examPlaceCell.textContent;
         examPlaceInput.className = 'edit-input';
         examPlaceInput.required = true;
+        examPlaceInput.placeholder = '请输入考试地点';
         examPlaceCell.textContent = '';
         examPlaceCell.appendChild(examPlaceInput);
     }
 
     // 保存更改
-    function saveChanges(row) {
-        const examId = row.dataset.examId;
+    function updateExamInfo(row) {
+        const scheduleId = row.dataset.scheduleId;
+        const examId = row.dataset.examId; // 获取examId
         
         const cells = row.cells;
 
         const updatedData = {
-            examId: examId,
+            scheduleId: scheduleId,
             examTime: cells[4].querySelector('input').value,
             examPlace: cells[5].querySelector('input').value
         };
+
+        // 只有在编辑现有考试时才添加examId
+        if (examId && examId !== 'undefined') {
+            updatedData.examId = parseInt(examId);
+        }
+
+        console.log('Updating exam with data:', updatedData); // 调试信息
 
         // 验证必填字段
         if (!updatedData.examTime || !updatedData.examPlace) {
@@ -240,6 +247,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
+            console.log('Update response:', data); // 调试信息
             if (data.success) {
                 searchExams();
                 const editButton = row.querySelector('.edit-btn');
@@ -254,108 +262,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 添加新的考试安排
-    function addNewExam() {
-        const row = resultTable.insertRow(0);
-        row.dataset.isNew = 'true';
-
-        // 考试ID（自动生成且只读，可选）
-        // const idCell = row.insertCell();
-        // const idInput = document.createElement('input');
-        // idInput.type = 'text';
-        // idInput.className = 'edit-input';
-        // idInput.value = getNextExamId();
-        // idInput.readOnly = true;
-        // idCell.appendChild(idInput);
-
-        // 课程号
-        const courseIdCell = row.insertCell();
-        const courseIdInput = document.createElement('input');
-        courseIdInput.type = 'text';
-        courseIdInput.className = 'edit-input';
-        courseIdInput.required = true;
-        courseIdCell.appendChild(courseIdInput);
-
-        // 课程名称
-        const courseNameCell = row.insertCell();
-        const courseNameInput = document.createElement('input');
-        courseNameInput.type = 'text';
-        courseNameInput.className = 'edit-input';
-        courseNameInput.required = true;
-        courseNameCell.appendChild(courseNameInput);
-
-        // 教师号
-        const teacherIdCell = row.insertCell();
-        const teacherIdInput = document.createElement('input');
-        teacherIdInput.type = 'text';
-        teacherIdInput.className = 'edit-input';
-        teacherIdInput.required = true;
-        teacherIdCell.appendChild(teacherIdInput);
-
-        // 教师姓名
-        const teacherNameCell = row.insertCell();
-        const teacherNameInput = document.createElement('input');
-        teacherNameInput.type = 'text';
-        teacherNameInput.className = 'edit-input';
-        teacherNameInput.required = true;
-        teacherNameCell.appendChild(teacherNameInput);
-
-        // 考试时间
-        const examTimeCell = row.insertCell();
-        const examTimeInput = document.createElement('input');
-        examTimeInput.type = 'text';
-        examTimeInput.className = 'exam-input';
-        examTimeInput.placeholder = '选择考试时间';
-        examTimeInput.required = true;
-        examTimeCell.appendChild(examTimeInput);
-
-        // 初始化日期时间选择器
-        flatpickr(examTimeInput, {
-            enableTime: true,
-            dateFormat: "Y-m-d H:i",
-            locale: "zh",
-            minDate: "today",
-            defaultHour: 9,
-            onChange: function (selectedDates, dateStr) {
-                const startTime = selectedDates[0];
-                const endTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000);
-                examTimeInput.value = `${dateStr}-${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`;
-            }
-        });
-
-        // 考试地点
-        const examPlaceCell = row.insertCell();
-        const examPlaceInput = document.createElement('input');
-        examPlaceInput.type = 'text';
-        examPlaceInput.className = 'edit-input';
-        examPlaceInput.placeholder = '输入考试地点';
-        examPlaceInput.required = true;
-        examPlaceCell.appendChild(examPlaceInput);
-
-        // 操作按钮
-        const actionCell = row.insertCell();
-        const saveButton = document.createElement('button');
-        saveButton.textContent = '保存';
-        saveButton.className = 'submit-btn';
-        saveButton.onclick = () => saveNewExam(row);
-        actionCell.appendChild(saveButton);
-    }
 
     // 保存新的考试安排
     function saveNewExam(row) {
         const cells = row.cells;
+        const scheduleId = row.dataset.scheduleId;
         const newExam = {
-            courseId: cells[0].querySelector('input').value,
-            courseName: cells[1].querySelector('input').value,
-            teacherId: cells[2].querySelector('input').value,
-            teacherName: cells[3].querySelector('input').value,
+            scheduleId: scheduleId,
             examTime: cells[4].querySelector('input').value,
             examPlace: cells[5].querySelector('input').value
         };
 
         // 验证必填字段
-        if (!newExam.courseId || !newExam.courseName || !newExam.teacherId ||
-            !newExam.examTime || !newExam.examPlace) {
+        if (!newExam.scheduleId || !newExam.examTime || !newExam.examPlace) {
             alert('请填写所有必填字段');
             return;
         }
@@ -381,5 +300,61 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Error adding exam:', error);
             alert('新增失败，请稍后重试');
         });
+    }
+
+    // 新增考试
+    function createExam(row) {
+        const scheduleId = row.dataset.scheduleId;
+        console.log('Creating exam for scheduleId:', scheduleId); // 调试信息
+        makeRowEditable(row);
+        
+        // 更改按钮文本和行为
+        const actionCell = row.cells[row.cells.length - 1];
+        const createButton = actionCell.querySelector('button');
+        createButton.textContent = '完成';
+        createButton.onclick = () => {
+            const cells = row.cells;
+            const examTimeInput = cells[4].querySelector('input');
+            const examPlaceInput = cells[5].querySelector('input');
+
+            // 验证必填字段
+            if (!examTimeInput.value.trim() || !examPlaceInput.value.trim()) {
+                alert('请填写所有必填字段');
+                return;
+            }
+
+            const newExam = {
+                scheduleId: scheduleId,
+                examTime: examTimeInput.value.trim(),
+                examPlace: examPlaceInput.value.trim()
+            };
+
+            console.log('Sending exam data:', newExam); // 调试信息
+
+            fetch('/addExam', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newExam)
+            })
+            .then(response => {
+                console.log('Response status:', response.status); // 调试信息
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data:', data); // 调试信息
+                if (data.success) {
+                    alert('创建考试成功');
+                    searchExams();
+                } else {
+                    alert('创建失败：' + (data.message || '未知错误'));
+                }
+            })
+            .catch(error => {
+                console.error('Error creating exam:', error);
+                alert('创建失败，请稍后重试');
+            });
+        };
     }
 });

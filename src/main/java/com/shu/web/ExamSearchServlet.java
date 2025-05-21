@@ -1,7 +1,7 @@
 package com.shu.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shu.dto.ExamSearchDTO;
+import com.shu.dto.CourseSearchDTO;
 import com.shu.mapper.ExamMapper;
 import com.shu.util.SqlSessionFactoryUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -52,7 +52,7 @@ public class ExamSearchServlet extends HttpServlet {
 
         try {
             ExamMapper examMapper = sqlSession.getMapper(ExamMapper.class);
-            List<ExamSearchDTO> results = examMapper.searchExams(
+            List<CourseSearchDTO> results = examMapper.searchSchedules(
                 examId, scheduleId, courseId, courseName, teacherId, teacherName, examTime, examPlace
             );
 

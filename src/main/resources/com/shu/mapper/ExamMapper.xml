@@ -20,21 +20,21 @@
     <update id="update">
         UPDATE exam
         SET exam_time = #{examTime}, exam_place = #{examPlace}
-        WHERE exam_id = #{examId};
+        WHERE schedule_id = #{scheduleId};
     </update>
 
-    <select id="searchExams" resultMap="com.shu.mapper.ExamSearchDTOMapper.examSearchDTO">
+    <select id="searchSchedules" resultMap="com.shu.mapper.CourseSearchDTOMapper.courseSearchResultMap">
         SELECT
+            cs.schedule_id,
             e.exam_id,
-            e.schedule_id,
             cs.course_id,
             c.course_name,
             cs.teacher_id,
             t.name AS teacher_name,
             e.exam_time,
             e.exam_place
-        FROM exam e
-        LEFT JOIN class_schedule cs ON e.schedule_id = cs.schedule_id
+        FROM class_schedule cs
+        LEFT JOIN exam e ON cs.schedule_id = e.schedule_id
         LEFT JOIN course c ON cs.course_id = c.course_id
         LEFT JOIN teacher t ON cs.teacher_id = t.teacher_id
         <where>
@@ -42,7 +42,7 @@
                 AND e.exam_id = #{examId}
             </if>
             <if test="scheduleId != null">
-                AND e.schedule_id = #{scheduleId}
+                AND cs.schedule_id = #{scheduleId}
             </if>
             <if test="courseId != null">
                 AND cs.course_id = #{courseId}
@@ -63,6 +63,23 @@
                 AND e.exam_place LIKE CONCAT('%', #{examPlace}, '%')
             </if>
         </where>
-        ORDER BY e.exam_id
+        ORDER BY cs.schedule_id
+    </select>
+
+    <select id="selectSchedulesWithoutExam" resultMap="com.shu.mapper.ExamSearchDTOMapper.examSearchDTO">
+        SELECT
+            cs.schedule_id AS scheduleId,
+            cs.course_id AS courseId,
+            c.course_name AS courseName,
+            cs.teacher_id AS teacherId,
+            t.name AS teacherName,
+            cs.class_time AS classTime
+        FROM class_schedule cs
+        LEFT JOIN course c ON cs.course_id = c.course_id
+        LEFT JOIN teacher t ON cs.teacher_id = t.teacher_id
+        LEFT JOIN exam e ON cs.schedule_id = e.schedule_id
+        WHERE e.schedule_id IS NULL
+        AND cs.status = '审核通过'
+        ORDER BY cs.schedule_id
     </select>
 </mapper> 
