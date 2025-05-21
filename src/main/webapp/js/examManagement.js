@@ -169,37 +169,19 @@ document.addEventListener('DOMContentLoaded', function () {
     function makeRowEditable(row) {
         const cells = row.cells;
 
-        // 课程号
+        // 课程号（只读）
         const courseIdCell = cells[0];
-        const courseIdInput = document.createElement('input');
-        courseIdInput.type = 'text';
-        courseIdInput.value = courseIdCell.textContent;
-        courseIdInput.className = 'edit-input';
-        courseIdInput.required = true;
-        courseIdCell.textContent = '';
-        courseIdCell.appendChild(courseIdInput);
+        courseIdCell.innerHTML = courseIdCell.textContent;
 
-        // 课程名称
+        // 课程名称（只读）
         const courseNameCell = cells[1];
-        const courseNameInput = document.createElement('input');
-        courseNameInput.type = 'text';
-        courseNameInput.value = courseNameCell.textContent;
-        courseNameInput.className = 'edit-input';
-        courseNameInput.required = true;
-        courseNameCell.textContent = '';
-        courseNameCell.appendChild(courseNameInput);
+        courseNameCell.innerHTML = courseNameCell.textContent;
 
-        // 教师号
+        // 教师号（只读）
         const teacherIdCell = cells[2];
-        const teacherIdInput = document.createElement('input');
-        teacherIdInput.type = 'text';
-        teacherIdInput.value = teacherIdCell.textContent;
-        teacherIdInput.className = 'edit-input';
-        teacherIdInput.required = true;
-        teacherIdCell.textContent = '';
-        teacherIdCell.appendChild(teacherIdInput);
+        teacherIdCell.innerHTML = teacherIdCell.textContent;
 
-        // 考试时间
+        // 考试时间（可编辑）
         const examTimeCell = cells[3];
         const examTimeInput = document.createElement('input');
         examTimeInput.type = 'text';
@@ -210,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function () {
         examTimeCell.textContent = '';
         examTimeCell.appendChild(examTimeInput);
 
-        // 考试地点
+        // 考试地点（可编辑）
         const examPlaceCell = cells[4];
         const examPlaceInput = document.createElement('input');
         examPlaceInput.type = 'text';
@@ -224,26 +206,23 @@ document.addEventListener('DOMContentLoaded', function () {
     // 保存更改
     function saveChanges(row) {
         const examId = row.dataset.examId;
+        
         const cells = row.cells;
 
         const updatedData = {
             examId: examId,
-            courseId: cells[0].querySelector('input').value,
-            courseName: cells[1].querySelector('input').value,
-            teacherId: cells[2].querySelector('input').value,
             examTime: cells[3].querySelector('input').value,
             examPlace: cells[4].querySelector('input').value
         };
 
         // 验证必填字段
-        if (!updatedData.courseId || !updatedData.courseName || !updatedData.teacherId ||
-            !updatedData.examTime || !updatedData.examPlace) {
+        if (!updatedData.examTime || !updatedData.examPlace) {
             alert('请填写所有必填字段');
             return;
         }
 
         // 发送更新请求
-        fetch('/updateExam', {
+        fetch('/examUpdate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8'

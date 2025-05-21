@@ -20,7 +20,7 @@
     <update id="update">
         UPDATE exam
         SET exam_time = #{examTime}, exam_place = #{examPlace}
-        WHERE schedule_id = #{scheduleId};
+        WHERE exam_id = #{examId};
     </update>
 
     <select id="searchExams" resultMap="com.shu.mapper.ExamSearchDTOMapper.examSearchDTO">
