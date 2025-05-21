@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shu.mapper.ExamMapper">
+
     <resultMap id="examMap" type="com.shu.pojo.Exam">
         <id column="exam_id" property="examId"/>
         <id column="schedule_id" property="scheduleId"/>
@@ -22,4 +23,46 @@
         WHERE schedule_id = #{scheduleId};
     </update>
 
+    <select id="searchExams" resultMap="com.shu.mapper.ExamSearchDTOMapper.examSearchDTO">
+        SELECT
+            e.exam_id,
+            e.schedule_id,
+            cs.course_id,
+            c.course_name,
+            cs.teacher_id,
+            t.name AS teacher_name,
+            e.exam_time,
+            e.exam_place
+        FROM exam e
+        LEFT JOIN class_schedule cs ON e.schedule_id = cs.schedule_id
+        LEFT JOIN course c ON cs.course_id = c.course_id
+        LEFT JOIN teacher t ON cs.teacher_id = t.teacher_id
+        <where>
+            <if test="examId != null">
+                AND e.exam_id = #{examId}
+            </if>
+            <if test="scheduleId != null">
+                AND e.schedule_id = #{scheduleId}
+            </if>
+            <if test="courseId != null">
+                AND cs.course_id = #{courseId}
+            </if>
+            <if test="courseName != null and courseName != ''">
+                AND c.course_name LIKE CONCAT('%', #{courseName}, '%')
+            </if>
+            <if test="teacherId != null">
+                AND cs.teacher_id = #{teacherId}
+            </if>
+            <if test="teacherName != null and teacherName != ''">
+                AND t.name LIKE CONCAT('%', #{teacherName}, '%')
+            </if>
+            <if test="examTime != null and examTime != ''">
+                AND e.exam_time = #{examTime}
+            </if>
+            <if test="examPlace != null and examPlace != ''">
+                AND e.exam_place LIKE CONCAT('%', #{examPlace}, '%')
+            </if>
+        </where>
+        ORDER BY e.exam_id
+    </select>
 </mapper> 

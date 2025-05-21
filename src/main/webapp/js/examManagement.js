@@ -1,170 +1,388 @@
 document.addEventListener('DOMContentLoaded', function () {
-    loadExamSchedules();
-});
+    // 获取表单和表格元素
+    const searchForm = document.getElementById('searchForm');
+    const resultTable = document.getElementById('resultTable').getElementsByTagName('tbody')[0];
 
-function loadExamSchedules() {
-    fetch('/teacherCourses')
-        .then(response => response.json())
-        .then(data => {
-            const tbody = document.getElementById('examTableBody');
-            tbody.innerHTML = '';
+    // 加载管理员信息
+    loadAdminInfo();
 
-            data.forEach(course => {
-                const row = tbody.insertRow();
+    // 监听表单提交
+    searchForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        searchExams();
+    });
 
-                // 添加课程基本信息
-                row.insertCell().textContent = course.courseId;
-                row.insertCell().textContent = course.courseName;
-                row.insertCell().textContent = course.credits;
-                row.insertCell().textContent = course.classTime;
-                row.insertCell().textContent = course.classroom;
-                row.insertCell().textContent = course.capacity;
+    // 重置按钮功能
+    searchForm.addEventListener('reset', function () {
+        setTimeout(searchExams, 0);
+    });
 
-                let timeInput = null;
-                let locationInput = null;
+    // 初始加载
+    searchExams();
 
-                // 考试时间单元格
-                const examTimeCell = row.insertCell();
-                if (course.examTime) {
-                    examTimeCell.textContent = course.examTime;
-                } else {
-                    timeInput = document.createElement('input');
-                    timeInput.type = 'text';
-                    timeInput.className = 'exam-input';
-                    timeInput.placeholder = '选择考试时间';
-                    examTimeCell.appendChild(timeInput);
+    // 绑定新增按钮点击事件
+    document.getElementById('addExamBtn').addEventListener('click', function() {
+        addNewExam();
+    });
 
-                    // 初始化日期时间选择器
-                    flatpickr(timeInput, {
-                        enableTime: true,
-                        dateFormat: "Y-m-d H:i",
-                        locale: "zh",
-                        minDate: "today",
-                        defaultHour: 9,
-                        onChange: function (selectedDates, dateStr) {
-                            // 自动添加考试时长（2小时）
-                            const startTime = selectedDates[0];
-                            const endTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000);
-                            timeInput.value = `${dateStr}-${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`;
-                        }
-                    });
+    // 加载管理员信息
+    function loadAdminInfo() {
+        fetch('/adminInfo')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    window.location.href = 'login.html';
+                    return;
                 }
-
-                // 考试地点单元格
-                const examPlaceCell = row.insertCell();
-                if (course.examPlace) {
-                    examPlaceCell.textContent = course.examPlace;
-                } else {
-                    locationInput = document.createElement('input');
-                    locationInput.type = 'text';
-                    locationInput.className = 'exam-input';
-                    locationInput.placeholder = '输入考试地点';
-                    examPlaceCell.appendChild(locationInput);
-                }
-
-                // 操作按钮单元格
-                const actionCell = row.insertCell();
-                if (!course.examTime || !course.examPlace) {
-                    const submitBtn = document.createElement('button');
-                    submitBtn.textContent = '提交';
-                    submitBtn.className = 'submit-btn';
-
-                    // 使用闭包来保持对timeInput和locationInput的引用
-                    const currentTimeInput = timeInput;
-                    const currentLocationInput = locationInput;
-
-                    submitBtn.onclick = () => {
-                        if (currentTimeInput && currentLocationInput) {
-                            submitExamInfo(course.scheduleId, currentTimeInput, currentLocationInput, submitBtn);
-                        } else {
-                            alert('请先填写考试时间和地点');
-                        }
-                    };
-
-                    actionCell.appendChild(submitBtn);
-                } else {
-                    const modifyBtn = document.createElement('button');
-                    modifyBtn.textContent = '修改';
-                    modifyBtn.className = 'button-update';
-
-                    modifyBtn.onclick = () => {
-                        // 允许用户修改时间和地点
-                        const newTimeInput = document.createElement('input');
-                        newTimeInput.type = 'text';
-                        newTimeInput.className = 'exam-input';
-                        newTimeInput.value = course.examTime; // 初始值为已有考试时间
-                        examTimeCell.innerHTML = '';
-                        examTimeCell.appendChild(newTimeInput);
-
-                        const newLocationInput = document.createElement('input');
-                        newLocationInput.type = 'text';
-                        newLocationInput.className = 'exam-input';
-                        newLocationInput.value = course.examPlace; // 初始值为已有考试地点
-                        examPlaceCell.innerHTML = '';
-                        examPlaceCell.appendChild(newLocationInput);
-
-                        // 更新按钮
-                        modifyBtn.textContent = '更新';
-                        modifyBtn.className = 'button-modify';
-                        modifyBtn.onclick = () => {
-                            submitExamInfo(course.scheduleId, newTimeInput, newLocationInput, modifyBtn);
-                        };
-                    };
-
-                    actionCell.appendChild(modifyBtn);
-                }
+                document.getElementById('adminId').textContent = data.adminId;
+                document.getElementById('adminName').textContent = data.name;
+                document.getElementById('adminGender').textContent = data.gender;
+                document.getElementById('adminEmail').textContent = data.email;
+                document.getElementById('adminDepartment').textContent = data.departmentName;
+            })
+            .catch(error => {
+                console.error('Error loading admin info:', error);
+                alert('加载管理员信息失败，请重新登录');
+                window.location.href = 'login.html';
             });
-        })
-        .catch(error => {
-            console.error('加载考试安排失败:', error);
-            alert('加载考试安排失败，请重试');
+    }
+
+    // 搜索考试安排
+    function searchExams() {
+        const formData = new FormData(searchForm);
+        const searchParams = new URLSearchParams();
+
+        // 转换表单数据为URL参数
+        for (let [key, value] of formData.entries()) {
+            if (value) {
+                searchParams.append(key, value);
+            }
+        }
+
+        // 发送搜索请求
+        fetch('/examSearch?' + searchParams.toString())
+            .then(response => response.json())
+            .then(data => {
+                if (!Array.isArray(data)) {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    throw new Error('返回的数据格式不正确');
+                }
+                displayResults(data);
+            })
+            .catch(error => {
+                console.error('Error searching exams:', error);
+                alert('搜索出错：' + error.message);
+            });
+    }
+
+    // 显示搜索结果
+    function displayResults(exams) {
+        resultTable.innerHTML = '';
+
+        if (exams.length === 0) {
+            const row = resultTable.insertRow();
+            const cell = row.insertCell();
+            cell.colSpan = 6;
+            cell.textContent = '没有找到匹配的考试安排';
+            cell.style.textAlign = 'center';
+            return;
+        }
+
+        exams.forEach(exam => {
+            const row = resultTable.insertRow();
+            row.dataset.examId = exam.examId;
+
+            // 课程号
+            const courseIdCell = row.insertCell();
+            courseIdCell.textContent = exam.courseId;
+            courseIdCell.dataset.originalValue = exam.courseId;
+
+            // 课程名称
+            const courseNameCell = row.insertCell();
+            courseNameCell.textContent = exam.courseName;
+            courseNameCell.dataset.originalValue = exam.courseName;
+
+            // 教师号
+            const teacherIdCell = row.insertCell();
+            teacherIdCell.textContent = exam.teacherId;
+            teacherIdCell.dataset.originalValue = exam.teacherId;
+
+            // 考试时间
+            const examTimeCell = row.insertCell();
+            if (exam.examTime) {
+                examTimeCell.textContent = exam.examTime || '';
+            examTimeCell.dataset.originalValue = exam.examTime;
+            } else {
+                const timeInput = document.createElement('input');
+                timeInput.type = 'text';
+                timeInput.className = 'edit-input';
+                timeInput.placeholder = '选择考试时间';
+                examTimeCell.appendChild(timeInput);
+
+                // 初始化日期时间选择器
+                flatpickr(timeInput, {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    locale: "zh",
+                    minDate: "today",
+                    defaultHour: 9,
+                    onChange: function (selectedDates, dateStr) {
+                        const startTime = selectedDates[0];
+                        const endTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000);
+                        timeInput.value = `${dateStr}-${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`;
+                    }
+                });
+            }
+
+            // 考试地点
+            const examPlaceCell = row.insertCell();
+            examPlaceCell.textContent = exam.examPlace || '';
+            examPlaceCell.dataset.originalValue = exam.examPlace;
+
+            // 操作按钮
+            const actionCell = row.insertCell();
+            const editButton = document.createElement('button');
+            editButton.textContent = '编辑';
+            editButton.className = 'edit-btn';
+            editButton.onclick = () => toggleEditMode(row);
+            actionCell.appendChild(editButton);
         });
-}
-
-function submitExamInfo(scheduleId, timeInput, locationInput, submitBtn) {
-    const examTime = timeInput.value;
-    const examPlace = locationInput.value;
-
-    if (!examTime || !examPlace) {
-        alert('请填写完整的考试时间和地点');
-        return;
     }
 
-    const timePattern = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}-\d{2}:\d{2}$/;
-    if (!timePattern.test(examTime)) {
-        alert('考试时间格式不正确，请使用系统提供的时间选择器');
-        return;
+    // 切换编辑模式
+    function toggleEditMode(row) {
+        const editButton = row.querySelector('.edit-btn');
+        const isEditing = editButton.textContent === '完成';
+
+        if (isEditing) {
+            saveChanges(row);
+        } else {
+            makeRowEditable(row);
+            editButton.textContent = '完成';
+        }
     }
 
-    submitBtn.disabled = true;
+    // 使行可编辑
+    function makeRowEditable(row) {
+        const cells = row.cells;
 
-    // 选择创建或修改接口
-    const endpoint = submitBtn.textContent === '提交' ? '/examArrange' : '/updateExam';
+        // 课程号
+        const courseIdCell = cells[0];
+        const courseIdInput = document.createElement('input');
+        courseIdInput.type = 'text';
+        courseIdInput.value = courseIdCell.textContent;
+        courseIdInput.className = 'edit-input';
+        courseIdInput.required = true;
+        courseIdCell.textContent = '';
+        courseIdCell.appendChild(courseIdInput);
 
-    fetch(endpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json;charset=UTF-8'
-        },
-        body: JSON.stringify({
-            scheduleId: scheduleId,
-            examTime: examTime,
-            examPlace: examPlace
+        // 课程名称
+        const courseNameCell = cells[1];
+        const courseNameInput = document.createElement('input');
+        courseNameInput.type = 'text';
+        courseNameInput.value = courseNameCell.textContent;
+        courseNameInput.className = 'edit-input';
+        courseNameInput.required = true;
+        courseNameCell.textContent = '';
+        courseNameCell.appendChild(courseNameInput);
+
+        // 教师号
+        const teacherIdCell = cells[2];
+        const teacherIdInput = document.createElement('input');
+        teacherIdInput.type = 'text';
+        teacherIdInput.value = teacherIdCell.textContent;
+        teacherIdInput.className = 'edit-input';
+        teacherIdInput.required = true;
+        teacherIdCell.textContent = '';
+        teacherIdCell.appendChild(teacherIdInput);
+
+        // 考试时间
+        const examTimeCell = cells[3];
+        const examTimeInput = document.createElement('input');
+        examTimeInput.type = 'text';
+        examTimeInput.value = examTimeCell.textContent;
+        examTimeInput.className = 'edit-input';
+        examTimeInput.required = true;
+        examTimeInput.placeholder = '如：2024-06-20 09:00';
+        examTimeCell.textContent = '';
+        examTimeCell.appendChild(examTimeInput);
+
+        // 考试地点
+        const examPlaceCell = cells[4];
+        const examPlaceInput = document.createElement('input');
+        examPlaceInput.type = 'text';
+        examPlaceInput.value = examPlaceCell.textContent;
+        examPlaceInput.className = 'edit-input';
+        examPlaceInput.required = true;
+        examPlaceCell.textContent = '';
+        examPlaceCell.appendChild(examPlaceInput);
+    }
+
+    // 保存更改
+    function saveChanges(row) {
+        const examId = row.dataset.examId;
+        const cells = row.cells;
+
+        const updatedData = {
+            examId: examId,
+            courseId: cells[0].querySelector('input').value,
+            courseName: cells[1].querySelector('input').value,
+            teacherId: cells[2].querySelector('input').value,
+            examTime: cells[3].querySelector('input').value,
+            examPlace: cells[4].querySelector('input').value
+        };
+
+        // 验证必填字段
+        if (!updatedData.courseId || !updatedData.courseName || !updatedData.teacherId ||
+            !updatedData.examTime || !updatedData.examPlace) {
+            alert('请填写所有必填字段');
+            return;
+        }
+
+        // 发送更新请求
+        fetch('/updateExam', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            body: JSON.stringify(updatedData)
         })
-    })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('考试信息' + (submitBtn.textContent === '提交' ? '提交' : '更新') + '成功！');
-                loadExamSchedules(); // 重新加载列表
+                searchExams();
+                const editButton = row.querySelector('.edit-btn');
+                editButton.textContent = '编辑';
             } else {
-                alert(data.message || '提交失败，请重试');
-                submitBtn.disabled = false;
+                alert('更新失败：' + (data.message || '未知错误'));
             }
         })
         .catch(error => {
-            console.error('提交考试信息失败:', error);
-            alert('提交失败，请重试');
-            submitBtn.disabled = false;
+            console.error('Error updating exam:', error);
+            alert('更新失败，请稍后重试');
         });
-}
+    }
+
+    // 添加新的考试安排
+    function addNewExam() {
+        const row = resultTable.insertRow(0);
+        row.dataset.isNew = 'true';
+
+        // 考试ID（自动生成且只读，可选）
+        // const idCell = row.insertCell();
+        // const idInput = document.createElement('input');
+        // idInput.type = 'text';
+        // idInput.className = 'edit-input';
+        // idInput.value = getNextExamId();
+        // idInput.readOnly = true;
+        // idCell.appendChild(idInput);
+
+        // 课程号
+        const courseIdCell = row.insertCell();
+        const courseIdInput = document.createElement('input');
+        courseIdInput.type = 'text';
+        courseIdInput.className = 'edit-input';
+        courseIdInput.required = true;
+        courseIdCell.appendChild(courseIdInput);
+
+        // 课程名称
+        const courseNameCell = row.insertCell();
+        const courseNameInput = document.createElement('input');
+        courseNameInput.type = 'text';
+        courseNameInput.className = 'edit-input';
+        courseNameInput.required = true;
+        courseNameCell.appendChild(courseNameInput);
+
+        // 教师号
+        const teacherIdCell = row.insertCell();
+        const teacherIdInput = document.createElement('input');
+        teacherIdInput.type = 'text';
+        teacherIdInput.className = 'edit-input';
+        teacherIdInput.required = true;
+        teacherIdCell.appendChild(teacherIdInput);
+
+        // 考试时间
+        const examTimeCell = row.insertCell();
+        const examTimeInput = document.createElement('input');
+        examTimeInput.type = 'text';
+        examTimeInput.className = 'exam-input';
+        examTimeInput.placeholder = '选择考试时间';
+        examTimeInput.required = true;
+        examTimeCell.appendChild(examTimeInput);
+
+        // 初始化日期时间选择器
+        flatpickr(examTimeInput, {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            locale: "zh",
+            minDate: "today",
+            defaultHour: 9,
+            onChange: function (selectedDates, dateStr) {
+                const startTime = selectedDates[0];
+                const endTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000);
+                examTimeInput.value = `${dateStr}-${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`;
+            }
+        });
+
+        // 考试地点
+        const examPlaceCell = row.insertCell();
+        const examPlaceInput = document.createElement('input');
+        examPlaceInput.type = 'text';
+        examPlaceInput.className = 'edit-input';
+        examPlaceInput.placeholder = '输入考试地点';
+        examPlaceInput.required = true;
+        examPlaceCell.appendChild(examPlaceInput);
+
+        // 操作按钮
+        const actionCell = row.insertCell();
+        const saveButton = document.createElement('button');
+        saveButton.textContent = '保存';
+        saveButton.className = 'submit-btn';
+        saveButton.onclick = () => saveNewExam(row);
+        actionCell.appendChild(saveButton);
+    }
+
+    // 保存新的考试安排
+    function saveNewExam(row) {
+        const cells = row.cells;
+        const newExam = {
+            courseId: cells[0].querySelector('input').value,
+            courseName: cells[1].querySelector('input').value,
+            teacherId: cells[2].querySelector('input').value,
+            examTime: cells[3].querySelector('input').value,
+            examPlace: cells[4].querySelector('input').value
+        };
+
+        // 验证必填字段
+        if (!newExam.courseId || !newExam.courseName || !newExam.teacherId ||
+            !newExam.examTime || !newExam.examPlace) {
+            alert('请填写所有必填字段');
+            return;
+        }
+
+        // 发送新增请求到服务器
+        fetch('/addExam', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newExam)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('新增考试安排成功');
+                searchExams();
+            } else {
+                alert('新增失败：' + (data.message || '未知错误'));
+            }
+        })
+        .catch(error => {
+            console.error('Error adding exam:', error);
+            alert('新增失败，请稍后重试');
+        });
+    }
+});
