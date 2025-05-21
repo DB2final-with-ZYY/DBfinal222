@@ -179,4 +179,30 @@
         WHERE schedule_id = #{scheduleId}
     </update>
 
+    <select id="selectTeacherCourses" resultType="com.shu.dto.CourseSearchDTO">
+        SELECT 
+            t.teacher_id as teacherId,
+            t.name as teacherName,
+            t.email,
+            t.position,
+            t.gender,
+            t.department_id as departmentId,
+            d.department_name as departmentName,
+            t.status,
+            cs.schedule_id as scheduleId,
+            c.course_id as courseId,
+            c.course_name as courseName,
+            cs.class_time as classTime,
+            c.credit,
+            c.exam_weight,
+            cs.classroom,
+            cs.capacity
+        FROM teacher t
+        LEFT JOIN department d ON t.department_id = d.department_id
+        LEFT JOIN class_schedule cs ON t.teacher_id = cs.teacher_id
+        LEFT JOIN course c ON cs.course_id = c.course_id
+        WHERE t.status = '在职'
+        ORDER BY t.teacher_id, cs.schedule_id
+    </select>
+
 </mapper> 

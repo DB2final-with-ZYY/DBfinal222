@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>班级管理 - 管理员端</title>
+    <link rel="stylesheet" href="css/courseSelect.css">
+    <link rel="stylesheet" href="css/schedule.css">
+    <link rel="stylesheet" href="css/createCourse.css">
+    <!-- 引入ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="js/adminClassManagement.js"></script>
+</head>
+
+<body>
+    <nav class="nav-menu">
+        <div class="nav-left">
+            <img src="images/signature.png" alt="SHU" class="nav-logo">
+            <a href="studentManagement.html" class="nav-item">学生管理</a>
+            <a href="teacherManagement.html" class="nav-item">教师管理</a>
+            <a href="courseManagement.html" class="nav-item">课程管理</a>
+            <a href="classScheduleManagement.html" class="nav-item">课程安排管理</a>
+            <a href="adminClassManagement.html" class="nav-item active">班级管理</a>
+            <a href="examManagement.html" class="nav-item">考试管理</a>
+        </div>
+        <div class="nav-right">
+            <a href="logoutAdmin" class="nav-item nav-logout">退出登录</a>
+        </div>
+    </nav>
+
+    <!-- 管理员信息区域 -->
+    <div class="student-info">
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">管理员号：</span>
+                <span class="info-value" id="adminId"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">姓名：</span>
+                <span class="info-value" id="adminName"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">性别：</span>
+                <span class="info-value" id="adminGender"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">邮箱：</span>
+                <span class="info-value" id="adminEmail"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">学院：</span>
+                <span class="info-value" id="adminDepartment"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 班级选择区域 -->
+    <div class="create-course-container">
+        <h2>班级选择</h2>
+        <div class="search-container">
+            <form id="searchForm">
+                <div class="form-group">
+                    <label for="teacherSelect">选择教师：</label>
+                    <select id="teacherSelect" required>
+                        <option value="">请选择教师</option>
+                    </select>
+                </div>
+                <div class="form-group" id="classSelectContainer" style="display: none;">
+                    <label for="classSelect">选择班级：</label>
+                    <select id="classSelect" required>
+                        <option value="">请选择班级</option>
+                    </select>
+                </div>
+                <!-- ... 其他搜索条件 ... -->
+            </form>
+        </div>
+    </div>
+
+    <!-- 学生列表区域 -->
+    <div class="course-container" id="studentListContainer" style="display: none;">
+        <h2>学生列表</h2>
+        <div class="class-info">
+            <span>总人数：</span><span id="totalStudents">0</span>
+            <span>平均分：</span><span id="averageScore">0</span>
+        </div>
+        <table id="studentTable">
+            <thead>
+                <tr>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>年级</th>
+                    <th>学院</th>
+                    <th>专业</th>
+<!--                    <th>邮箱</th>-->
+                    <th>平时成绩</th>
+                    <th>考试成绩</th>
+                    <th>总评</th>
+                    <!-- <th>平时成绩操作</th>
+                    <th>考试成绩操作</th> -->
+                    <th>退课操作</th>
+                </tr>
+            </thead>
+            <tbody id="studentListBody">
+                <!-- 这里将通过JavaScript动态填充学生信息 -->
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

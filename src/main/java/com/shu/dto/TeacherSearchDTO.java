@@ -10,6 +10,7 @@ public class TeacherSearchDTO {
     private Integer departmentId;
     private String status;
     private String departmentName;
+    private Integer courseId;
     private String courseName;  // 通过class_schedule关联的课程名称
     private Integer scheduleId; // 课程安排ID
 
@@ -85,6 +86,14 @@ public class TeacherSearchDTO {
         this.departmentName = departmentName;
     }
 
+    public Integer getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Integer courseId) {
+        this.courseId = courseId;
+    }
+
     public String getCourseName() {
         return courseName;
     }
@@ -113,6 +122,7 @@ public class TeacherSearchDTO {
                 ", departmentId=" + departmentId +
                 ", status='" + status + '\'' +
                 ", departmentName='" + departmentName + '\'' +
+                ", courseId=" + courseId +
                 ", courseName='" + courseName + '\'' +
                 ", scheduleId=" + scheduleId +
                 '}';

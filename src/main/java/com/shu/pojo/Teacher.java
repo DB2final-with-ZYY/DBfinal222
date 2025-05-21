@@ -1,5 +1,8 @@
 package com.shu.pojo;
 
+import com.shu.dto.CourseSearchDTO;
+import java.util.List;
+
 public class Teacher {
     private Integer teacherId; // 教师ID
     private String password; // 登录密码
@@ -9,6 +12,8 @@ public class Teacher {
     private String gender; // 性别 (M-男,F-女,O-其他)
     private Integer departmentId; // 所属院系ID
     private String status;  // '在职', '离职'
+    private String departmentName;
+    private List<CourseSearchDTO> courses; // 添加课程列表字段
 
     // 关联属性
     private Department department; // 所属院系信息
@@ -83,6 +88,22 @@ public class Teacher {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public List<CourseSearchDTO> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<CourseSearchDTO> courses) {
+        this.courses = courses;
     }
 
     @Override

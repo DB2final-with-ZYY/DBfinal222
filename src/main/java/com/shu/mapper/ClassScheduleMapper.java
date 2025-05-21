@@ -1,6 +1,7 @@
 package com.shu.mapper;
 
 import com.shu.dto.CourseSearchDTO;
+import com.shu.dto.TeacherSearchDTO;
 import com.shu.pojo.ClassSchedule;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -109,4 +110,6 @@ public interface ClassScheduleMapper {
      * @return 更新的行数
      */
     int updateClassSchedule(ClassSchedule classSchedule);
+
+    List<CourseSearchDTO> selectTeacherCourses();
 }
