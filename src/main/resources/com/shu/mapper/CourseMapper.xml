@@ -12,6 +12,19 @@
         <result column="status" property="status"/>
         <association property="department" resultMap="com.shu.mapper.DepartmentMapper.departmentMap"/>
     </resultMap>
+    <update id="update">
+        UPDATE
+            course
+        SET
+            course_name = #{courseName},
+            department_id = #{departmentId},
+            credit = #{credit},
+            exam_weight = #{examWeight},
+            status = #{status}
+        WHERE
+            course_id = #{courseId}
+    </update>
+
 
     <select id="searchCourses" resultMap="com.shu.mapper.CourseSearchDTOMapper.courseSearchResultMap">
         SELECT
