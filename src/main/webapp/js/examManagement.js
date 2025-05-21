@@ -110,6 +110,11 @@ document.addEventListener('DOMContentLoaded', function () {
             teacherIdCell.textContent = exam.teacherId;
             teacherIdCell.dataset.originalValue = exam.teacherId;
 
+            // 教师姓名
+            const teacherNameCell = row.insertCell();
+            teacherNameCell.textContent = exam.teacherName;
+            teacherNameCell.dataset.originalValue = exam.teacherName;
+
             // 考试时间
             const examTimeCell = row.insertCell();
             if (exam.examTime) {
@@ -181,8 +186,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const teacherIdCell = cells[2];
         teacherIdCell.innerHTML = teacherIdCell.textContent;
 
+        // 教师姓名（只读）
+        const teacherNameCell = cells[3];
+        teacherNameCell.innerHTML = teacherNameCell.textContent;
+
         // 考试时间（可编辑）
-        const examTimeCell = cells[3];
+        const examTimeCell = cells[4];
         const examTimeInput = document.createElement('input');
         examTimeInput.type = 'text';
         examTimeInput.value = examTimeCell.textContent;
@@ -193,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
         examTimeCell.appendChild(examTimeInput);
 
         // 考试地点（可编辑）
-        const examPlaceCell = cells[4];
+        const examPlaceCell = cells[5];
         const examPlaceInput = document.createElement('input');
         examPlaceInput.type = 'text';
         examPlaceInput.value = examPlaceCell.textContent;
@@ -211,8 +220,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const updatedData = {
             examId: examId,
-            examTime: cells[3].querySelector('input').value,
-            examPlace: cells[4].querySelector('input').value
+            examTime: cells[4].querySelector('input').value,
+            examPlace: cells[5].querySelector('input').value
         };
 
         // 验证必填字段
@@ -283,6 +292,14 @@ document.addEventListener('DOMContentLoaded', function () {
         teacherIdInput.required = true;
         teacherIdCell.appendChild(teacherIdInput);
 
+        // 教师姓名
+        const teacherNameCell = row.insertCell();
+        const teacherNameInput = document.createElement('input');
+        teacherNameInput.type = 'text';
+        teacherNameInput.className = 'edit-input';
+        teacherNameInput.required = true;
+        teacherNameCell.appendChild(teacherNameInput);
+
         // 考试时间
         const examTimeCell = row.insertCell();
         const examTimeInput = document.createElement('input');
@@ -331,8 +348,9 @@ document.addEventListener('DOMContentLoaded', function () {
             courseId: cells[0].querySelector('input').value,
             courseName: cells[1].querySelector('input').value,
             teacherId: cells[2].querySelector('input').value,
-            examTime: cells[3].querySelector('input').value,
-            examPlace: cells[4].querySelector('input').value
+            teacherName: cells[3].querySelector('input').value,
+            examTime: cells[4].querySelector('input').value,
+            examPlace: cells[5].querySelector('input').value
         };
 
         // 验证必填字段
