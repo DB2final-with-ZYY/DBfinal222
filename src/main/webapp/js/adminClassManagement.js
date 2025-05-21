@@ -121,14 +121,22 @@ function setupClassSelect() {
 
 // 计算总评
 function calculateFinalGrade(student, examWeight) {
+    console.log('Calculating final grade for student:', student);
+    console.log('Using exam weight:', examWeight);
+    
     const usual = student.usualScore;
     const exam = student.examScore;
+    
+    console.log('Usual score:', usual);
+    console.log('Exam score:', exam);
 
     if (usual === '未录入' || exam === '未录入') {
+        console.log('Returning 未完善 due to missing scores');
         return '未完善';
     }
 
     const finalGrade = usual * (1 - examWeight) + exam * examWeight;
+    console.log('Calculated final grade:', finalGrade);
     return finalGrade.toFixed(2); // 保留两位小数
 }
 
@@ -146,7 +154,7 @@ function loadStudentList(classInfo) {
         .then(data => {
             displayStudentList(data);
             updateClassStatistics(data);
-            displayScoreAnalysis(data);
+            //displayScoreAnalysis(data);
         })
         .catch(error => console.error('Error loading students:', error));
 }
@@ -306,68 +314,77 @@ function handleGradeEntry(student, gradeType) {
 
 // 更新班级统计信息
 function updateClassStatistics(students) {
+    console.log('Updating class statistics with students:', students);
+    
     const classInfo = JSON.parse(document.getElementById('classSelect').value);
+    console.log('Class info:', classInfo);
+    
     const scores = students.map(student => {
         const finalGrade = calculateFinalGrade(student, classInfo.examWeight || examWeight);
+        console.log(`Student ${student.studentId} final grade:`, finalGrade);
         return finalGrade !== '未完善' ? parseFloat(finalGrade) : null;
     }).filter(score => score !== null);
-
+    
+    console.log('Valid scores:', scores);
+    
     document.getElementById('totalStudents').textContent = students.length;
+    console.log('Total students:', students.length);
 
     const average = scores.length > 0
         ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2)
         : '暂无';
+    console.log('Average score:', average);
     document.getElementById('averageScore').textContent = average;
 }
 
-// 显示成绩分析图表
-function displayScoreAnalysis(students) {
-    const classInfo = JSON.parse(document.getElementById('classSelect').value);
-    const scores = students.map(student => {
-        const finalGrade = calculateFinalGrade(student, classInfo.examWeight || examWeight);
-        return finalGrade !== '未完善' ? parseFloat(finalGrade) : null;
-    }).filter(score => score !== null);
+// // 显示成绩分析图表
+// function displayScoreAnalysis(students) {
+//     const classInfo = JSON.parse(document.getElementById('classSelect').value);
+//     const scores = students.map(student => {
+//         const finalGrade = calculateFinalGrade(student, classInfo.examWeight || examWeight);
+//         return finalGrade !== '未完善' ? parseFloat(finalGrade) : null;
+//     }).filter(score => score !== null);
 
-    // 分数分布图
-    const distributionChart = echarts.init(document.getElementById('scoreDistribution'));
-    const distributionOption = {
-        title: { text: '成绩分布' },
-        tooltip: {},
-        xAxis: {
-            type: 'category',
-            data: ['<60', '60-69', '70-79', '80-89', '90-100']
-        },
-        yAxis: { type: 'value' },
-        series: [{
-            data: calculateScoreDistribution(scores),
-            type: 'bar'
-        }]
-    };
-    distributionChart.setOption(distributionOption);
+//     // 分数分布图
+//     const distributionChart = echarts.init(document.getElementById('scoreDistribution'));
+//     const distributionOption = {
+//         title: { text: '成绩分布' },
+//         tooltip: {},
+//         xAxis: {
+//             type: 'category',
+//             data: ['<60', '60-69', '70-79', '80-89', '90-100']
+//         },
+//         yAxis: { type: 'value' },
+//         series: [{
+//             data: calculateScoreDistribution(scores),
+//             type: 'bar'
+//         }]
+//     };
+//     distributionChart.setOption(distributionOption);
 
-    // 成绩统计图
-    const statisticsChart = echarts.init(document.getElementById('scoreStatistics'));
-    const statisticsOption = {
-        title: { text: '成绩统计' },
-        tooltip: {},
-        radar: {
-            indicator: [
-                { name: '平均分', max: 100 },
-                { name: '最高分', max: 100 },
-                { name: '最低分', max: 100 },
-                { name: '及格率', max: 100 }
-            ]
-        },
-        series: [{
-            type: 'radar',
-            data: [{
-                value: calculateScoreStatistics(scores),
-                name: '成绩指标'
-            }]
-        }]
-    };
-    statisticsChart.setOption(statisticsOption);
-}
+//     // 成绩统计图
+//     const statisticsChart = echarts.init(document.getElementById('scoreStatistics'));
+//     const statisticsOption = {
+//         title: { text: '成绩统计' },
+//         tooltip: {},
+//         radar: {
+//             indicator: [
+//                 { name: '平均分', max: 100 },
+//                 { name: '最高分', max: 100 },
+//                 { name: '最低分', max: 100 },
+//                 { name: '及格率', max: 100 }
+//             ]
+//         },
+//         series: [{
+//             type: 'radar',
+//             data: [{
+//                 value: calculateScoreStatistics(scores),
+//                 name: '成绩指标'
+//             }]
+//         }]
+//     };
+//     statisticsChart.setOption(statisticsOption);
+// }
 
 // 计算分数分布
 function calculateScoreDistribution(scores) {
@@ -452,30 +469,30 @@ function calculateScoreStatistics(scores) {
 //     statisticsChart.setOption(statisticsOption);
 // }
 //
-// // 计算分数分布
-// function calculateScoreDistribution(scores) {
-//     const distribution = [0, 0, 0, 0, 0];
-//     scores.forEach(score => {
-//         if (score < 60) distribution[0]++;
-//         else if (score < 70) distribution[1]++;
-//         else if (score < 80) distribution[2]++;
-//         else if (score < 90) distribution[3]++;
-//         else distribution[4]++;
-//     });
-//     return distribution;
-// }
-//
-// // 计算成绩统计数据
-// function calculateScoreStatistics(scores) {
-//     if (scores.length === 0) return [0, 0, 0, 0];
-//
-//     const average = scores.reduce((a, b) => a + b, 0) / scores.length;
-//     const max = Math.max(...scores);
-//     const min = Math.min(...scores);
-//     const passRate = (scores.filter(s => s >= 60).length / scores.length) * 100;
-//
-//     return [average, max, min, passRate];
-// }
+// 计算分数分布
+function calculateScoreDistribution(scores) {
+    const distribution = [0, 0, 0, 0, 0];
+    scores.forEach(score => {
+        if (score < 60) distribution[0]++;
+        else if (score < 70) distribution[1]++;
+        else if (score < 80) distribution[2]++;
+        else if (score < 90) distribution[3]++;
+        else distribution[4]++;
+    });
+    return distribution;
+}
+
+// 计算成绩统计数据
+function calculateScoreStatistics(scores) {
+    if (scores.length === 0) return [0, 0, 0, 0];
+
+    const average = scores.reduce((a, b) => a + b, 0) / scores.length;
+    const max = Math.max(...scores);
+    const min = Math.min(...scores);
+    const passRate = (scores.filter(s => s >= 60).length / scores.length) * 100;
+
+    return [average, max, min, passRate];
+}
 
 // 退课功能
 function removeStudent(studentId) {
@@ -483,30 +500,71 @@ function removeStudent(studentId) {
         return;
     }
 
-    const classInfo = JSON.parse(document.getElementById('classSelect').value);
-    fetch('/removeStudent', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+    try {
+        const classSelect = document.getElementById('classSelect');
+        if (!classSelect || !classSelect.value) {
+            throw new Error('未选择课程');
+        }
+
+        // 打印原始值以便调试
+        console.log('Raw classSelect value:', classSelect.value);
+
+        let classInfo;
+        try {
+            classInfo = JSON.parse(classSelect.value);
+        } catch (e) {
+            console.error('JSON parse error:', e);
+            throw new Error('课程信息格式错误');
+        }
+
+        // 验证必要字段
+        if (!classInfo.courseId || !classInfo.teacherId || !classInfo.classTime) {
+            throw new Error('课程信息不完整');
+        }
+
+        // 打印发送的数据
+        const requestData = {
             studentId: studentId,
             courseId: classInfo.courseId,
             teacherId: classInfo.teacherId,
             classTime: classInfo.classTime
+        };
+        console.log('Sending data:', requestData);
+
+        fetch('/adminRemoveStudent', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
         })
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('退课成功');
-                loadStudentList(classInfo);
-            } else {
-                alert(data.error || '退课失败，请重试');
-            }
-        })
-        .catch(error => {
-            console.error('Error removing student:', error);
-            alert('退课失败，请重试');
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络请求失败');
+                }
+                return response.text().then(text => {
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        console.error('Response text:', text);
+                        throw new Error('服务器响应格式错误');
+                    }
+                });
+            })
+            .then(data => {
+                if (data.success) {
+                    alert('退课成功');
+                    loadStudentList(classInfo);
+                } else {
+                    alert(data.error || data.message || '退课失败，请重试');
+                }
+            })
+            .catch(error => {
+                console.error('Error removing student:', error);
+                alert('退课失败，请重试');
+            });
+    } catch (error) {
+        console.error('Error in removeStudent:', error);
+        alert(error.message || '退课失败，请重试');
+    }
 }
