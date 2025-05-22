@@ -44,4 +44,9 @@
         WHERE enrollment_id = #{enrollmentId};
     </update>
 
+    <delete id="deleteByEnrollmentId">
+        DELETE FROM grade
+        WHERE enrollment_id = #{enrollmentId};
+    </delete>
+
 </mapper> 

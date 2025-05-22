@@ -46,4 +46,11 @@ public interface GradeMapper {
      * @return
      */
     int updateExamScore(Grade grade);
+
+    /**
+     * 根据选课ID删除成绩
+     * @param enrollmentId 选课ID
+     * @return 影响的行数
+     */
+    int deleteByEnrollmentId(Integer enrollmentId);
 } 

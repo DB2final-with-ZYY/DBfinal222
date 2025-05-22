@@ -540,14 +540,19 @@ function removeStudent(studentId) {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('网络请求失败');
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.text().then(text => {
+                    console.log('Raw response:', text);
                     try {
                         return JSON.parse(text);
                     } catch (e) {
+                        console.error('JSON parse error:', e);
                         console.error('Response text:', text);
-                        throw new Error('服务器响应格式错误');
+                        // 尝试从错误消息中提取有用的信息
+                        const errorMatch = text.match(/Cause: ([^"]+)/);
+                        const errorMessage = errorMatch ? errorMatch[1] : '服务器响应格式错误';
+                        throw new Error(errorMessage);
                     }
                 });
             })
@@ -561,7 +566,7 @@ function removeStudent(studentId) {
             })
             .catch(error => {
                 console.error('Error removing student:', error);
-                alert('退课失败，请重试');
+                alert(error.message || '退课失败，请重试');
             });
     } catch (error) {
         console.error('Error in removeStudent:', error);
